@@ -1,0 +1,17 @@
+/* app.component.css */
+.sidenav-container {
+    /* Ocupa el 100% de la altura de la pantalla (Viewport Height) */
+    height: 100vh;
+}
+
+.sidenav {
+    /* Ancho del menú lateral */
+    width: 250px;
+}
+
+/* Opcional: una ligera sombra para la barra superior */
+.top-toolbar {
+    box-shadow: 0 3px 5px -1px rgba(0, 0, 0, .2), 0 6px 10px 0 rgba(0, 0, 0, .14), 0 1px 18px 0 rgba(0, 0, 0, .12);
+    position: relative;
+    z-index: 2;
+}

@@ -1,0 +1,21 @@
+-- INSERT INTO tenant (id, company_name, tier) 
+-- VALUES ('11111111-1111-1111-1111-111111111111', 'Kosto Dev Corp', 'pro');
+-- INSERT INTO product (tenant_id, name, sale_price, current_stock)
+-- VALUES ('11111111-1111-1111-1111-111111111111', 'Espresso', 3.00, 0)
+-- RETURNING id;    
+-- DELETE FROM production_batch WHERE id = '4c600532-9ddf-463d-9742-04473632018d';
+-- TRUNCATE TABLE tenant CASCADE;
+-- INSERT INTO product (tenant_id, name, sale_price, current_stock)
+-- VALUES ('11111111-1111-1111-1111-111111111111', 'Pastel de Chocolate (8 porciones)', 12.50, 0)
+-- RETURNING id;
+-- ALTER TABLE product 
+-- ADD COLUMN is_pre_made BOOLEAN NOT NULL DEFAULT FALSE;
+-- UPDATE product 
+-- SET is_pre_made = true 
+-- WHERE id = '5a58e5ad-c8e8-4729-bf8f-a8827200fd29';
+-- Agregar soft delete a Producto y Recurso
+-- ALTER TABLE product ADD COLUMN is_active BOOLEAN NOT NULL DEFAULT TRUE;
+-- ALTER TABLE resource ADD COLUMN is_active BOOLEAN NOT NULL DEFAULT TRUE;
+-- ALTER TABLE recipe_item ADD COLUMN is_active BOOLEAN NOT NULL DEFAULT TRUE;
+-- ALTER TABLE tenant ADD COLUMN is_active BOOLEAN NOT NULL DEFAULT TRUE;
+-- ALTER TABLE tenant ADD COLUMN updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP;

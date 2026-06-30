@@ -1,0 +1,75 @@
+<mat-sidenav-container class="sidenav-container">
+
+  <mat-sidenav #sidenav mode="side" opened class="sidenav">
+    <mat-toolbar color="primary">Kosto SaaS</mat-toolbar>
+
+    <mat-nav-list>
+      <a mat-list-item routerLink="/products">
+        <mat-icon matListItemIcon>inventory</mat-icon>
+        <div matListItemTitle>Productos</div>
+      </a>
+
+      <a mat-list-item routerLink="/resources">
+        <mat-icon matListItemIcon>category</mat-icon>
+        <div matListItemTitle>Insumos</div>
+      </a>
+
+      <a mat-list-item routerLink="/recipes">
+        <mat-icon matListItemIcon>receipt_long</mat-icon>
+        <div matListItemTitle>Recetas</div>
+      </a>
+
+      <a mat-list-item routerLink="/sales/new">
+        <mat-icon matListItemIcon>point_of_sale</mat-icon>
+        <div matListItemTitle>Punto de Venta</div>
+      </a>
+
+      <mat-divider></mat-divider>
+
+      <a mat-list-item routerLink="/transaction-logs">
+        <mat-icon matListItemIcon>history</mat-icon>
+        <div matListItemTitle>Transacciones</div>
+      </a>
+
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar color="primary" class="top-toolbar">
+
+      <div style="flex: 1; display: flex; justify-content: flex-start;">
+        <button mat-icon-button (click)="sidenav.toggle()">
+          <mat-icon>menu</mat-icon>
+        </button>
+      </div>
+
+      <div
+        style="flex: 1; display: flex; justify-content: center; align-items: center; font-weight: 500; text-align: center;">
+        <span>{{ companyName }}</span>
+      </div>
+
+      <div style="flex: 1; display: flex; justify-content: flex-end;">
+        <button mat-icon-button [matMenuTriggerFor]="settingsMenu">
+          <mat-icon>account_circle</mat-icon>
+        </button>
+      </div>
+
+      <mat-menu #settingsMenu="matMenu">
+        <button mat-menu-item routerLink="/tenants">
+          <mat-icon>business</mat-icon>
+          <span>Mi Compañía</span>
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item (click)="toggleTheme()">
+          <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
+          <span>{{ isDarkMode ? 'Modo Claro' : 'Modo Oscuro' }}</span>
+        </button>
+      </mat-menu>
+    </mat-toolbar>
+
+    <div style="padding: 20px;">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+
+</mat-sidenav-container>

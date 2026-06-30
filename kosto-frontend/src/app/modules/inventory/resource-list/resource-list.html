@@ -1,0 +1,82 @@
+<main style="padding: 2rem; max-width: 1200px; margin: 0 auto;">
+
+    <mat-card>
+        <mat-card-header
+            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+
+            <div>
+                <mat-card-title>Insumos de Kosto</mat-card-title>
+                <mat-card-subtitle>Gestión centralizada de Insumos</mat-card-subtitle>
+            </div>
+
+            <button mat-raised-button color="primary" routerLink="/resources/new">
+                <mat-icon>add</mat-icon> Nuevo Insumo
+            </button>
+
+        </mat-card-header>
+
+        <mat-card-content>
+            @if (isLoading()) {
+            <div style="text-align: center; padding: 3rem;">
+                <p>Cargando insumos y existencias...</p>
+            </div>
+            } @else {
+            <table mat-table [dataSource]="resources()" class="mat-elevation-z2" style="width: 100%;">
+
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef> Nombre del Insumo </th>
+                    <td mat-cell *matCellDef="let element">
+                        <strong>{{element.name}}</strong>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="unit_cost">
+                    <th mat-header-cell *matHeaderCellDef> Costo Unitario </th>
+                    <td mat-cell *matCellDef="let element"> ${{element.unit_cost}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="stock">
+                    <th mat-header-cell *matHeaderCellDef> Stock Disponible </th>
+                    <td mat-cell *matCellDef="let element">
+                        <span [style.color]="element.current_stock === 0 ? 'red' : 'green'">
+                            {{element.current_stock}}
+                        </span>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="unit_measure">
+                    <th mat-header-cell *matHeaderCellDef> Unidad de Medida </th>
+                    <td mat-cell *matCellDef="let element"> {{element.unit_of_measure}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="updated_at">
+                    <th mat-header-cell *matHeaderCellDef> Última Actualización </th>
+                    <td mat-cell *matCellDef="let element"> {{element.updated_at}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef> Acciones </th>
+                    <td mat-cell *matCellDef="let element">
+                        <button mat-icon-button color="primary" (click)="onEdit(element)">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <button mat-icon-button color="warn" (click)="onDelete(element.id)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell" colspan="6" style="text-align: center; padding: 2rem;">
+                        No hay insumos registrados en la base de datos.
+                    </td>
+                </tr>
+            </table>
+            }
+        </mat-card-content>
+    </mat-card>
+
+</main>

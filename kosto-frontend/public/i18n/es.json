@@ -1,0 +1,13 @@
+{
+    "NAV": {
+        "PRODUCTS": "Productos",
+        "RESOURCES": "Insumos",
+        "RECIPES": "Recetas",
+        "POS": "Punto de Venta",
+        "TRANSACTIONS": "Transacciones"
+    },
+    "MENU": {
+        "LIGHT_MODE": "Modo Claro",
+        "DARK_MODE": "Modo Oscuro"
+    }
+}
