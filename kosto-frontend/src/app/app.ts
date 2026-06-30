@@ -13,6 +13,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { Tenant } from './core/services/tenant';
 import { Auth } from './core/services/auth';
 
+import { TranslateService } from '@ngx-translate/core';
+
 
 @Component({
   selector: 'app-root',
@@ -34,6 +36,7 @@ export class App implements OnInit {
   private document = inject(DOCUMENT);
   private tenantService = inject(Tenant);
   private readonly authService = inject(Auth);
+  private translate = inject(TranslateService);
 
   public isDarkMode = false;
   public companyName = 'Kosto Inventory System'; // Valor por defecto
@@ -57,6 +60,10 @@ export class App implements OnInit {
       },
       error: () => console.log("No se pudo cargar el nombre de la empresa")
     });
+
+    this.translate.addLangs(['es', 'en']);
+    this.translate.setFallbackLang('es');
+    this.translate.use(localStorage.getItem('lang') || 'es');
   }
 
   toggleTheme() {
