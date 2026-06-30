@@ -1,0 +1,229 @@
+### 1. Insertar un nuevo recurso (POST)
+POST http://127.0.0.1:3000/resources
+Content-Type: application/json
+
+{
+    "name": "Hariana de Trigo",
+    "unit_of_measure": "g",
+    "unit_cost": 0.05,
+    "current_stock": 900
+}
+
+### 2. Listar los recursos (GET) - Aún no lo hemos programado, pero lo haremos en un segundo
+GET http://127.0.0.1:3000/resources
+
+
+### 2. Listar los recursos (GET) - Aún no lo hemos programado, pero lo haremos en un segundo
+GET http://127.0.0.1:3000/recipes
+
+### 1. Crear producto (Manual en SQLTools, pero si quieres endpoint POST aquí iría)
+
+### 2. Agregar Receta
+POST http://127.0.0.1:3000/recipe
+Content-Type: application/json
+
+{
+    "product_id": "1ae0669e-0f7b-4c65-b821-d3518f38d137",
+    "resource_id": "e0622174-f5ed-4cac-880f-b5689f9cde18",
+    "quantity": 9
+}
+
+### 3. Producir (Consumir insumos)  Expresso
+POST http://127.0.0.1:3000/production
+Content-Type: application/json
+
+{
+    "product_id": "1ae0669e-0f7b-4c65-b821-d3518f38d137",
+    "quantity": 1
+}
+
+
+### ==========================================
+### FASE 1: REGISTRAR MATERIA PRIMA
+### ==========================================
+
+### Crear Harina (Copia el ID devuelto)
+POST http://127.0.0.1:3000/resources
+Content-Type: application/json
+
+{
+    "name": "Harina de Trigo",
+    "unit_of_measure": "g",
+    "unit_cost": 0.002,
+    "current_stock": 5000
+}
+
+### Crear Huevos (Copia el ID devuelto)
+POST http://127.0.0.1:3000/resources
+Content-Type: application/json
+
+{
+    "name": "Huevo Blanco",
+    "unit_of_measure": "unidad",
+    "unit_cost": 0.15,
+    "current_stock": 60
+}
+
+### Crear Chocolate (Copia el ID devuelto)
+POST http://127.0.0.1:3000/resources
+Content-Type: application/json
+
+{
+    "name": "Cacao en Polvo",
+    "unit_of_measure": "g",
+    "unit_cost": 0.01,
+    "current_stock": 1000
+}
+
+
+### ==========================================
+### FASE 2: ARMAR LA RECETA DEL PASTEL
+### (Sustituye los IDs por los que copiaste)
+### ==========================================
+
+### Agregar Harina a la receta (ej. 500g por pastel)
+POST http://127.0.0.1:3000/recipe
+Content-Type: application/json
+
+{
+    "product_id": "5a58e5ad-c8e8-4729-bf8f-a8827200fd29",
+    "resource_id": "75a0ac56-e139-4254-bb27-b46b23a05a20",
+    "quantity": 500
+}
+
+### Agregar Huevos a la receta (ej. 4 huevos por pastel)
+POST http://127.0.0.1:3000/recipe
+Content-Type: application/json
+
+{
+    "product_id": "93a488df-66a5-4574-bfaf-bd5db98bc61f",
+    "resource_id": "518965d0-fcf0-4757-ada2-48c959efe7ae",
+    "quantity": 4
+}
+
+### Agregar Chocolate a la receta (ej. 150g por pastel)
+POST http://127.0.0.1:3000/recipe
+Content-Type: application/json
+
+{
+    "product_id": "5a58e5ad-c8e8-4729-bf8f-a8827200fd29",
+    "resource_id": "dea40d30-2861-4c61-a8e0-718507e7c326",
+    "quantity": 150
+}
+
+
+### ==========================================
+### FASE 3: ORDEN DE PRODUCCIÓN
+### ==========================================
+
+### Fabricar 2 Pasteles
+POST http://127.0.0.1:3000/production
+Content-Type: application/json
+
+{
+    "product_id": "5a58e5ad-c8e8-4729-bf8f-a8827200fd29",
+    "quantity": 2
+}
+
+
+### ==========================================
+### ENDPOINTS DE PRODUCTOS
+### ==========================================
+
+### Crear Producto 1: Café Americano (MTO - No es prefabricado por defecto)
+POST http://127.0.0.1:3000/products
+Content-Type: application/json
+
+{
+    "name": "Café Americano",
+    "sale_price": 2.50
+}
+
+### Crear Producto 2: Pastel de Zanahoria (MTS - Prefabricado, va a vitrina)
+POST http://127.0.0.1:3000/products
+Content-Type: application/json
+
+{
+    "name": "Pastel de Zanahoria",
+    "sale_price": 14.00,
+    "is_pre_made": true
+}
+
+### Listar todos los Productos del catálogo
+GET http://127.0.0.1:3000/products
+
+
+### ==========================================
+### PRUEBAS DE ACTUALIZACIÓN (PUT)
+### ==========================================
+
+### Modificar un Recurso (Ej. Cambiar costo de la harina)
+PUT http://127.0.0.1:3000/resources
+Content-Type: application/json
+
+{
+    "id": "AQUI_VA_EL_ID_DE_LA_HARINA",
+    "name": "Harina de Trigo Ultra Fina",
+    "unit_of_measure": "g",
+    "unit_cost": 0.0025
+}
+
+### Modificar un Producto (Ej. Subir precio al pastel)
+PUT http://127.0.0.1:3000/products
+Content-Type: application/json
+
+{
+    "id": "AQUI_VA_EL_ID_DEL_PASTEL",
+    "name": "Pastel de Chocolate Premium",
+    "sale_price": 15.00,
+    "is_pre_made": true
+}
+
+
+### ==========================================
+### PRUEBAS DE ELIMINACIÓN (DELETE)
+### ==========================================
+
+### Intentar borrar un recurso protegido por Receta (Debe dar 500 por RESTRICCIÓN DE DB)
+DELETE http://127.0.0.1:3000/resources?id=AQUI_VA_EL_ID_DE_LA_HARINA
+
+### Borrar un producto limpio (Si no tiene historial en batch, dará 200 OK)
+DELETE http://127.0.0.1:3000/products?id=AQUI_VA_EL_ID_DE_UN_PRODUCTO_NUEVO
+
+### Borrar una receta (Si no tiene historial en batch, dará 200 OK)
+DELETE http://127.0.0.1:3000/recipe?id=AQUI_VA_EL_ID_DE_LA_RECETA
+
+### force-delete
+DELETE http://127.0.0.1:3000/resources/force-delete?id=AQUI_VA_EL_ID_DE_LA_HARINA
+
+### Borrar un producto
+DELETE http://127.0.0.1:3000/products/force-delete?id=AQUI_VA_EL_ID_DE_UN_PRODUCTO_NUEVO
+
+### Borrar una receta (Si no tiene historial en batch, dará 200 OK)
+DELETE http://127.0.0.1:3000/recipe/force-delete?id=AQUI_VA_EL_ID_DE_LA_RECETA
+
+### ==========================================
+### PRUEBAS DE VENTAS Y TRANSACCIONES (/sales)
+### ==========================================
+
+### VENTA TIPO 1: Producto Prefabricado (Ej. Pastel de Zanahoria)
+### Esperado: Descuenta directamente de la tabla 'product'
+POST http://127.0.0.1:3000/sales
+Content-Type: application/json
+
+{
+    "product_id": "UUID_DEL_PASTEL",
+    "quantity": 1,
+    "total_amount": 14.00
+}
+
+### VENTA TIPO 2: Producto al momento (Ej. Café Americano)
+### Esperado: Busca la receta y descuenta de la tabla 'resource'
+POST http://127.0.0.1:3000/sales
+Content-Type: application/json
+
+{
+    "product_id": "UUID_DEL_CAFE",
+    "quantity": 2,
+    "total_amount": 5.00
+}

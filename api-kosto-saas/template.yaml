@@ -1,0 +1,108 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: API Kosto SaaS
+
+Globals:
+  Function:
+    Timeout: 10
+    MemorySize: 128
+
+Resources:
+  # Ahora KostoApiGateway está correctamente dentro de Resources
+  KostoApiGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      Cors:
+        AllowMethods: "'GET,POST,OPTIONS,DELETE,PUT'"
+        AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,x-tenant-id'"
+        AllowOrigin: "'http://localhost:4200'"
+
+  KostoApiFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .
+      Handler: kosto/app.lambdaHandler
+      Runtime: nodejs24.x
+      Architectures:
+        - x86_64
+      Environment:
+        Variables:
+          DB_HOST: saas_postgres_dev
+          DB_USER: admin
+          DB_PASSWORD: password123
+          DB_NAME: saas_app
+      Events:
+        GetProducts:
+          Type: Api
+          Properties: { RestApiId: !Ref KostoApiGateway, Path: /products, Method: GET }
+        PostProducts:
+          Type: Api
+          Properties: { RestApiId: !Ref KostoApiGateway, Path: /products, Method: POST }
+        PutProducts:
+          Type: Api
+          Properties: { RestApiId: !Ref KostoApiGateway, Path: /products, Method: PUT }
+        DeleteProducts:
+          Type: Api
+          Properties: { RestApiId: !Ref KostoApiGateway, Path: /products, Method: DELETE }
+        GetResources:
+          Type: Api
+          Properties: { RestApiId: !Ref KostoApiGateway, Path: /resources, Method: GET }
+        PostResources:
+          Type: Api
+          Properties: { RestApiId: !Ref KostoApiGateway, Path: /resources, Method: POST }
+        PutResources:
+          Type: Api
+          Properties: { RestApiId: !Ref KostoApiGateway, Path: /resources, Method: PUT }
+        DeleteResources:
+          Type: Api
+          Properties: { RestApiId: !Ref KostoApiGateway, Path: /resources, Method: DELETE }
+        GetRecipes:
+          Type: Api
+          Properties: { RestApiId: !Ref KostoApiGateway, Path: /recipes, Method: GET }
+        PostRecipes:
+          Type: Api
+          Properties: { RestApiId: !Ref KostoApiGateway, Path: /recipes, Method: POST }
+        PutRecipes:
+          Type: Api
+          Properties: { RestApiId: !Ref KostoApiGateway, Path: /recipes, Method: PUT }
+        DeleteRecipes:
+          Type: Api
+          Properties: { RestApiId: !Ref KostoApiGateway, Path: /recipes, Method: DELETE }
+        GetSales:
+          Type: Api
+          Properties: { RestApiId: !Ref KostoApiGateway, Path: /sales, Method: GET }
+        PostSales:
+          Type: Api
+          Properties: { RestApiId: !Ref KostoApiGateway, Path: /sales, Method: POST }
+        GetTenants:
+          Type: Api
+          Properties: { RestApiId: !Ref KostoApiGateway, Path: '/tenants', Method: GET }
+        GetTenantById:
+          Type: Api
+          Properties: { RestApiId: !Ref KostoApiGateway, Path: '/tenants/{id}', Method: GET }
+        PostTenants:
+          Type: Api
+          Properties: { RestApiId: !Ref KostoApiGateway, Path: /tenants, Method: POST }
+        UpdateTenants:
+          Type: Api
+          Properties: { RestApiId: !Ref KostoApiGateway, Path: '/tenants/{id}', Method: PUT }
+        # DeleteTenants:
+        #   Type: Api
+        #   Properties: { RestApiId: !Ref KostoApiGateway, Path: /tenants/{id}, Method: DELETE }
+
+    
+    # Metadata debe ir al mismo nivel que Properties, no dentro
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        Sourcemap: true
+        EntryPoints: 
+        - kosto/app.ts
+
+Outputs:
+  KostoApiEndpoint:
+    Description: "API Gateway endpoint URL"
+    Value: !Sub "https://${KostoApiGateway}.execute-api.${AWS::Region}.${AWS::URLSuffix}/Prod/"

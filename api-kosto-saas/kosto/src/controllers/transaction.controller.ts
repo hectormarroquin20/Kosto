@@ -1,0 +1,61 @@
+import { dbPool } from '../db/database';
+import { processProduction } from './production.controller'; // <-- Importamos la SSOT
+
+export const registerSale = async (tenantId: string, productId: string, quantity: number, totalAmount: number) => {
+    const client = await dbPool.connect();
+
+    try {
+        await client.query('BEGIN'); // Iniciamos la transacción maestra
+
+        // 1. Verificamos el tipo de producto
+        const productQuery = await client.query(
+            'SELECT is_pre_made FROM product WHERE id = $1 AND tenant_id = $2',
+            [productId, tenantId]
+        );
+
+        if (productQuery.rowCount === 0) throw new Error('Product not found');
+        const isPreMade = productQuery.rows[0].is_pre_made;
+
+        // 2. Lógica de Negocios
+        if (isPreMade) {
+            // PASTEL: Solo descontamos de la vitrina (ya se produjo antes)
+            const updateProduct = await client.query(
+                `UPDATE product SET current_stock = current_stock - $1 
+                 WHERE id = $2 AND tenant_id = $3 AND current_stock >= $1`,
+                [quantity, productId, tenantId]
+            );
+            if (updateProduct.rowCount === 0) throw new Error('Insufficient product stock in display');
+        } else {
+            // CAFÉ (Make to Order): Llamamos a la magia, pasándole nuestra transacción
+            await processProduction(tenantId, productId, quantity, client);
+        }
+
+        // 3. Registrar el movimiento financiero
+        const logQuery = `
+            INSERT INTO transaction_log (tenant_id, type, reference_id, quantity, total_amount)
+            VALUES ($1, 'sale', $2, $3, $4)
+            RETURNING id, transaction_date;
+        `;
+        const result = await client.query(logQuery, [tenantId, productId, quantity, totalAmount]);
+
+        await client.query('COMMIT'); // Se guardan la venta y la producción al mismo tiempo
+        return result.rows[0];
+
+    } catch (err) {
+        await client.query('ROLLBACK');
+        throw err;
+    } finally {
+        client.release();
+    }
+};
+
+export const getTransaction = async (tenantId: string) => {
+    const client = await dbPool.connect();
+    try {
+        const queryText = `SELECT * FROM transaction_log WHERE tenant_id = $1`;
+        const result = await client.query(queryText, [tenantId]);
+        return result.rows;
+    } finally {
+        client.release();
+    }
+};

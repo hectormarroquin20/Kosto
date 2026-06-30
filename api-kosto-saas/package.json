@@ -1,0 +1,19 @@
+{
+  "name": "api-kosto-saas",
+  "version": "1.0.0",
+  "description": "API Kosto Backend",
+  "main": "kosto/app.js",
+  "scripts": {
+    "compile": "tsc"
+  },
+  "dependencies": {
+    "pg": "^8.12.0",
+    "esbuild": "^0.24.0"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.162",
+    "@types/node": "^20.14.0",
+    "@types/pg": "^8.11.0",
+    "typescript": "^5.0.0"
+  }
+}
