@@ -14,13 +14,21 @@ import { TransactionLogService } from '../../../core/services/transaction-log.se
 import { Product } from '../../../core/services/product'; // Tu servicio de productos
 import { ProductModel } from '../../../core/models/product.interface';
 
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+
 @Component({
   selector: 'app-sales-form',
   standalone: true,
   imports: [
-    ReactiveFormsModule, AsyncPipe, MatAutocompleteModule,
-    MatCardModule, MatFormFieldModule, MatInputModule,
-    MatSelectModule, MatButtonModule
+    ReactiveFormsModule,
+    AsyncPipe,
+    MatAutocompleteModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatButtonModule,
+    TranslatePipe
   ],
   templateUrl: './sales-form.html',
   styleUrl: './sales-form.scss',

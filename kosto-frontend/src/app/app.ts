@@ -1,5 +1,5 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { Component, computed, inject, OnInit, signal, WritableSignal } from '@angular/core';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { DOCUMENT } from '@angular/common';
 
 // Importaciones de Angular Material
@@ -13,8 +13,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { Tenant } from './core/services/tenant';
 import { Auth } from './core/services/auth';
 
-import { TranslateService } from '@ngx-translate/core';
-
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
@@ -27,7 +26,8 @@ import { TranslateService } from '@ngx-translate/core';
     MatListModule,
     MatIconModule,
     MatButtonModule,
-    MatMenuModule
+    MatMenuModule,
+    TranslatePipe
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss'
@@ -37,11 +37,14 @@ export class App implements OnInit {
   private tenantService = inject(Tenant);
   private readonly authService = inject(Auth);
   private translate = inject(TranslateService);
+  private router = inject(Router);
 
   public isDarkMode = false;
   public companyName = 'Kosto Inventory System'; // Valor por defecto
   public tenantId: string | null = null;
-  title = 'kosto-saas';
+
+  // isLoggedIn: WritableSignal<boolean> = signal(this.authService.isLoggedIn());
+  isLoggedIn = computed(() => this.authService.isLoggedIn());
 
   ngOnInit(): void {
     this.tenantId = this.authService.getTenantId();
@@ -61,9 +64,13 @@ export class App implements OnInit {
       error: () => console.log("No se pudo cargar el nombre de la empresa")
     });
 
-    this.translate.addLangs(['es', 'en']);
-    this.translate.setFallbackLang('es');
-    this.translate.use(localStorage.getItem('lang') || 'es');
+    const savedLang = localStorage.getItem('lang') || 'es';
+    this.translate.use(savedLang);
+  }
+
+  changeLanguage(lang: string) {
+    this.translate.use(lang);
+    localStorage.setItem('lang', lang);
   }
 
   toggleTheme() {
@@ -75,5 +82,21 @@ export class App implements OnInit {
     } else {
       this.document.body.classList.remove('dark-theme');
     }
+  }
+
+  async signOut() {
+    this.authService.logout();
+
+    // 3. Usa el router correctamente
+    if (this.router) {
+      await this.router.navigate(['/login']);
+      window.location.reload();
+    } else {
+      console.error("El Router no está inicializado");
+    }
+  }
+
+  onLoginSuccess() {
+    this.router.navigate(['/']);
   }
 }

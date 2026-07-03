@@ -14,6 +14,8 @@ import { Product } from '../../../core/services/product';
 import { Resource } from '../../../core/services/resource';
 import { catchError, forkJoin, of } from 'rxjs';
 
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+
 @Component({
   selector: 'app-recipe-list',
   standalone: true,
@@ -24,7 +26,8 @@ import { catchError, forkJoin, of } from 'rxjs';
     MatCardModule,
     MatIconModule,
     MatButtonModule,
-    RouterLink
+    RouterLink,
+    TranslatePipe
   ],
   templateUrl: './recipe-list.html',
   styleUrl: './recipe-list.scss',
@@ -95,11 +98,15 @@ export class RecipeList implements OnInit {
   }
 
   onEdit(recipeItem: RecipeItem) {
-    this.router.navigate(['/recipes/edit', recipeItem.id]);
+    this.router.navigate(['/recipes/edit', recipeItem.product_id]);
   }
 
   hasSufficientStock(resourceId: string, required: number): boolean {
     const res = this.resourceMap().get(resourceId);
+    if (!res) {
+      console.warn('ID no encontrado en mapa:', resourceId);
+    }
+    console.warn('ID SI encontrado en mapa:', resourceId);
     return res ? res.stock >= required : false;
   }
 }

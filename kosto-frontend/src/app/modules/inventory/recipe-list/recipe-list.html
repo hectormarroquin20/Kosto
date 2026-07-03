@@ -4,75 +4,79 @@
         <mat-card-header
             style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
             <div>
-                <mat-card-title>Inventario de Kosto</mat-card-title>
-                <mat-card-subtitle>Gestión centralizada de Recetas</mat-card-subtitle>
+                <mat-card-title>{{ 'RECIPES.TITLE' | translate }}</mat-card-title>
+                <mat-card-subtitle>{{ 'RECIPES.SUBTITLE' | translate }}</mat-card-subtitle>
             </div>
 
             <button mat-raised-button color="primary" routerLink="/recipes/new">
-                <mat-icon>add</mat-icon> Nueva Receta
+                <mat-icon>add</mat-icon> {{ 'RECIPES.NEW_BTN' | translate }}
             </button>
         </mat-card-header>
 
         <mat-card-content>
 
             <mat-form-field appearance="outline" style="width: 100%; margin-bottom: 1rem;">
-                <mat-label>Filtrar por nombre de producto</mat-label>
-                <input matInput (keyup)="filter.set($any($event.target).value)" placeholder="Ej. Pastel de Chocolate">
+                <mat-label>{{ 'RECIPES.FILTER_LABEL' | translate }}</mat-label>
+                <input matInput (keyup)="filter.set($any($event.target).value)"
+                    [placeholder]="'RECIPES.FILTER_PLACEHOLDER' | translate">
             </mat-form-field>
 
             @if (isLoading()) {
             <div style="text-align: center; padding: 3rem;">
-                <p>Cargando recetas y existencias...</p>
+                <p>{{ 'RECIPES.LOADING' | translate }}</p>
             </div>
             } @else {
-            <table mat-table [dataSource]="filteredRecipes()" class="mat-elevation-z2" style="width: 100%;">
+            <div class="table-responsive">
+                <table mat-table [dataSource]="filteredRecipes()" class="mat-elevation-z2" style="width: 100%;">
 
-                <ng-container matColumnDef="product_id">
-                    <th mat-header-cell *matHeaderCellDef> Producto </th>
-                    <td mat-cell *matCellDef="let element">
-                        {{ productMap().get(element.product_id) || 'Cargando...' }}
-                    </td>
-                </ng-container>
+                    <ng-container matColumnDef="product_id">
+                        <th mat-header-cell *matHeaderCellDef> {{ 'RECIPES.TABLE.PRODUCT' | translate }} </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{ productMap().get(element.product_id) || ('RECIPES.LOADING_TEXT' | translate) }}
+                        </td>
+                    </ng-container>
 
-                <ng-container matColumnDef="resource_id">
-                    <th mat-header-cell *matHeaderCellDef> Insumo </th>
-                    <td mat-cell *matCellDef="let element">
-                        <div style="font-weight: 500;">{{ resourceMap().get(element.resource_id)?.name || 'Cargando...'
-                            }}</div>
-                        <small
-                            [style.color]="hasSufficientStock(element.resource_id, element.required_quantity) ? 'green' : 'red'">
-                            {{ hasSufficientStock(element.resource_id, element.required_quantity) ? 'Stock disponible' :
-                            'Stock insuficiente' }}
-                        </small>
-                    </td>
-                </ng-container>
+                    <ng-container matColumnDef="resource_id">
+                        <th mat-header-cell *matHeaderCellDef> {{ 'RECIPES.TABLE.RESOURCE' | translate }} </th>
+                        <td mat-cell *matCellDef="let element">
+                            <div style="font-weight: 500;">{{ resourceMap().get(element.resource_id)?.name ||
+                                ('RECIPES.LOADING_TEXT' | translate) }}</div>
+                            <small
+                                [style.color]="hasSufficientStock(element.resource_id, element.required_quantity) ? 'green' : 'red'">
+                                {{ (hasSufficientStock(element.resource_id, element.required_quantity) ?
+                                'RECIPES.STOCK.OK'
+                                : 'RECIPES.STOCK.INSUFFICIENT') | translate }}
+                            </small>
+                        </td>
+                    </ng-container>
 
-                <ng-container matColumnDef="required_quantity">
-                    <th mat-header-cell *matHeaderCellDef> Cantidad Requerida </th>
-                    <td mat-cell *matCellDef="let element"> {{element.required_quantity}} </td>
-                </ng-container>
+                    <ng-container matColumnDef="required_quantity">
+                        <th mat-header-cell *matHeaderCellDef> {{ 'RECIPES.TABLE.QUANTITY' | translate }} </th>
+                        <td mat-cell *matCellDef="let element"> {{element.required_quantity}} </td>
+                    </ng-container>
 
-                <ng-container matColumnDef="actions">
-                    <th mat-header-cell *matHeaderCellDef> Acciones </th>
-                    <td mat-cell *matCellDef="let element">
-                        <button mat-icon-button color="primary" (click)="onEdit(element)">
-                            <mat-icon>edit</mat-icon>
-                        </button>
-                        <button mat-icon-button color="warn" (click)="onDelete(element.id)">
-                            <mat-icon>delete</mat-icon>
-                        </button>
-                    </td>
-                </ng-container>
+                    <ng-container matColumnDef="actions">
+                        <th mat-header-cell *matHeaderCellDef> {{ 'RECIPES.TABLE.ACTIONS' | translate }} </th>
+                        <td mat-cell *matCellDef="let element">
+                            <button mat-icon-button color="primary" (click)="onEdit(element)">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                            <button mat-icon-button color="warn" (click)="onDelete(element.id)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
 
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
-                <tr class="mat-row" *matNoDataRow>
-                    <td class="mat-cell" colspan="4" style="text-align: center; padding: 2rem;">
-                        No hay recetas registradas o no coinciden con el filtro.
-                    </td>
-                </tr>
-            </table>
+                    <tr class="mat-row" *matNoDataRow>
+                        <td class="mat-cell" colspan="4" style="text-align: center; padding: 2rem;">
+                            {{ 'RECIPES.NO_DATA' | translate }}
+                        </td>
+                    </tr>
+                </table>
+            </div>
             }
         </mat-card-content>
     </mat-card>

@@ -23,21 +23,47 @@ export const createProduct = async (
 };
 
 // Obtener todos los productos del tenant
-export const getProducts = async (tenantId: string) => {
+// export const getProducts = async (tenantId: string) => {
+//     const client = await dbPool.connect();
+//     try {
+//         const queryText = `
+//             SELECT id, name, sale_price, current_stock, is_pre_made, is_active, created_at
+//             FROM product
+//             WHERE tenant_id = $1 AND is_active = TRUE
+//             ORDER BY name ASC;
+//         `;
+//         const result = await client.query(queryText, [tenantId]);
+//         return result.rows;
+//     } finally {
+//         client.release();
+//     }
+// };
+export const getProducts = async (tenantId: string, isPreMade?: boolean) => {
     const client = await dbPool.connect();
     try {
-        const queryText = `
+        let queryText = `
             SELECT id, name, sale_price, current_stock, is_pre_made, is_active, created_at
             FROM product
             WHERE tenant_id = $1 AND is_active = TRUE
-            ORDER BY name ASC;
         `;
-        const result = await client.query(queryText, [tenantId]);
+
+        const queryParams: any[] = [tenantId];
+
+        // Si se envió el parámetro, lo agregamos a la consulta
+        if (isPreMade !== undefined) {
+            queryParams.push(isPreMade);
+            queryText += ` AND is_pre_made = $${queryParams.length}`;
+        }
+
+        queryText += ` ORDER BY name ASC;`;
+
+        const result = await client.query(queryText, queryParams);
         return result.rows;
     } finally {
         client.release();
     }
 };
+
 
 export const updateProduct = async (
     tenantId: string,

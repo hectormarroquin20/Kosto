@@ -1,21 +1,21 @@
 <mat-card>
     <mat-card-header>
-        <h2>Nueva Transacción</h2>
+        <h2>{{ 'TRANSACTIONS.FORM.TITLE' | translate }}</h2>
     </mat-card-header>
 
     <mat-card-content>
         <form [formGroup]="form" (ngSubmit)="save()" class="form-container">
             <mat-form-field appearance="outline">
-                <mat-label>Tipo</mat-label>
+                <mat-label>{{ 'TRANSACTIONS.FORM.TYPE' | translate }}</mat-label>
                 <mat-select formControlName="type">
-                    <mat-option value="SALE">Venta</mat-option>
-                    <mat-option value="PURCHASE">Compra</mat-option>
-                    <mat-option value="ADJUSTMENT">Ajuste</mat-option>
+                    <mat-option value="SALE">{{ 'TRANSACTIONS.FORM.SALE' | translate }}</mat-option>
+                    <mat-option value="PURCHASE">{{ 'TRANSACTIONS.FORM.PURCHASE' | translate }}</mat-option>
+                    <mat-option value="ADJUSTMENT">{{ 'TRANSACTIONS.FORM.ADJUSTMENT' | translate }}</mat-option>
                 </mat-select>
             </mat-form-field>
 
             <mat-form-field appearance="outline">
-                <mat-label>Producto</mat-label>
+                <mat-label>{{ 'TRANSACTIONS.FORM.PRODUCT' | translate }}</mat-label>
                 <input type="text" matInput formControlName="product" [matAutocomplete]="auto">
                 <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn"
                     (optionSelected)="onProductSelected($event)">
@@ -26,20 +26,24 @@
             </mat-form-field>
 
             <mat-form-field appearance="outline">
-                <mat-label>Cantidad</mat-label>
+                <mat-label>{{ 'TRANSACTIONS.FORM.QUANTITY' | translate }}</mat-label>
                 <input matInput type="number" formControlName="quantity">
             </mat-form-field>
 
             <mat-form-field appearance="outline">
-                <mat-label>Monto Total</mat-label>
+                <mat-label>{{ 'TRANSACTIONS.FORM.TOTAL' | translate }}</mat-label>
                 <input matInput type="number" formControlName="total_amount">
                 <span matTextPrefix>$&nbsp;</span>
-                <mat-hint>Calculado automáticamente</mat-hint>
+                <mat-hint>{{ 'TRANSACTIONS.FORM.HINT' | translate }}</mat-hint>
             </mat-form-field>
 
             <div class="actions">
-                <button mat-button type="button" (click)="router.navigate(['/inventory/sales'])">Cancelar</button>
-                <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">Guardar</button>
+                <button mat-button type="button" (click)="router.navigate(['/inventory/sales'])">
+                    {{ 'TRANSACTIONS.FORM.CANCEL' | translate }}
+                </button>
+                <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
+                    {{ 'TRANSACTIONS.FORM.SAVE' | translate }}
+                </button>
             </div>
         </form>
     </mat-card-content>

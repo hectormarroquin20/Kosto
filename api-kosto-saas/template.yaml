@@ -87,6 +87,9 @@ Resources:
         UpdateTenants:
           Type: Api
           Properties: { RestApiId: !Ref KostoApiGateway, Path: '/tenants/{id}', Method: PUT }
+        PostProduction:
+          Type: Api
+          Properties: { RestApiId: !Ref KostoApiGateway, Path: /production, Method: POST }
         # DeleteTenants:
         #   Type: Api
         #   Properties: { RestApiId: !Ref KostoApiGateway, Path: /tenants/{id}, Method: DELETE }

@@ -4,10 +4,175 @@
         "RESOURCES": "Insumos",
         "RECIPES": "Recetas",
         "POS": "Punto de Venta",
-        "TRANSACTIONS": "Transacciones"
+        "TRANSACTIONS": "Transacciones",
+        "PRODUCTION": "Producción (Stock)"
     },
     "MENU": {
+        "COMPANY": "Mi Compañia",
         "LIGHT_MODE": "Modo Claro",
-        "DARK_MODE": "Modo Oscuro"
+        "DARK_MODE": "Modo Oscuro",
+        "SIGN_OUT": "Cerrar sesión"
+    },
+    "TRANSACTIONS": {
+        "TITLE": "Registros de Transacción",
+        "SUBTITLE": "Gestión centralizada de Registros de Transacción",
+        "NEW_BTN": "nueva transacción",
+        "LOADING": "Cargando logs de transacciones y existencias...",
+        "UNKNOWN_PRODUCT": "Producto Desconocido",
+        "NO_DATA": "No hay registros de transacción registrados en la base de datos.",
+        "TABLE": {
+            "TYPE": "Tipo",
+            "PRODUCT": "Producto",
+            "QUANTITY": "Cantidad",
+            "TOTAL": "Monto Total",
+            "DATE": "Fecha de Transacción"
+        },
+        "FORM": {
+            "TITLE": "Nueva Transacción",
+            "TYPE": "Tipo",
+            "SALE": "Venta",
+            "PURCHASE": "Compra",
+            "ADJUSTMENT": "Ajuste",
+            "PRODUCT": "Producto",
+            "QUANTITY": "Cantidad",
+            "TOTAL": "Monto Total",
+            "HINT": "Calculado automáticamente",
+            "CANCEL": "Cancelar",
+            "SAVE": "Guardar"
+        }
+    },
+    "TENANT": {
+        "CONFIG": {
+            "TITLE": "Configuración de Compañía",
+            "COMPANY_NAME": "Nombre de la Compañía",
+            "TIER": "Tier de la cuenta",
+            "CREATED_AT": "Fecha de Creación",
+            "LOCK": "Bloquear Edición",
+            "UNLOCK": "Activar Edición",
+            "SAVE": "Guardar Cambios"
+        }
+    },
+    "RESOURCES": {
+        "TITLE": "Insumos de Kosto",
+        "SUBTITLE": "Gestión centralizada de Insumos",
+        "NEW_BTN": "Nuevo Insumo",
+        "LOADING": "Cargando insumos y existencias...",
+        "NO_DATA": "No hay insumos registrados en la base de datos.",
+        "TABLE": {
+            "NAME": "Nombre del Insumo",
+            "COST": "Costo Unitario",
+            "STOCK": "Stock Disponible",
+            "UNIT": "Unidad de Medida",
+            "UPDATED": "Última Actualización",
+            "ACTIONS": "Acciones"
+        },
+        "FORM": {
+            "EDIT_TITLE": "Editar Insumo",
+            "NEW_TITLE": "Nuevo Insumo",
+            "SUBTITLE": "Gestión de materia prima y recursos",
+            "NAME": "Nombre del Insumo",
+            "NAME_PLACEHOLDER": "Ej. Grano de Café Tostado",
+            "UNIT": "Unidad de Medida",
+            "UNIT_PLACEHOLDER": "Selecciona una unidad",
+            "COST": "Costo Unitario ($)",
+            "STOCK": "Stock Actual",
+            "IS_ACTIVE": "Insumo Activo",
+            "CANCEL": "Cancelar",
+            "SAVE": "Guardar Cambios",
+            "CREATE": "Crear Insumo"
+        },
+        "ERRORS": {
+            "REQUIRED": "Este campo es obligatorio.",
+            "MAX_LENGTH": "Máximo 255 caracteres permitidos.",
+            "MIN_ZERO": "El valor no puede ser negativo."
+        }
+    },
+    "RECIPES": {
+        "TITLE": "Inventario de Kosto",
+        "SUBTITLE": "Gestión centralizada de Recetas",
+        "NEW_BTN": "Nueva Receta",
+        "FILTER_LABEL": "Filtrar por nombre de producto",
+        "FILTER_PLACEHOLDER": "Ej. Pastel de Chocolate",
+        "LOADING": "Cargando recetas y existencias...",
+        "LOADING_TEXT": "Cargando...",
+        "NO_DATA": "No hay recetas registradas o no coinciden con el filtro.",
+        "STOCK": {
+            "OK": "Stock disponible",
+            "INSUFFICIENT": "Stock insuficiente"
+        },
+        "TABLE": {
+            "PRODUCT": "Producto",
+            "RESOURCE": "Insumo",
+            "QUANTITY": "Cantidad Requerida",
+            "ACTIONS": "Acciones"
+        },
+        "FORM": {
+            "EDIT_TITLE": "Editar Receta",
+            "NEW_TITLE": "Nueva Receta",
+            "SELECT_PRODUCT": "Seleccionar Producto",
+            "SELECT_RESOURCE": "Seleccionar Insumo",
+            "QUANTITY": "Cantidad Requerida",
+            "TOTAL_COST": "Costo Total de la Receta",
+            "CANCEL": "Cancelar",
+            "SAVE": "Guardar"
+        }
+    },
+    "PRODUCTS": {
+        "TITLE": "Inventario de Kosto",
+        "SUBTITLE": "Gestión centralizada de productos",
+        "NEW_BTN": "Nuevo Producto",
+        "LOADING": "Cargando productos y existencias...",
+        "NO_DATA": "No hay productos registrados en la base de datos.",
+        "TABLE": {
+            "NAME": "Nombre del Producto",
+            "PRICE": "Precio de Venta",
+            "STOCK": "Stock Disponible",
+            "TYPE": "Comportamiento",
+            "ACTIONS": "Acciones"
+        },
+        "TYPES": {
+            "PRE_MADE": "📦 Vitrina (Stock)",
+            "MAKE_TO_ORDER": "☕ Make-to-Order"
+        },
+        "FORM": {
+            "TITLE": "Registrar Nuevo Producto",
+            "NAME": "Nombre del Producto",
+            "NAME_PLACEHOLDER": "Ej. Capuchino Vainilla",
+            "PRICE": "Precio de Venta ($)",
+            "TYPE": "Tipo de Manufactura",
+            "CANCEL": "Cancelar",
+            "SAVE": "Guardar Producto"
+        },
+        "ERRORS": {
+            "REQUIRED": "El nombre es obligatorio.",
+            "MIN_PRICE": "El precio debe ser mayor a 0."
+        }
+    },
+    "LOGIN": {
+        "TITLE": "Iniciar Sesión",
+        "EMAIL": "Correo electrónico",
+        "PASSWORD": "Contraseña",
+        "BTN": "Entrar"
+    },
+    "PRODUCTION": {
+        "FORM": {
+            "TITLE": "Registrar Producción de Vitrina",
+            "SUBTITLE": "Cocinar o preparar productos por lote para agregar al inventario.",
+            "SELECT_PRODUCT": "Producto a Elaborar",
+            "QUANTITY": "Cantidad Producida",
+            "QUANTITY_HINT": "Ej: 12 (Rebanadas de pastel, galletas, etc.)",
+            "CANCEL": "Cancelar",
+            "PRODUCE": "Procesar Lote"
+        },
+        "ERRORS": {
+            "TITLE": "No se pudo procesar",
+            "MIN_QTY": "Debe producir al menos 1 unidad."
+        },
+        "RESULT": {
+            "SUCCESS": "¡Lote procesado exitosamente!",
+            "TOTAL_COST": "Costo Total del Lote",
+            "UNIT_COST": "Costo Unitario Calculado",
+            "TIP": "Revisa este costo unitario contra tu precio de venta en el catálogo de productos para asegurar tu margen de ganancia."
+        }
     }
 }

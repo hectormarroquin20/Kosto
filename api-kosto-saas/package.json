@@ -4,16 +4,24 @@
   "description": "API Kosto Backend",
   "main": "kosto/app.js",
   "scripts": {
-    "compile": "tsc"
+    "compile": "tsc",
+    "test": "cd kosto && npx jest --config jest.config.js",
+    "test:watch": "cd kosto && npx jest --config jest.config.js --watch",
+    "test:coverage": "cd kosto && npx jest --config jest.config.js --coverage",
+    "start": "cd kosto && node app.js"
   },
   "dependencies": {
-    "pg": "^8.12.0",
-    "esbuild": "^0.24.0"
+    "esbuild": "^0.28.1",
+    "pg": "^8.12.0"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.162",
+    "@types/jest": "^30.0.0",
     "@types/node": "^20.14.0",
     "@types/pg": "^8.11.0",
-    "typescript": "^5.0.0"
+    "jest": "^30.4.2",
+    "ts-jest": "^29.4.11",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^6.0.3"
   }
 }

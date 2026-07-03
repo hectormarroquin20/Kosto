@@ -9,6 +9,9 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { Router, RouterLink } from '@angular/router';
 
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+
+
 @Component({
   selector: 'app-resource-list',
   imports: [
@@ -16,7 +19,8 @@ import { Router, RouterLink } from '@angular/router';
     MatCardModule,
     MatIconModule,
     MatButtonModule,
-    RouterLink
+    RouterLink,
+    TranslatePipe
   ],
   templateUrl: './resource-list.html',
   styleUrl: './resource-list.scss',

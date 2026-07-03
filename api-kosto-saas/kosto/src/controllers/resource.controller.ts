@@ -1,5 +1,5 @@
 import { dbPool } from '../db/database';
-import { CreateResourceDTO } from '../models/types';
+import { CreateResourceDTO, Resource } from '../models/types';
 
 export const createResource = async (tenantId: string, payload: Partial<CreateResourceDTO>) => {
     // 1. Validación básica de datos de entrada
@@ -9,7 +9,7 @@ export const createResource = async (tenantId: string, payload: Partial<CreateRe
 
     // 2. Obtener una conexión del Pool
     const client = await dbPool.connect();
-    
+
     try {
         // 3. Consulta parametrizada con RETURNING para devolver el registro creado
         const queryText = `
@@ -17,13 +17,13 @@ export const createResource = async (tenantId: string, payload: Partial<CreateRe
             VALUES ($1, $2, $3, $4, $5)
             RETURNING id, name, unit_of_measure, unit_cost, current_stock, created_at
         `;
-        
+
         // Si no envían stock inicial, asumimos 0
         const initialStock = payload.current_stock || 0;
         const values = [tenantId, payload.name, payload.unit_of_measure, payload.unit_cost, initialStock];
 
         const result = await client.query(queryText, values);
-        
+
         return result.rows[0];
     } finally {
         // 4. SIEMPRE liberar el cliente de vuelta al pool, incluso si hay error
@@ -46,10 +46,10 @@ export const getResources = async (tenantId: string) => {
 };
 
 export const updateResource = async (
-    tenantId: string, 
-    id: string, 
-    name: string, 
-    unitOfMeasure: string, 
+    tenantId: string,
+    id: string,
+    name: string,
+    unitOfMeasure: string,
     unitCost: number
 ) => {
     const client = await dbPool.connect();
@@ -72,7 +72,7 @@ export const forceDeleteResource = async (tenantId: string, id: string) => {
     try {
         // Intentamos el borrado físico
         const result = await client.query(
-            'DELETE FROM resource WHERE id = $1 AND tenant_id = $2', 
+            'DELETE FROM resource WHERE id = $1 AND tenant_id = $2',
             [id, tenantId]
         );
         return (result.rowCount ?? 0) > 0;

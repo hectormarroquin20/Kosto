@@ -31,6 +31,8 @@ body {
   // Reset the user agent margin.
   margin: 0;
   height: 100%;
+  overflow-x: hidden;
+  width: 100%;
 }
 
 /* You can add global styles to this file, and also import other style files */
@@ -48,4 +50,27 @@ body {
 .dark-theme .mat-sidenav-content {
   background-color: #303030;
   color: white;
+}
+
+/* El contenedor del scroll */
+.table-responsive {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 1rem;
+}
+
+/* Evita que los elementos hijos obliguen al padre a expandirse */
+* {
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+/* Esto fuerza a que cualquier componente de Material Material 3 respete el ancho de pantalla */
+.mat-mdc-card,
+.mat-mdc-dialog-container,
+mat-sidenav-content {
+  max-width: 100%;
+  box-sizing: border-box !important;
 }

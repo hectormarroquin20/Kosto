@@ -3,7 +3,7 @@ import { createResource, forceDeleteResource, getResources, softDeleteResource, 
 import { buildResponse } from './src/utils/response';
 import { getTenantFromHeader } from './src/utils/auth';
 import { processProduction } from './src/controllers/production.controller';
-import { addRecipeItem, forceDeleteRecipeItem, getRecipeItem, softDeleteRecipeItem, updateRecipeItem } from './src/controllers/recipe.controller';
+import { addRecipeItem, forceDeleteRecipeItem, getRecipeItem, updateRecipeItem } from './src/controllers/recipe.controller';
 import { createProduct, forceDeleteProduct, getProducts, softDeleteProduct, updateProduct } from './src/controllers/product.controller';
 import { createTenant, getTenant, updateTenant } from './src/controllers/tenant.controller';
 import { getTransaction, registerSale } from './src/controllers/transaction.controller';
@@ -16,7 +16,18 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
     try {
         const method = event.httpMethod;
         const path = event.path;
-        if (method === 'OPTIONS') return buildResponse(200, {});
+
+        if (method === 'OPTIONS') {
+            return {
+                statusCode: 200,
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+                    'Access-Control-Allow-Headers': 'Content-Type, Authorization, x-tenant-id',
+                },
+                body: ''
+            };
+        }
 
         let tenantId = '';
         if (path !== '/tenants' || method !== 'POST') {
@@ -50,7 +61,17 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
             return buildResponse(200, { message: 'Product physically deleted' });
         }
         if (path === '/products') {
-            if (method === 'GET') return buildResponse(200, { data: await getProducts(tenantId) });
+            if (method === 'GET') {
+                // Extraemos el parámetro de la URL: /products?is_pre_made=true
+                const isPreMadeParam = event.queryStringParameters?.is_pre_made;
+
+                // Convertimos el string 'true' a booleano real
+                const isPreMade = isPreMadeParam !== undefined
+                    ? isPreMadeParam.toLowerCase() === 'true'
+                    : undefined;
+
+                return buildResponse(200, { data: await getProducts(tenantId, isPreMade) });
+            }
             if (method === 'POST') {
                 const b = getBody(event);
                 return buildResponse(201, { data: await createProduct(tenantId, b.name, parseFloat(b.sale_price), !!b.is_pre_made) });
@@ -65,28 +86,25 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
         // ========================================================
         // CRUD: RECIPES
         // ========================================================
-        if (path === '/recipes/force-delete' && method === 'DELETE') {
-            await forceDeleteRecipeItem(tenantId, event.queryStringParameters?.id!);
-            return buildResponse(200, { message: 'Recipe physically deleted' });
-        }
+        // if (path === '/recipes/force-delete' && method === 'DELETE') {
+        //     await forceDeleteRecipeItem(tenantId, event.queryStringParameters?.id!);
+        //     return buildResponse(200, { message: 'Recipe physically deleted' });
+        // }
         if (path === '/recipes') {
             if (method === 'GET') return buildResponse(200, { data: await getRecipeItem(tenantId) });
             if (method === 'POST') {
                 const b = getBody(event);
-                return buildResponse(201, { data: await addRecipeItem(tenantId, b.product_id, b.resource_id, b.quantity) });
+                return buildResponse(201, { data: await addRecipeItem(tenantId, b.product_id, b.resource_id, parseFloat(b.required_quantity)) });
             }
             if (method === 'PUT') {
                 const b = getBody(event);
-                return buildResponse(200, { data: await updateRecipeItem(tenantId, b.id, b.product_id, b.resource_id, b.quantity) });
+                return buildResponse(200, { data: await updateRecipeItem(tenantId, b.id, b.product_id, b.resource_id, parseFloat(b.required_quantity)) });
             }
-            if (method === 'DELETE') return buildResponse(200, { data: await softDeleteRecipeItem(tenantId, event.queryStringParameters?.id!) });
+            if (method === 'DELETE') return buildResponse(200, { data: await forceDeleteRecipeItem(tenantId, event.queryStringParameters?.id!) });
         }
 
         // ========================================================
         // CRUD: TENANTS & SALES
-        // ========================================================
-        // ========================================================
-        // CRUD: TENANTS
         // ========================================================
 
         // 1. Rutas Dinámicas: /tenants/{id}
@@ -122,8 +140,14 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
         }
 
         if (path === '/production' && method === 'POST') {
-            const b = getBody(event);
-            return buildResponse(201, { data: await processProduction(tenantId, b.reference_id, b.quantity) });
+            try {
+                const b = getBody(event);
+                const result = await processProduction(tenantId, b.product_id, b.quantity);
+                return buildResponse(201, { data: result });
+            } catch (err: any) {
+                // Aquí es donde sucede la magia: capturamos el mensaje del error lanzado en el controlador
+                return buildResponse(400, { error: err.message });
+            }
         }
 
         return buildResponse(404, { error: 'Route not found' });

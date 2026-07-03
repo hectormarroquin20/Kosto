@@ -7,6 +7,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { Router, RouterLink } from '@angular/router';
 
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+
 @Component({
   selector: 'app-product-list',
   standalone: true,
@@ -15,7 +17,8 @@ import { Router, RouterLink } from '@angular/router';
     MatCardModule,
     MatIconModule,
     MatButtonModule,
-    RouterLink
+    RouterLink,
+    TranslatePipe
   ],
   templateUrl: './product-list.html',
   styleUrl: './product-list.scss',

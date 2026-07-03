@@ -1,0 +1,178 @@
+{
+    "NAV": {
+        "PRODUCTS": "Products",
+        "RESOURCES": "Resources",
+        "RECIPES": "Recipes",
+        "POS": "Point of Sale",
+        "TRANSACTIONS": "Transactions",
+        "PRODUCTION": "Production (Stock)"
+    },
+    "MENU": {
+        "COMPANY": "My Company",
+        "LIGHT_MODE": "Light Mode",
+        "DARK_MODE": "Dark Mode",
+        "SIGN_OUT": "Sign out"
+    },
+    "TRANSACTIONS": {
+        "TITLE": "Transaction Logs",
+        "SUBTITLE": "Centralized management of transaction logs",
+        "NEW_BTN": "new transaction",
+        "LOADING": "Loading transaction logs and stock...",
+        "UNKNOWN_PRODUCT": "Unknown Product",
+        "NO_DATA": "No transaction records found in the database.",
+        "TABLE": {
+            "TYPE": "Type",
+            "PRODUCT": "Product",
+            "QUANTITY": "Quantity",
+            "TOTAL": "Total Amount",
+            "DATE": "Transaction Date"
+        },
+        "FORM": {
+            "TITLE": "New Transaction",
+            "TYPE": "Type",
+            "SALE": "Sale",
+            "PURCHASE": "Purchase",
+            "ADJUSTMENT": "Adjustment",
+            "PRODUCT": "Product",
+            "QUANTITY": "Quantity",
+            "TOTAL": "Total Amount",
+            "HINT": "Automatically calculated",
+            "CANCEL": "Cancel",
+            "SAVE": "Save"
+        }
+    },
+    "TENANT": {
+        "CONFIG": {
+            "TITLE": "Company Settings",
+            "COMPANY_NAME": "Company Name",
+            "TIER": "Account Tier",
+            "CREATED_AT": "Creation Date",
+            "LOCK": "Lock Editing",
+            "UNLOCK": "Enable Editing",
+            "SAVE": "Save Changes"
+        }
+    },
+    "RESOURCES": {
+        "TITLE": "Kosto Resources",
+        "SUBTITLE": "Centralized resource management",
+        "NEW_BTN": "New Resource",
+        "LOADING": "Loading resources and stock...",
+        "NO_DATA": "No resources registered in the database.",
+        "TABLE": {
+            "NAME": "Resource Name",
+            "COST": "Unit Cost",
+            "STOCK": "Available Stock",
+            "UNIT": "Unit of Measure",
+            "UPDATED": "Last Update",
+            "ACTIONS": "Actions"
+        },
+        "FORM": {
+            "EDIT_TITLE": "Edit Resource",
+            "NEW_TITLE": "New Resource",
+            "SUBTITLE": "Raw material and resource management",
+            "NAME": "Resource Name",
+            "NAME_PLACEHOLDER": "e.g. Roasted Coffee Bean",
+            "UNIT": "Unit of Measure",
+            "UNIT_PLACEHOLDER": "Select a unit",
+            "COST": "Unit Cost ($)",
+            "STOCK": "Current Stock",
+            "IS_ACTIVE": "Active Resource",
+            "CANCEL": "Cancel",
+            "SAVE": "Save Changes",
+            "CREATE": "Create Resource"
+        },
+        "ERRORS": {
+            "REQUIRED": "This field is required.",
+            "MAX_LENGTH": "Maximum 255 characters allowed.",
+            "MIN_ZERO": "Value cannot be negative."
+        }
+    },
+    "RECIPES": {
+        "TITLE": "Kosto Inventory",
+        "SUBTITLE": "Centralized Recipe Management",
+        "NEW_BTN": "New Recipe",
+        "FILTER_LABEL": "Filter by product name",
+        "FILTER_PLACEHOLDER": "e.g. Chocolate Cake",
+        "LOADING": "Loading recipes and stock...",
+        "LOADING_TEXT": "Loading...",
+        "NO_DATA": "No recipes registered or no matches found.",
+        "STOCK": {
+            "OK": "Sufficient stock",
+            "INSUFFICIENT": "Insufficient stock"
+        },
+        "TABLE": {
+            "PRODUCT": "Product",
+            "RESOURCE": "Resource",
+            "QUANTITY": "Required Quantity",
+            "ACTIONS": "Actions"
+        },
+        "FORM": {
+            "EDIT_TITLE": "Edit Recipe",
+            "NEW_TITLE": "New Recipe",
+            "SELECT_PRODUCT": "Select Product",
+            "SELECT_RESOURCE": "Select Resource",
+            "QUANTITY": "Required Quantity",
+            "TOTAL_COST": "Total Cost of the Recipe",
+            "CANCEL": "Cancel",
+            "SAVE": "Save"
+        }
+    },
+    "PRODUCTS": {
+        "TITLE": "Kosto Inventory",
+        "SUBTITLE": "Centralized product management",
+        "NEW_BTN": "New Product",
+        "LOADING": "Loading products and stock...",
+        "NO_DATA": "No products registered in the database.",
+        "TABLE": {
+            "NAME": "Product Name",
+            "PRICE": "Sale Price",
+            "STOCK": "Available Stock",
+            "TYPE": "Behavior",
+            "ACTIONS": "Actions"
+        },
+        "TYPES": {
+            "PRE_MADE": "📦 Showroom (Stock)",
+            "MAKE_TO_ORDER": "☕ Make-to-Order"
+        },
+        "FORM": {
+            "TITLE": "Register New Product",
+            "NAME": "Product Name",
+            "NAME_PLACEHOLDER": "e.g. Vanilla Cappuccino",
+            "PRICE": "Sale Price ($)",
+            "TYPE": "Manufacturing Type",
+            "CANCEL": "Cancel",
+            "SAVE": "Save Product"
+        },
+        "ERRORS": {
+            "REQUIRED": "Name is required.",
+            "MIN_PRICE": "Price must be greater than 0."
+        }
+    },
+    "LOGIN": {
+        "TITLE": "Login",
+        "EMAIL": "Email",
+        "PASSWORD": "Password",
+        "BTN": "Login"
+    },
+    "PRODUCTION": {
+        "FORM": {
+            "TITLE": "Registrar Producción de Vitrina",
+            "SUBTITLE": "Cocinar o preparar productos por lote para agregar al inventario.",
+            "SELECT_PRODUCT": "Producto a Elaborar",
+            "QUANTITY": "Cantidad Producida",
+            "QUANTITY_HINT": "Ej: 12 (Rebanadas de pastel, galletas, etc.)",
+            "CANCEL": "Cancelar",
+            "PRODUCE": "Procesar Lote"
+        },
+        "ERRORS": {
+            "TITLE": "No se pudo procesar",
+            "MIN_QTY": "Debe producir al menos 1 unidad."
+        },
+        "RESULT": {
+            "SUCCESS": "¡Lote procesado exitosamente!",
+            "TOTAL_COST": "Costo Total del Lote",
+            "UNIT_COST": "Costo Unitario Calculado",
+            "TIP": "Revisa este costo unitario contra tu precio de venta en el catálogo de productos para asegurar tu margen de ganancia."
+        }
+    }
+}

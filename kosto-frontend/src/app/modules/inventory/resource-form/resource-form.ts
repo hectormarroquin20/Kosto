@@ -14,6 +14,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSelectModule } from '@angular/material/select';
 
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+
+
 @Component({
   selector: 'app-resource-form',
   standalone: true,
@@ -25,7 +28,8 @@ import { MatSelectModule } from '@angular/material/select';
     MatInputModule,
     MatButtonModule,
     MatSlideToggleModule,
-    MatSelectModule
+    MatSelectModule,
+    TranslatePipe
   ],
   templateUrl: './resource-form.html',
   styleUrl: './resource-form.scss',

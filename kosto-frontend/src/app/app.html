@@ -1,3 +1,4 @@
+@if (isLoggedIn()) {
 <mat-sidenav-container class="sidenav-container">
 
   <mat-sidenav #sidenav mode="side" opened class="sidenav">
@@ -6,29 +7,34 @@
     <mat-nav-list>
       <a mat-list-item routerLink="/products">
         <mat-icon matListItemIcon>inventory</mat-icon>
-        <div matListItemTitle>Productos</div>
+        <div matListItemTitle>{{ 'NAV.PRODUCTS' | translate }}</div>
       </a>
 
       <a mat-list-item routerLink="/resources">
         <mat-icon matListItemIcon>category</mat-icon>
-        <div matListItemTitle>Insumos</div>
+        <div matListItemTitle>{{ 'NAV.RESOURCES' | translate }}</div>
       </a>
 
       <a mat-list-item routerLink="/recipes">
         <mat-icon matListItemIcon>receipt_long</mat-icon>
-        <div matListItemTitle>Recetas</div>
+        <div matListItemTitle>{{ 'NAV.RECIPES' | translate }}</div>
       </a>
 
       <a mat-list-item routerLink="/sales/new">
         <mat-icon matListItemIcon>point_of_sale</mat-icon>
-        <div matListItemTitle>Punto de Venta</div>
+        <div matListItemTitle>{{ 'NAV.POS' | translate }}</div>
       </a>
 
       <mat-divider></mat-divider>
 
       <a mat-list-item routerLink="/transaction-logs">
         <mat-icon matListItemIcon>history</mat-icon>
-        <div matListItemTitle>Transacciones</div>
+        <div matListItemTitle>{{ 'NAV.TRANSACTIONS' | translate }}</div>
+      </a>
+
+      <a mat-list-item routerLink="/production">
+        <mat-icon matListItemIcon>factory</mat-icon>
+        <div matListItemTitle>{{ 'NAV.PRODUCTION' | translate }}</div>
       </a>
 
     </mat-nav-list>
@@ -55,15 +61,28 @@
       </div>
 
       <mat-menu #settingsMenu="matMenu">
+        <button mat-menu-item (click)="changeLanguage('es')">Español</button>
+        <button mat-menu-item (click)="changeLanguage('en')">English</button>
+
         <button mat-menu-item routerLink="/tenants">
           <mat-icon>business</mat-icon>
-          <span>Mi Compañía</span>
+          <span>{{ 'MENU.COMPANY' | translate }}</span>
         </button>
+
         <mat-divider></mat-divider>
+
         <button mat-menu-item (click)="toggleTheme()">
           <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
-          <span>{{ isDarkMode ? 'Modo Claro' : 'Modo Oscuro' }}</span>
+          <span>{{ isDarkMode ? ('MENU.LIGHT_MODE' | translate) : ('MENU.DARK_MODE' | translate) }}</span>
         </button>
+
+        <mat-divider></mat-divider>
+
+        <button mat-menu-item (click)="signOut()">
+          <mat-icon color="warn">logout</mat-icon>
+          <span>{{ 'MENU.SIGN_OUT' | translate }}</span>
+        </button>
+
       </mat-menu>
     </mat-toolbar>
 
@@ -73,3 +92,6 @@
   </mat-sidenav-content>
 
 </mat-sidenav-container>
+} @else {
+<router-outlet></router-outlet>
+}
