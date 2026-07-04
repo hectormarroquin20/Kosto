@@ -81,19 +81,3 @@ export const forceDeleteRecipeItem = async (tenantId: string, id: string) => {
         client.release();
     }
 };
-
-// export const softDeleteRecipeItem = async (tenantId: string, id: string) => {
-//     const client = await dbPool.connect();
-//     try {
-//         const queryText = `
-//             UPDATE recipe_item 
-//             SET is_active = FALSE 
-//             WHERE id = $1 AND tenant_id = $2
-//             RETURNING id;
-//         `;
-//         const result = await client.query(queryText, [id, tenantId]);
-//         return (result.rowCount ?? 0) > 0;
-//     } finally {
-//         client.release();
-//     }
-// };

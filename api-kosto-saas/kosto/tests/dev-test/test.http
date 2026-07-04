@@ -227,3 +227,14 @@ Content-Type: application/json
     "quantity": 2,
     "total_amount": 5.00
 }
+
+### VENTA TIPO 2: Producto al momento (Ej. Café Americano)
+# ### Esperado: Busca la receta y descuenta de la tabla 'resource'
+# POST http://127.0.0.1:3000/admin/reconcile
+# Content-Type: application/json
+# x-tenant-id: 11111111-1111-1111-1111-111111111111
+
+# {
+#     "email": "oswaldo.margueta@gmail.com",
+#     "tenantId": "11111111-1111-1111-1111-111111111111"
+# }

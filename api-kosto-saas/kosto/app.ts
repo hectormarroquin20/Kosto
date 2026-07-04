@@ -96,10 +96,6 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
         // ========================================================
         // CRUD: RECIPES
         // ========================================================
-        // if (path === '/recipes/force-delete' && method === 'DELETE') {
-        //     await forceDeleteRecipeItem(tenantId, event.queryStringParameters?.id!);
-        //     return buildResponse(200, { message: 'Recipe physically deleted' });
-        // }
         if (path === '/recipes') {
             if (method === 'GET') return buildResponse(200, { data: await getRecipeItem(tenantId) });
             if (method === 'POST') {
@@ -134,10 +130,6 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
             if (method === 'GET') {
                 return buildResponse(200, { data: await getTenant(tenantId) });
             }
-            // if (method === 'POST') {
-            //     const b = getBody(event);
-            //     return buildResponse(201, { data: await createTenant(b.company_name, b.tier) });
-            // }
             if (method === 'POST') {
                 const b = getBody(event);
 
@@ -175,17 +167,6 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
             }
         }
 
-        // if (path === '/admin/reconcile' && method === 'POST') {
-        //     const b = getBody(event);
-        //     console.log("DEBUG - Body recibido:", JSON.stringify(b));
-
-        //     await reconcileUserTenant({ body: b }, {
-        //         status: (code: number) => ({
-        //             json: (responseBody: any) => buildResponse(code, responseBody)
-        //         })
-        //     } as any);
-        //     return buildResponse(200, { message: 'Success' });
-        // }
 
         return buildResponse(404, { error: 'Route not found' });
     } catch (err: any) {

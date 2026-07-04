@@ -1,5 +1,5 @@
 import { dbPool } from '../db/database';
-import { CreateResourceDTO, Resource } from '../models/types';
+import { CreateResourceDTO } from '../models/types';
 
 export const createResource = async (tenantId: string, payload: Partial<CreateResourceDTO>) => {
     // 1. Validación básica de datos de entrada

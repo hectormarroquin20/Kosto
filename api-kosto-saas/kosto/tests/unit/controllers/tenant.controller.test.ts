@@ -26,15 +26,15 @@ describe('Tenant Controller Unit Tests', () => {
     });
 
     test('createTenant debería insertar y retornar el nuevo tenant', async () => {
-        const mockRow = { id: 't1', company_name: 'Kosto Corp', tier: 'premium' };
+        const mockRow = { id: 't1', company_name: 'Kosto Corp', tier: 'freemium' };
         mockClient.query.mockResolvedValue({ rows: [mockRow] });
 
-        const result = await createTenant('Kosto Corp', 'premium');
+        const result = await createTenant('Kosto Corp', 'freemium');
 
         expect(result).toEqual(mockRow);
         expect(mockClient.query).toHaveBeenCalledWith(
             expect.stringContaining('INSERT INTO tenant'),
-            ['Kosto Corp', 'premium']
+            ['Kosto Corp', 'freemium']
         );
         expect(mockClient.release).toHaveBeenCalled();
     });

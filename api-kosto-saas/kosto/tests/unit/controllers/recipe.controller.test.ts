@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, jest, test } from '@jest/globals';
-import { upsertRecipeItem, getRecipeItem, updateRecipeItem, forceDeleteRecipeItem, softDeleteRecipeItem } from '@/controllers/recipe.controller';
+import { upsertRecipeItem, getRecipeItem, updateRecipeItem, forceDeleteRecipeItem } from '@/controllers/recipe.controller';
 import { dbPool } from '@/db/database';
 
 jest.mock('@/db/database');
@@ -58,13 +58,5 @@ describe('Recipe Controller Unit Tests', () => {
 
         expect(result).toBe(true);
         expect(mockClient.release).toHaveBeenCalled();
-    });
-
-    test('softDeleteRecipeItem debería retornar false si no encontró la receta', async () => {
-        mockClient.query.mockResolvedValue({ rowCount: 0 });
-
-        const result = await softDeleteRecipeItem('t1', '999');
-
-        expect(result).toBe(false);
     });
 });
