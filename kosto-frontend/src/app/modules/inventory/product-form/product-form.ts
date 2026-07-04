@@ -12,7 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 
-import { Auth } from '../../../core/services/auth';
+import { IAuthService } from '../../../core/models/auth.interface';
 
 import { ActivatedRoute } from '@angular/router';
 
@@ -37,7 +37,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 export class ProductForm {
   private readonly fb = inject(FormBuilder);
   private readonly productService = inject(Product);
-  private readonly authService = inject(Auth); // <--- Inyectamos el gestor de sesión
+  private readonly authService = inject(IAuthService); // <--- Inyectamos el gestor de sesión
   private readonly router = inject(Router);
 
   private readonly route = inject(ActivatedRoute);
@@ -87,7 +87,7 @@ export class ProductForm {
 
     const formValue = this.productForm.value;
     const payload: Partial<ProductModel> & { create_recipe?: boolean } = {
-      tenant_id: this.authService.getTenantId(),
+      tenant_id: this.authService.getTenantId() ?? undefined,
       name: formValue.name ?? '',
       sale_price: formValue.sale_price ?? 0,
       is_pre_made: formValue.is_pre_made ?? true,

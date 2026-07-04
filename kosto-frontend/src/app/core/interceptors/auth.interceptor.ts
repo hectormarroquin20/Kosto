@@ -1,13 +1,13 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { Auth } from '../services/auth';
+import { IAuthService } from '../models/auth.interface';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-    const authService = inject(Auth);
+    const authService = inject(IAuthService);
     const tenantId = authService.getTenantId();
 
     const reqWithHeader = req.clone({
-        headers: req.headers.set('x-tenant-id', tenantId)
+        headers: tenantId ? req.headers.set('x-tenant-id', tenantId) : req.headers
     });
 
     return next(reqWithHeader);

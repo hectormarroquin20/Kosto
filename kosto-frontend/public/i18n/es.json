@@ -5,7 +5,8 @@
         "RECIPES": "Recetas",
         "POS": "Punto de Venta",
         "TRANSACTIONS": "Transacciones",
-        "PRODUCTION": "Producción (Stock)"
+        "PRODUCTION": "Producción (Stock)",
+        "ZERORESOURCE": "Insumos Faltantes"
     },
     "MENU": {
         "COMPANY": "Mi Compañia",
@@ -58,6 +59,8 @@
         "NEW_BTN": "Nuevo Insumo",
         "LOADING": "Cargando insumos y existencias...",
         "NO_DATA": "No hay insumos registrados en la base de datos.",
+        "MISSING_TITLE": "Insumos faltantes",
+        "MISSING_SUBTITLE": "Gestión centralizada de Insumos",
         "TABLE": {
             "NAME": "Nombre del Insumo",
             "COST": "Costo Unitario",
@@ -141,7 +144,8 @@
             "PRICE": "Precio de Venta ($)",
             "TYPE": "Tipo de Manufactura",
             "CANCEL": "Cancelar",
-            "SAVE": "Guardar Producto"
+            "SAVE": "Guardar Producto",
+            "CREATE_RECIPE_AFTER": "Continuar con creacion de receta"
         },
         "ERRORS": {
             "REQUIRED": "El nombre es obligatorio.",
@@ -152,7 +156,11 @@
         "TITLE": "Iniciar Sesión",
         "EMAIL": "Correo electrónico",
         "PASSWORD": "Contraseña",
-        "BTN": "Entrar"
+        "BTN": "Entrar",
+        "SUBTITLE": "Acceso seguro mediante la plataforma corporativa.",
+        "BTNCLOUD": "Iniciar sesión con AWS",
+        "ALREADY_HAVE_ACCOUNT": "¿Ya tienes una cuenta de Kosto?",
+        "GO_TO_REGISTER": "Ir al portal de registro"
     },
     "PRODUCTION": {
         "FORM": {
@@ -174,5 +182,22 @@
             "UNIT_COST": "Costo Unitario Calculado",
             "TIP": "Revisa este costo unitario contra tu precio de venta en el catálogo de productos para asegurar tu margen de ganancia."
         }
+    },
+    "REGISTER": {
+        "TITLE": "Crear cuenta en Kosto",
+        "SUBTITLE": "Registra tu empresa y comienza a gestionar tu inventario",
+        "BUSINESS_DATA": "Datos del Negocio",
+        "COMPANY_NAME": "Nombre de la Empresa",
+        "COMPANY_REQUIRED": "El nombre de la empresa es requerido",
+        "COMPANY_MIN_LENGTH": "Debe tener al menos 3 caracteres",
+        "ADMIN_DATA": "Usuario Administrador",
+        "EMAIL": "Correo Electrónico",
+        "EMAIL_INVALID": "Ingresa un correo electrónico válido",
+        "PASSWORD": "Contraseña",
+        "PASSWORD_MIN_LENGTH": "La contraseña debe tener mínimo 8 caracteres",
+        "LOADING": "Procesando configuración...",
+        "BTN": "Registrar Empresa",
+        "ALREADY_HAVE_ACCOUNT": "¿Ya tienes una cuenta de Kosto?",
+        "GO_TO_LOGIN": "Ir al portal de acceso"
     }
 }

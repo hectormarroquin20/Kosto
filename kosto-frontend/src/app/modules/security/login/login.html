@@ -1,12 +1,35 @@
 <main style="display: flex; justify-content: center; align-items: center; height: 100vh;">
-    <mat-card style="width: 400px; padding: 2rem;">
-        <mat-card-header style="margin-bottom: 1.5rem;">
+    <!-- Centramos el contenido de la tarjeta para que se vea como un portal de SSO -->
+    <mat-card style="width: 400px; padding: 2rem; text-align: center;">
+        <mat-card-header style="margin-bottom: 1.5rem; justify-content: center;">
             <mat-card-title>{{ 'LOGIN.TITLE' | translate }}</mat-card-title>
+            <app-language-selector></app-language-selector>
         </mat-card-header>
 
         <mat-card-content>
+
+            <!-- ============================================================== -->
+            <!-- NUEVO BOTÓN DE GATEWAY (SSO CON AWS COGNITO)                   -->
+            <!-- ============================================================== -->
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 1.5rem; margin-top: 1rem;">
+                <p style="color: #666; margin: 0; font-size: 14px;">
+                    {{ 'LOGIN.SUBTITLE' | translate }}
+                </p>
+
+                <!-- Usamos un botón grande con un icono de nube/seguridad -->
+                <button mat-flat-button color="primary" (click)="onLogin()"
+                    style="width: 100%; padding: 24px 0; font-size: 16px; display: flex; align-items: center; justify-content: center;">
+                    <mat-icon style="margin-right: 8px;">cloud_done</mat-icon>
+                    {{ 'LOGIN.BTNCLOUD' | translate }}
+                </button>
+            </div>
+
+            <!-- ============================================================== -->
+            <!-- FORMULARIO ORIGINAL COMENTADO (LEGACY / RESPALDO)              -->
+            <!-- ============================================================== -->
+            <!--
             <form [formGroup]="loginForm" (ngSubmit)="onLogin()"
-                style="display: flex; flex-direction: column; gap: 1rem;">
+                style="display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem; text-align: left;">
 
                 <mat-form-field appearance="outline">
                     <mat-label>{{ 'LOGIN.EMAIL' | translate }}</mat-label>
@@ -25,6 +48,16 @@
                     {{ 'LOGIN.BTN' | translate }}
                 </button>
             </form>
+            -->
+
+            <div style="text-align: center; margin-top: 1.5rem; font-size: 14px;">
+                {{ 'LOGIN.ALREADY_HAVE_ACCOUNT' | translate }} <br>
+                <a routerLink="/register"
+                    style="color: #3f51b5; text-decoration: none; font-weight: 500; display: inline-block; margin-top: 8px;">
+                    {{ 'LOGIN.GO_TO_REGISTER' | translate }}
+                </a>
+            </div>
+
         </mat-card-content>
     </mat-card>
 </main>

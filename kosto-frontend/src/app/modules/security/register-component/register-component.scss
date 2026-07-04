@@ -1,0 +1,9 @@
+mat-card {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+    border-radius: 12px;
+}
+
+// Ajuste para evitar que el ícono prefix se pegue mucho al texto
+::ng-deep .mat-mdc-text-field-wrapper .mat-mdc-form-field-icon-prefix {
+    padding-right: 8px;
+}

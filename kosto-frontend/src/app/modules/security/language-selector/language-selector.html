@@ -1,0 +1,9 @@
+<button mat-button [matMenuTriggerFor]="menu" style="display: flex; align-items: center; gap: 8px;">
+    <mat-icon>language</mat-icon>
+    <span style="font-weight: 500; font-size: 14px;">{{ currentLanguage | uppercase }}</span>
+</button>
+
+<mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="changeLanguage('es')">Español</button>
+    <button mat-menu-item (click)="changeLanguage('en')">English</button>
+</mat-menu>

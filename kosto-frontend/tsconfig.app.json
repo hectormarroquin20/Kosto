@@ -5,10 +5,12 @@
   "compilerOptions": {
     "outDir": "./out-tsc/app",
     "types": [],
-    "rootDir": "src"
+    "rootDir": "src",
+    "ignoreDeprecations": "6.0"
   },
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "src/app/modules/security/language-selector"
   ],
   "exclude": [
     "src/**/*.spec.ts"

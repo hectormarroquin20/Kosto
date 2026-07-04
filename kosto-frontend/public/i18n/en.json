@@ -141,7 +141,8 @@
             "PRICE": "Sale Price ($)",
             "TYPE": "Manufacturing Type",
             "CANCEL": "Cancel",
-            "SAVE": "Save Product"
+            "SAVE": "Save Product",
+            "CREATE_RECIPE_AFTER": "Continue creating recipe"
         },
         "ERRORS": {
             "REQUIRED": "Name is required.",
@@ -152,7 +153,11 @@
         "TITLE": "Login",
         "EMAIL": "Email",
         "PASSWORD": "Password",
-        "BTN": "Login"
+        "BTN": "Login",
+        "SUBTITLE": "Secure access through the corporate platform.",
+        "BTNCLOUD": "Login with AWS",
+        "ALREADY_HAVE_ACCOUNT": "Already have a Kosto account?",
+        "GO_TO_REGISTER": "Go to registration portal"
     },
     "PRODUCTION": {
         "FORM": {
@@ -174,5 +179,22 @@
             "UNIT_COST": "Costo Unitario Calculado",
             "TIP": "Revisa este costo unitario contra tu precio de venta en el catálogo de productos para asegurar tu margen de ganancia."
         }
+    },
+    "REGISTER": {
+        "TITLE": "Create a Kosto account",
+        "SUBTITLE": "Register your company and start managing your inventory",
+        "BUSINESS_DATA": "Business Data",
+        "COMPANY_NAME": "Company Name",
+        "COMPANY_REQUIRED": "Company name is required",
+        "COMPANY_MIN_LENGTH": "Must be at least 3 characters",
+        "ADMIN_DATA": "Administrator User",
+        "EMAIL": "Email Address",
+        "EMAIL_INVALID": "Enter a valid email address",
+        "PASSWORD": "Password",
+        "PASSWORD_MIN_LENGTH": "Password must be at least 8 characters",
+        "LOADING": "Processing configuration...",
+        "BTN": "Register Company",
+        "ALREADY_HAVE_ACCOUNT": "Already have a Kosto account?",
+        "GO_TO_LOGIN": "Go to login portal"
     }
 }

@@ -3,10 +3,8 @@ import { authGuard } from './core/guards/auth.guard'; // Ajusta la ruta a donde 
 
 export const routes: Routes = [
     // RUTA PÚBLICA: No necesita guard
-    {
-        path: 'login',
-        loadComponent: () => import('./modules/security/login/login').then(m => m.Login)
-    },
+    { path: 'login', loadComponent: () => import('./modules/security/login/login').then(m => m.Login) },
+    { path: 'register', loadComponent: () => import('./modules/security/register-component/register-component').then(m => m.RegisterComponent) },
 
     // RUTAS PRIVADAS: Requieren estar logueado
     {
@@ -32,9 +30,10 @@ export const routes: Routes = [
 
             // Otros
             { path: 'transaction-logs', loadComponent: () => import('./modules/inventory/transaction-log/transaction-log').then(m => m.TransactionLog) },
-            { path: 'tenants', loadComponent: () => import('./modules/inventory/tenant/tenant-form').then(m => m.TenantForm) },
+            { path: 'missing-stock-resource', loadComponent: () => import('./modules/inventory/missing-stock-resource/missing-stock-resource').then(m => m.MissingStockResource) },
             { path: 'sales/new', loadComponent: () => import('./modules/inventory/sales-form/sales-form').then(m => m.SalesForm) },
             { path: 'production', loadComponent: () => import('./modules/inventory/production-list/production-list').then(m => m.ProductionList) }
+
         ]
     },
     { path: '**', redirectTo: 'products' }
