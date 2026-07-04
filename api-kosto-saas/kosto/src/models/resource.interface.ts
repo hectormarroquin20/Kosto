@@ -1,4 +1,4 @@
-export interface ResourceInterface {
+export interface Resource {
     id?: string;
     tenant_id: string;
     name: string;

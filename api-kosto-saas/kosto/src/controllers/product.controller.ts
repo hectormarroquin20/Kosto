@@ -1,21 +1,35 @@
 import { dbPool } from '../db/database';
+import { buildInsertQuery, buildUpdateQuery } from '../utils/sql';
+import { ProductModel } from '../models/product.interface';
 
-// Crear un nuevo producto
-export const createProduct = async (
-    tenantId: string,
-    name: string,
-    salePrice: number,
-    isPreMade: boolean = false,
-    isActive: boolean = true
-) => {
+const PRODUCT_INSERTABLE_COLUMNS = ['name', 'sale_price', 'current_stock', 'is_pre_made', 'is_active'];
+const PRODUCT_UPDATABLE_COLUMNS = ['name', 'sale_price', 'current_stock', 'is_pre_made', 'is_active'];
+
+export const createProduct = async (tenantId: string, payload: Partial<ProductModel>) => {
     const client = await dbPool.connect();
     try {
-        const queryText = `
-            INSERT INTO product (tenant_id, name, sale_price, is_pre_made, is_active)
-            VALUES ($1, $2, $3, $4, $5)
-            RETURNING id, tenant_id, name, sale_price, current_stock, is_pre_made, created_at;
-        `;
-        const result = await client.query(queryText, [tenantId, name, salePrice, isPreMade, isActive]);
+        if (!payload.name || payload.sale_price === undefined || payload.sale_price === null) {
+            throw new Error('ValidationError: Missing required fields (name, sale_price)');
+        }
+
+        const insertPayload = {
+            name: payload.name,
+            sale_price: Number(payload.sale_price),
+            is_pre_made: payload.is_pre_made ?? false,
+            is_active: payload.is_active ?? true,
+            current_stock: payload.current_stock ?? 0,
+        };
+
+        const { text, values } = buildInsertQuery(
+            'product',
+            { tenant_id: tenantId },
+            insertPayload,
+            'id, tenant_id, name, sale_price, current_stock, is_pre_made, is_active, created_at',
+            [],
+            PRODUCT_INSERTABLE_COLUMNS
+        );
+
+        const result = await client.query(text, values);
         return result.rows[0];
     } finally {
         client.release();
@@ -49,7 +63,6 @@ export const getProducts = async (tenantId: string, isPreMade?: boolean) => {
 
         const queryParams: any[] = [tenantId];
 
-        // Si se envió el parámetro, lo agregamos a la consulta
         if (isPreMade !== undefined) {
             queryParams.push(isPreMade);
             queryText += ` AND is_pre_made = $${queryParams.length}`;
@@ -65,23 +78,27 @@ export const getProducts = async (tenantId: string, isPreMade?: boolean) => {
 };
 
 
-export const updateProduct = async (
-    tenantId: string,
-    id: string,
-    name: string,
-    salePrice: number,
-    isPreMade: boolean,
-    isActive: boolean = true
-) => {
+export const updateProduct = async (tenantId: string, id: string, payload: Partial<ProductModel>) => {
     const client = await dbPool.connect();
     try {
-        const queryText = `
-            UPDATE product 
-            SET name = $1, sale_price = $2, is_pre_made = $3, is_active= $4, updated_at = CURRENT_TIMESTAMP
-            WHERE id = $5 AND tenant_id = $6
-            RETURNING id, name, sale_price, current_stock, is_pre_made, updated_at;
-        `;
-        const result = await client.query(queryText, [name, salePrice, isPreMade, isActive, id, tenantId]);
+        const updatePayload: Partial<ProductModel> = {};
+
+        if (payload.name !== undefined) updatePayload.name = payload.name;
+        if (payload.sale_price !== undefined && payload.sale_price !== null) updatePayload.sale_price = Number(payload.sale_price);
+        if (payload.is_pre_made !== undefined) updatePayload.is_pre_made = payload.is_pre_made;
+        if (payload.is_active !== undefined) updatePayload.is_active = payload.is_active;
+        if (payload.current_stock !== undefined && payload.current_stock !== null) updatePayload.current_stock = Number(payload.current_stock);
+
+        const { text, values } = buildUpdateQuery(
+            'product',
+            updatePayload as Record<string, unknown>,
+            { id, tenant_id: tenantId },
+            'id, name, sale_price, current_stock, is_pre_made, updated_at',
+            [],
+            PRODUCT_UPDATABLE_COLUMNS
+        );
+
+        const result = await client.query(text, values);
         return result.rows[0];
     } finally {
         client.release();

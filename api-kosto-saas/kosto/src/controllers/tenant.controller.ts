@@ -1,11 +1,14 @@
 import { dbPool } from '../db/database';
+import { buildUpdateQuery } from '../utils/sql';
+import { Tenant } from '../models/tenant.inteface';
+
+const TENANT_UPDATABLE_COLUMNS = ['company_name', 'tier', 'is_active'];
+const VALID_TIERS = ['freemium', 'pro', 'business'];
 
 export const createTenant = async (companyName: string, tier: string = 'freemium') => {
     const client = await dbPool.connect();
     try {
-        // Validamos que el tier sea uno de los permitidos
-        const validTiers = ['freemium', 'pro', 'business'];
-        const safeTier = validTiers.includes(tier) ? tier : 'freemium';
+        const safeTier = VALID_TIERS.includes(tier) ? tier : 'freemium';
 
         const queryText = `
             INSERT INTO tenant (company_name, tier)
@@ -30,21 +33,25 @@ export const getTenant = async (tenantId: string) => {
     }
 };
 
-export const updateTenant = async (
-    id: string,
-    companyName: string,
-    tier: string,
-    isActive: boolean = true
-) => {
+export const updateTenant = async (id: string, payload: Partial<Tenant>) => {
     const client = await dbPool.connect();
     try {
-        const queryText = `
-            UPDATE tenant 
-            SET company_name = $1, tier = $2, is_active= $3, updated_at = CURRENT_TIMESTAMP
-            WHERE id = $4
-            RETURNING id, company_name, tier, updated_at;
-        `;
-        const result = await client.query(queryText, [companyName, tier, isActive, id]);
+        const updatePayload: Partial<Tenant> = {};
+
+        if (payload.company_name !== undefined) updatePayload.company_name = payload.company_name;
+        if (payload.tier !== undefined) updatePayload.tier = VALID_TIERS.includes(payload.tier) ? payload.tier : 'freemium';
+        if (payload.is_active !== undefined) updatePayload.is_active = payload.is_active;
+
+        const { text, values } = buildUpdateQuery(
+            'tenant',
+            updatePayload as Record<string, unknown>,
+            { id },
+            'id, company_name, tier, updated_at',
+            [],
+            TENANT_UPDATABLE_COLUMNS
+        );
+
+        const result = await client.query(text, values);
         return result.rows[0];
     } finally {
         client.release();

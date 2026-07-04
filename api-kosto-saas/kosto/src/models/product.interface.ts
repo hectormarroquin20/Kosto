@@ -5,5 +5,7 @@ export interface ProductModel {
     sale_price: number;
     current_stock: number;
     is_pre_made: boolean;
-    created_at: string;
+    is_active?: boolean;
+    created_at?: string;
+    updated_at?: string;
 }

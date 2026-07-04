@@ -1,32 +1,39 @@
 import { dbPool } from '../db/database';
+import { buildInsertQuery, buildUpdateQuery } from '../utils/sql';
 import { CreateResourceDTO } from '../models/types';
+import { Resource } from '../models/resource.interface';
+
+const RESOURCE_INSERTABLE_COLUMNS = ['name', 'unit_of_measure', 'unit_cost', 'current_stock', 'is_active'];
+const RESOURCE_UPDATABLE_COLUMNS = ['name', 'unit_of_measure', 'unit_cost', 'current_stock', 'is_active'];
 
 export const createResource = async (tenantId: string, payload: Partial<CreateResourceDTO>) => {
-    // 1. Validación básica de datos de entrada
-    if (!payload.name || !payload.unit_of_measure || payload.unit_cost === undefined) {
+    if (!payload.name || !payload.unit_of_measure || payload.unit_cost === undefined || payload.unit_cost === null) {
         throw new Error('ValidationError: Missing required fields (name, unit_of_measure, unit_cost)');
     }
 
-    // 2. Obtener una conexión del Pool
     const client = await dbPool.connect();
 
     try {
-        // 3. Consulta parametrizada con RETURNING para devolver el registro creado
-        const queryText = `
-            INSERT INTO resource (tenant_id, name, unit_of_measure, unit_cost, current_stock)
-            VALUES ($1, $2, $3, $4, $5)
-            RETURNING id, name, unit_of_measure, unit_cost, current_stock, created_at
-        `;
+        const insertPayload = {
+            name: payload.name,
+            unit_of_measure: payload.unit_of_measure,
+            unit_cost: Number(payload.unit_cost),
+            current_stock: payload.current_stock ?? 0,
+            is_active: payload.is_active ?? true,
+        };
 
-        // Si no envían stock inicial, asumimos 0
-        const initialStock = payload.current_stock || 0;
-        const values = [tenantId, payload.name, payload.unit_of_measure, payload.unit_cost, initialStock];
+        const { text, values } = buildInsertQuery(
+            'resource',
+            { tenant_id: tenantId },
+            insertPayload,
+            'id, name, unit_of_measure, unit_cost, current_stock, is_active, created_at',
+            [],
+            RESOURCE_INSERTABLE_COLUMNS
+        );
 
-        const result = await client.query(queryText, values);
-
+        const result = await client.query(text, values);
         return result.rows[0];
     } finally {
-        // 4. SIEMPRE liberar el cliente de vuelta al pool, incluso si hay error
         client.release();
     }
 };
@@ -45,23 +52,28 @@ export const getResources = async (tenantId: string) => {
     }
 };
 
-export const updateResource = async (
-    tenantId: string,
-    id: string,
-    name: string,
-    unitOfMeasure: string,
-    unitCost: number
-) => {
+export const updateResource = async (tenantId: string, id: string, payload: Partial<Resource>) => {
     const client = await dbPool.connect();
     try {
-        const queryText = `
-            UPDATE resource 
-            SET name = $1, unit_of_measure = $2, unit_cost = $3, updated_at = CURRENT_TIMESTAMP
-            WHERE id = $4 AND tenant_id = $5
-            RETURNING id, name, unit_of_measure, unit_cost, current_stock, updated_at;
-        `;
-        const result = await client.query(queryText, [name, unitOfMeasure, unitCost, id, tenantId]);
-        return result.rows[0]; // Retorna el recurso modificado
+        const updatePayload: Partial<Resource> = {};
+
+        if (payload.name !== undefined) updatePayload.name = payload.name;
+        if (payload.unit_of_measure !== undefined) updatePayload.unit_of_measure = payload.unit_of_measure;
+        if (payload.unit_cost !== undefined && payload.unit_cost !== null) updatePayload.unit_cost = Number(payload.unit_cost);
+        if (payload.current_stock !== undefined && payload.current_stock !== null) updatePayload.current_stock = Number(payload.current_stock);
+        if (payload.is_active !== undefined) updatePayload.is_active = payload.is_active;
+
+        const { text, values } = buildUpdateQuery(
+            'resource',
+            updatePayload as Record<string, unknown>,
+            { id, tenant_id: tenantId },
+            'id, name, unit_of_measure, unit_cost, current_stock, updated_at',
+            [],
+            RESOURCE_UPDATABLE_COLUMNS
+        );
+
+        const result = await client.query(text, values);
+        return result.rows[0];
     } finally {
         client.release();
     }

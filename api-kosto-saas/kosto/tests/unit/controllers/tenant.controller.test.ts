@@ -53,7 +53,7 @@ describe('Tenant Controller Unit Tests', () => {
         const mockRow = { id: 't1', company_name: 'Nuevo Nombre', tier: 'pro' };
         mockClient.query.mockResolvedValue({ rows: [mockRow] });
 
-        const result = await updateTenant('t1', 'Nuevo Nombre', 'pro', true);
+        const result = await updateTenant('t1', { company_name: 'Nuevo Nombre', tier: 'pro', is_active: true });
 
         expect(result.company_name).toBe('Nuevo Nombre');
         expect(mockClient.query).toHaveBeenCalledWith(

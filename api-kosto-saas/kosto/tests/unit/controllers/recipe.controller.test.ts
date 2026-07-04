@@ -23,7 +23,7 @@ describe('Recipe Controller Unit Tests', () => {
         const mockRow = { id: '1', product_id: 'p1', resource_id: 'r1', required_quantity: 5 };
         mockClient.query.mockResolvedValue({ rows: [mockRow] });
 
-        const result = await upsertRecipeItem('t1', 'p1', 'r1', 5);
+        const result = await upsertRecipeItem('t1', { product_id: 'p1', resource_id: 'r1', required_quantity: 5 });
 
         expect(result).toEqual(mockRow);
         expect(mockClient.query).toHaveBeenCalledWith(expect.stringContaining('INSERT INTO recipe_item'), expect.any(Array));
@@ -45,7 +45,7 @@ describe('Recipe Controller Unit Tests', () => {
         const mockRow = { id: '1', product_id: 'p1', resource_id: 'r1', required_quantity: 10 };
         mockClient.query.mockResolvedValue({ rows: [mockRow] });
 
-        const result = await updateRecipeItem('t1', '1', 'p1', 'r1', 10);
+        const result = await updateRecipeItem('t1', '1', { product_id: 'p1', resource_id: 'r1', required_quantity: 10 });
 
         expect(result.required_quantity).toBe(10);
         expect(mockClient.release).toHaveBeenCalled();

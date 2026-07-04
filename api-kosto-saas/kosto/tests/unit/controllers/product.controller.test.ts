@@ -41,10 +41,10 @@ describe('Product Controller Unit Tests', () => {
             const mockRow = { id: '1', name: 'Coffee', sale_price: 2.5 };
             mockQuery.mockResolvedValueOnce({ rows: [mockRow] });
 
-            const result = await createProduct('tenant-1', 'Coffee', 2.5, true, true);
+            const result = await createProduct('tenant-1', { name: 'Coffee', sale_price: 2.5, is_pre_made: true, is_active: true });
 
             expect(dbPool.connect).toHaveBeenCalledTimes(1);
-            expect(mockQuery).toHaveBeenCalledWith(expect.any(String), ['tenant-1', 'Coffee', 2.5, true, true]);
+            expect(mockQuery).toHaveBeenCalledWith(expect.any(String), ['tenant-1', 'Coffee', 2.5, true, true, 0]);
             expect(result).toEqual(mockRow);
             expect(mockRelease).toHaveBeenCalledTimes(1);
         });
@@ -52,7 +52,7 @@ describe('Product Controller Unit Tests', () => {
         test('should release the client even if the query fails', async () => {
             mockQuery.mockRejectedValueOnce(new Error('DB Error'));
 
-            await expect(createProduct('tenant-1', 'Coffee', 2.5)).rejects.toThrow('DB Error');
+            await expect(createProduct('tenant-1', { name: 'Coffee', sale_price: 2.5, is_pre_made: false })).rejects.toThrow('DB Error');
             expect(mockRelease).toHaveBeenCalledTimes(1);
         });
     });
@@ -90,7 +90,7 @@ describe('Product Controller Unit Tests', () => {
             const mockRow = { id: '1', name: 'Updated Coffee' };
             mockQuery.mockResolvedValueOnce({ rows: [mockRow] });
 
-            const result = await updateProduct('tenant-1', '1', 'Updated Coffee', 3.0, false, true);
+            const result = await updateProduct('tenant-1', '1', { name: 'Updated Coffee', sale_price: 3.0, is_pre_made: false, is_active: true });
 
             expect(mockQuery).toHaveBeenCalledWith(
                 expect.any(String),

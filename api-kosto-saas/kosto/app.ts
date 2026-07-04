@@ -58,7 +58,7 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
             if (method === 'POST') return buildResponse(201, { data: await createResource(tenantId, getBody(event)) });
             if (method === 'PUT') {
                 const b = getBody(event);
-                return buildResponse(200, { data: await updateResource(tenantId, b.id, b.name, b.unit_of_measure, parseFloat(b.unit_cost)) });
+                return buildResponse(200, { data: await updateResource(tenantId, b.id, b) });
             }
             if (method === 'DELETE') return buildResponse(200, { data: await softDeleteResource(tenantId, event.queryStringParameters?.id!) });
         }
@@ -84,11 +84,11 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
             }
             if (method === 'POST') {
                 const b = getBody(event);
-                return buildResponse(201, { data: await createProduct(tenantId, b.name, parseFloat(b.sale_price), !!b.is_pre_made) });
+                return buildResponse(201, { data: await createProduct(tenantId, b) });
             }
             if (method === 'PUT') {
                 const b = getBody(event);
-                return buildResponse(200, { data: await updateProduct(tenantId, b.id, b.name, parseFloat(b.sale_price), !!b.is_pre_made) });
+                return buildResponse(200, { data: await updateProduct(tenantId, b.id, b) });
             }
             if (method === 'DELETE') return buildResponse(200, { data: await softDeleteProduct(tenantId, event.queryStringParameters?.id!) });
         }
@@ -100,11 +100,11 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
             if (method === 'GET') return buildResponse(200, { data: await getRecipeItem(tenantId) });
             if (method === 'POST') {
                 const b = getBody(event);
-                return buildResponse(201, { data: await upsertRecipeItem(tenantId, b.product_id, b.resource_id, parseFloat(b.required_quantity)) });
+                return buildResponse(201, { data: await upsertRecipeItem(tenantId, b) });
             }
             if (method === 'PUT') {
                 const b = getBody(event);
-                return buildResponse(200, { data: await upsertRecipeItem(tenantId, b.product_id, b.resource_id, parseFloat(b.required_quantity)) });
+                return buildResponse(200, { data: await upsertRecipeItem(tenantId, b) });
             }
             if (method === 'DELETE') return buildResponse(200, { data: await forceDeleteRecipeItem(tenantId, event.queryStringParameters?.id!) });
         }
@@ -122,7 +122,7 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
             if (method === 'PUT') {
                 const b = getBody(event);
                 console.log("Objeto en body", b)
-                return buildResponse(200, { data: await updateTenant(id, b.company_name, b.tier, b.is_active) });
+                return buildResponse(200, { data: await updateTenant(id, b) });
             }
         }
         // Esta es la ruta para: GET /tenants y POST /tenants

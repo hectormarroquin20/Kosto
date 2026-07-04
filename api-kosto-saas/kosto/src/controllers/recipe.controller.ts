@@ -1,6 +1,14 @@
 import { dbPool } from '../db/database';
+import { buildUpdateQuery } from '../utils/sql';
+import { RecipeItem } from '../models/recipe-item.interface';
 
-export const upsertRecipeItem = async (tenantId: string, productId: string, resourceId: string, quantity: number) => {
+const RECIPE_UPDATABLE_COLUMNS = ['product_id', 'resource_id', 'required_quantity', 'is_active'];
+
+export const upsertRecipeItem = async (tenantId: string, payload: Partial<RecipeItem>) => {
+    if (!payload.product_id || !payload.resource_id || payload.required_quantity === undefined || payload.required_quantity === null) {
+        throw new Error('ValidationError: Missing required fields (product_id, resource_id, required_quantity)');
+    }
+
     const client = await dbPool.connect();
     try {
         const queryText = `
@@ -12,7 +20,7 @@ export const upsertRecipeItem = async (tenantId: string, productId: string, reso
                     tenant_id = EXCLUDED.tenant_id
                 RETURNING id, product_id, resource_id, required_quantity;
         `;
-        const result = await client.query(queryText, [productId, resourceId, quantity, tenantId]);
+        const result = await client.query(queryText, [payload.product_id, payload.resource_id, Number(payload.required_quantity), tenantId]);
         return result.rows[0];
     } finally {
         client.release();
@@ -45,22 +53,26 @@ export const getRecipeItem = async (tenantId: string, productId?: string) => {
     }
 };
 
-export const updateRecipeItem = async (
-    tenantId: string,
-    id: string,
-    productId: string,
-    resourceId: string,
-    quantity: number
-) => {
+export const updateRecipeItem = async (tenantId: string, id: string, payload: Partial<RecipeItem>) => {
     const client = await dbPool.connect();
     try {
-        const queryText = `
-            UPDATE recipe_item 
-            SET product_id = $1, resource_id = $2, required_quantity = $3, updated_at = CURRENT_TIMESTAMP
-            WHERE id = $4 AND tenant_id = $5
-            RETURNING id, product_id, resource_id, required_quantity;
-        `;
-        const result = await client.query(queryText, [productId, resourceId, quantity, id, tenantId]);
+        const updatePayload: Partial<RecipeItem> = {};
+
+        if (payload.product_id !== undefined) updatePayload.product_id = payload.product_id;
+        if (payload.resource_id !== undefined) updatePayload.resource_id = payload.resource_id;
+        if (payload.required_quantity !== undefined && payload.required_quantity !== null) updatePayload.required_quantity = Number(payload.required_quantity);
+        if (payload.is_active !== undefined) updatePayload.is_active = payload.is_active;
+
+        const { text, values } = buildUpdateQuery(
+            'recipe_item',
+            updatePayload as Record<string, unknown>,
+            { id, tenant_id: tenantId },
+            'id, product_id, resource_id, required_quantity, updated_at',
+            [],
+            RECIPE_UPDATABLE_COLUMNS
+        );
+
+        const result = await client.query(text, values);
         return result.rows[0];
     } finally {
         client.release();

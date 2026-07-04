@@ -54,7 +54,7 @@ describe('Resource Controller Unit Tests', () => {
         const mockRow = { id: 'res1', name: 'Harina', unit_of_measure: 'kg', unit_cost: 2.0 };
         mockClient.query.mockResolvedValue({ rows: [mockRow] });
 
-        const result = await updateResource('t1', 'res1', 'Harina', 'kg', 2.0);
+        const result = await updateResource('t1', 'res1', { name: 'Harina', unit_of_measure: 'kg', unit_cost: 2.0 });
 
         expect(result.unit_cost).toBe(2.0);
     });
