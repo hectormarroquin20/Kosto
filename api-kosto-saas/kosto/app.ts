@@ -3,16 +3,26 @@ import { createResource, forceDeleteResource, getResources, softDeleteResource, 
 import { buildResponse } from './src/utils/response';
 import { getTenantFromHeader } from './src/utils/auth';
 import { processProduction } from './src/controllers/production.controller';
-import { addRecipeItem, forceDeleteRecipeItem, getRecipeItem, updateRecipeItem } from './src/controllers/recipe.controller';
+import { upsertRecipeItem, forceDeleteRecipeItem, getRecipeItem, updateRecipeItem } from './src/controllers/recipe.controller';
 import { createProduct, forceDeleteProduct, getProducts, softDeleteProduct, updateProduct } from './src/controllers/product.controller';
+
+// Controllers for tenants and transactions
 import { createTenant, getTenant, updateTenant } from './src/controllers/tenant.controller';
 import { getTransaction, registerSale } from './src/controllers/transaction.controller';
+// import { reconcileUserTenant } from '@/controllers/admin.controller';
+
+import { IIdentityService } from '@/models/identity.interface';
+import { CognitoIdentityService } from '@/services/cognito-identity.service';
+
 
 const getBody = (event: APIGatewayProxyEvent) => {
     try { return event.body ? JSON.parse(event.body) : {}; } catch { return {}; }
 };
 
 export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+
+    const identityService: IIdentityService = new CognitoIdentityService();
+
     try {
         const method = event.httpMethod;
         const path = event.path;
@@ -94,11 +104,11 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
             if (method === 'GET') return buildResponse(200, { data: await getRecipeItem(tenantId) });
             if (method === 'POST') {
                 const b = getBody(event);
-                return buildResponse(201, { data: await addRecipeItem(tenantId, b.product_id, b.resource_id, parseFloat(b.required_quantity)) });
+                return buildResponse(201, { data: await upsertRecipeItem(tenantId, b.product_id, b.resource_id, parseFloat(b.required_quantity)) });
             }
             if (method === 'PUT') {
                 const b = getBody(event);
-                return buildResponse(200, { data: await updateRecipeItem(tenantId, b.id, b.product_id, b.resource_id, parseFloat(b.required_quantity)) });
+                return buildResponse(200, { data: await upsertRecipeItem(tenantId, b.product_id, b.resource_id, parseFloat(b.required_quantity)) });
             }
             if (method === 'DELETE') return buildResponse(200, { data: await forceDeleteRecipeItem(tenantId, event.queryStringParameters?.id!) });
         }
@@ -107,7 +117,6 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
         // CRUD: TENANTS & SALES
         // ========================================================
 
-        // 1. Rutas Dinámicas: /tenants/{id}
         if (path.startsWith('/tenants/')) {
             const id = path.split('/')[2];
 
@@ -125,9 +134,25 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
             if (method === 'GET') {
                 return buildResponse(200, { data: await getTenant(tenantId) });
             }
+            // if (method === 'POST') {
+            //     const b = getBody(event);
+            //     return buildResponse(201, { data: await createTenant(b.company_name, b.tier) });
+            // }
             if (method === 'POST') {
                 const b = getBody(event);
-                return buildResponse(201, { data: await createTenant(b.company_name, b.tier) });
+
+                // 1. Creamos en BD (Tu lógica actual)
+                const tenant = await createTenant(b.company_name, b.tier);
+
+                // 2. Delegamos la creación del usuario a un servicio desacoplado
+                // Esto podría ser un llamado a un "IdentityManager" que decidiremos qué implementar
+                await identityService.createUser({
+                    email: b.email,
+                    password: b.password,
+                    tenantId: tenant.id
+                });
+
+                return buildResponse(201, { data: tenant });
             }
         }
 
@@ -149,6 +174,18 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
                 return buildResponse(400, { error: err.message });
             }
         }
+
+        // if (path === '/admin/reconcile' && method === 'POST') {
+        //     const b = getBody(event);
+        //     console.log("DEBUG - Body recibido:", JSON.stringify(b));
+
+        //     await reconcileUserTenant({ body: b }, {
+        //         status: (code: number) => ({
+        //             json: (responseBody: any) => buildResponse(code, responseBody)
+        //         })
+        //     } as any);
+        //     return buildResponse(200, { message: 'Success' });
+        // }
 
         return buildResponse(404, { error: 'Route not found' });
     } catch (err: any) {

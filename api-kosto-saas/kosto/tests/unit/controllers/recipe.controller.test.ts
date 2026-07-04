@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, jest, test } from '@jest/globals';
-import { addRecipeItem, getRecipeItem, updateRecipeItem, forceDeleteRecipeItem, softDeleteRecipeItem } from '@/controllers/recipe.controller';
+import { upsertRecipeItem, getRecipeItem, updateRecipeItem, forceDeleteRecipeItem, softDeleteRecipeItem } from '@/controllers/recipe.controller';
 import { dbPool } from '@/db/database';
 
 jest.mock('@/db/database');
@@ -23,7 +23,7 @@ describe('Recipe Controller Unit Tests', () => {
         const mockRow = { id: '1', product_id: 'p1', resource_id: 'r1', required_quantity: 5 };
         mockClient.query.mockResolvedValue({ rows: [mockRow] });
 
-        const result = await addRecipeItem('t1', 'p1', 'r1', 5);
+        const result = await upsertRecipeItem('t1', 'p1', 'r1', 5);
 
         expect(result).toEqual(mockRow);
         expect(mockClient.query).toHaveBeenCalledWith(expect.stringContaining('INSERT INTO recipe_item'), expect.any(Array));

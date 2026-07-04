@@ -1,14 +1,18 @@
 import { dbPool } from '../db/database';
 
-export const createTenant = async (companyName: string, tier: string = 'free') => {
+export const createTenant = async (companyName: string, tier: string = 'freemium') => {
     const client = await dbPool.connect();
     try {
+        // Validamos que el tier sea uno de los permitidos
+        const validTiers = ['freemium', 'pro', 'business'];
+        const safeTier = validTiers.includes(tier) ? tier : 'freemium';
+
         const queryText = `
             INSERT INTO tenant (company_name, tier)
             VALUES ($1, $2)
             RETURNING id, company_name, tier, created_at;
         `;
-        const result = await client.query(queryText, [companyName, tier]);
+        const result = await client.query(queryText, [companyName, safeTier]);
         return result.rows[0];
     } finally {
         client.release();

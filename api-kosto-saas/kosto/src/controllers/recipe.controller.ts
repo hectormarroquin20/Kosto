@@ -1,6 +1,6 @@
 import { dbPool } from '../db/database';
 
-export const addRecipeItem = async (tenantId: string, productId: string, resourceId: string, quantity: number) => {
+export const upsertRecipeItem = async (tenantId: string, productId: string, resourceId: string, quantity: number) => {
     const client = await dbPool.connect();
     try {
         const queryText = `
