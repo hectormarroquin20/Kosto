@@ -161,23 +161,23 @@
     },
     "PRODUCTION": {
         "FORM": {
-            "TITLE": "Registrar Producción de Vitrina",
-            "SUBTITLE": "Cocinar o preparar productos por lote para agregar al inventario.",
-            "SELECT_PRODUCT": "Producto a Elaborar",
-            "QUANTITY": "Cantidad Producida",
-            "QUANTITY_HINT": "Ej: 12 (Rebanadas de pastel, galletas, etc.)",
-            "CANCEL": "Cancelar",
-            "PRODUCE": "Procesar Lote"
+            "TITLE": "Production Form",
+            "SUBTITLE": "Cook or prepare products in batches to add to inventory.",
+            "SELECT_PRODUCT": "Product to Produce",
+            "QUANTITY": "Produced Quantity",
+            "QUANTITY_HINT": "Ex: 12 (Slices of cake, cookies, etc.)",
+            "CANCEL": "Cancel",
+            "PRODUCE": "Process Batch"
         },
         "ERRORS": {
-            "TITLE": "No se pudo procesar",
-            "MIN_QTY": "Debe producir al menos 1 unidad."
+            "TITLE": "Batch Processing Failed",
+            "MIN_QTY": "You must produce at least 1 unit."
         },
         "RESULT": {
-            "SUCCESS": "¡Lote procesado exitosamente!",
-            "TOTAL_COST": "Costo Total del Lote",
-            "UNIT_COST": "Costo Unitario Calculado",
-            "TIP": "Revisa este costo unitario contra tu precio de venta en el catálogo de productos para asegurar tu margen de ganancia."
+            "SUCCESS": "Batch processed successfully!",
+            "TOTAL_COST": "Total Batch Cost",
+            "UNIT_COST": "Calculated Unit Cost",
+            "TIP": "Review this unit cost against your product's selling price in the catalog to ensure your profit margin."
         }
     },
     "REGISTER": {
@@ -210,5 +210,13 @@
             "CANCEL": "Cancel",
             "ADD": "Add"
         }
+    },
+    "UNITS": {
+        "KILOGRAMS": "Kilograms (kg)",
+        "POUNDS": "Pounds (lb)",
+        "LITERS": "Liters (lt)",
+        "MILLILITERS": "Milliliters (ml)",
+        "GRAMS": "Grams (gr)",
+        "UNITS": "Units (unid)"
     }
 }

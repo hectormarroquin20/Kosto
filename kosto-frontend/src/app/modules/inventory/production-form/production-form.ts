@@ -15,7 +15,7 @@ import { ProductionService } from '../../../core/services/production.service';
   selector: 'app-production-form',
   imports: [
     ReactiveFormsModule,
-    MatDialogModule, // <-- Reemplaza MatCardModule
+    MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
@@ -31,23 +31,23 @@ export class ProductionForm {
   private fb = inject(FormBuilder);
   private productionService = inject(ProductionService);
 
-  // Inyectamos el control del modal y la data que nos pasa la tabla
+  // Inject the modal control and data passed by the table
   public dialogRef = inject(MatDialogRef<ProductionForm>);
   public data = inject(MAT_DIALOG_DATA);
 
-  // Inicializamos el form con el ID bloqueado (disabled) porque ya sabemos qué producto es
+  // Initialize the form with the ID locked (disabled) because we already know what product it is
   productionForm: FormGroup = this.fb.group({
     product_id: [{ value: this.data.product_id, disabled: true }, Validators.required],
     quantity_produced: [1, [Validators.required, Validators.min(1)]]
   });
 
   productionResult = signal<any>(null);
-  errorMessage = signal<string | null>(null); // Señal para errores
+  errorMessage = signal<string | null>(null); // Signal for errors
 
   onSubmit() {
     if (this.productionForm.valid) {
       const payload = {
-        product_id: this.data.product_id, // Usamos el ID de la data del modal
+        product_id: this.data.product_id, // Use the ID from the modal data
         quantity: this.productionForm.get('quantity_produced')?.value
       };
 
@@ -57,16 +57,16 @@ export class ProductionForm {
           this.errorMessage.set(null);
         },
         error: (err) => {
-          // Ajustamos para leer el campo 'error' que devolvemos en el buildResponse del catch
-          console.log('Error completo del backend:', err);
-          const msg = err.error?.error || 'Error desconocido al producir';
+          // Adjust to read the 'error' field we return in the buildResponse of the catch
+          console.log('Full backend error:', err);
+          const msg = err.error?.error || 'Unknown error while producing';
           this.errorMessage.set(msg);
         }
       });
     }
   }
 
-  // Método para cerrar el modal y avisar si hubo cambios
+  // Method to close the modal and notify if changes were made
   closeDialog(refreshTable: boolean = false) {
     this.dialogRef.close(refreshTable);
   }

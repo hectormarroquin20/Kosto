@@ -213,5 +213,13 @@
             "CANCEL": "Cancelar",
             "ADD": "Agregar"
         }
+    },
+    "UNITS": {
+        "KILOGRAMS": "Kilogramos (kg)",
+        "POUNDS": "Libras (lb)",
+        "LITERS": "Litros (lt)",
+        "MILLILITERS": "Mililitros (ml)",
+        "GRAMS": "Gramos (gr)",
+        "UNITS": "Unidades (unid)"
     }
 }

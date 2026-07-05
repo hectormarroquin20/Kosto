@@ -18,7 +18,7 @@ import { LanguageSelector } from '../language-selector/language-selector';
 // @Component({
 //   selector: 'app-login',
 //   imports: [
-//     ReactiveFormsModule, // 2. IMPORTANTE para [formGroup]
+//     ReactiveFormsModule, // 2. IMPORTANT FOR [formGroup]
 //     MatCardModule,
 //     MatFormFieldModule,
 //     MatInputModule,
@@ -31,10 +31,10 @@ import { LanguageSelector } from '../language-selector/language-selector';
 // })
 // export class Login {
 //   private fb = inject(FormBuilder);
-//   private authService = inject(Auth); // Inyectamos el servicio
+//   private authService = inject(Auth); // Inject the service
 //   private router = inject(Router);
 
-//   // 3. ESTO ES LO QUE TE FALTA EN EL COMPONENTE
+//   // 3. THIS IS WHAT YOU NEED IN THE COMPONENT
 //   loginForm: FormGroup = this.fb.group({
 //     email: ['', [Validators.required, Validators.email]],
 //     password: ['', [Validators.required]]
@@ -50,30 +50,18 @@ import { LanguageSelector } from '../language-selector/language-selector';
 //     if (this.loginForm.valid) {
 //       const { email } = this.loginForm.value;
 
-//       // 1. Ejecutamos la lógica de login
+//       // 1. Execute the login logic
 //       this.authService.login(email);
 
-//       // 2. Redirigimos al home/dashboard
+//       // 2. Redirect to home/dashboard
 //       this.router.navigate(['/']);
 //     }
 //   }
 // }
 
-// import { Component, inject, signal } from '@angular/core';
-// import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-// import { MatButtonModule } from '@angular/material/button';
-// import { MatCardModule } from '@angular/material/card';
-// import { MatFormFieldModule } from '@angular/material/form-field';
-// import { MatIconModule } from '@angular/material/icon';
-// import { MatInputModule } from '@angular/material/input';
-// import { Router } from '@angular/router';
-// import { TranslatePipe } from '@ngx-translate/core';
-// // Importa el servicio de OIDC
-// import { OidcSecurityService } from 'angular-auth-oidc-client';
-
 @Component({
   selector: 'app-login',
-  standalone: true, // Asegúrate de que sea standalone
+  standalone: true, // Ensure it is standalone
   imports: [
     ReactiveFormsModule,
     RouterLink,
@@ -105,7 +93,7 @@ export class Login {
   }
 
   onLogin() {
-    // Esto es la forma más básica y segura
+    // This is the most basic and secure way
     this.oidcSecurityService.authorize();
   }
 }

@@ -9,12 +9,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { Router } from '@angular/router';
 import { Observable, startWith, map } from 'rxjs';
-
 import { TransactionLogService } from '../../../core/services/transaction-log.service';
-import { ProductService } from '../../../core/services/product.service'; // Tu servicio de productos
+import { ProductService } from '../../../core/services/product.service';
 import { ProductModel } from '../../../core/models/product.interface';
 
-import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-sales-form',
@@ -39,18 +38,17 @@ export class SalesForm implements OnInit {
   private readonly productService = inject(ProductService);
   protected readonly router = inject(Router);
 
-  // Estado local de productos
+  // Local state for products
   public allProducts = signal<ProductModel[]>([]);
   public filteredProducts$!: Observable<ProductModel[]>;
 
   public form: FormGroup = this.fb.group({
     type: ['SALE', Validators.required],
-    product: ['', Validators.required], // Input visual para el usuario
-    reference_id: ['', Validators.required], // ID oculto para el backend
+    product: ['', Validators.required], // User-facing input
+    reference_id: ['', Validators.required], // Hidden ID for backend
     quantity: [1, [Validators.required, Validators.min(1)]],
     total_amount: [0, [Validators.required, Validators.min(0)]]
   });
-
 
   ngOnInit() {
     this.productService.getProducts().subscribe(res => {
@@ -63,10 +61,10 @@ export class SalesForm implements OnInit {
       );
     });
 
-    // 2. Reactividad: Recalcular total si cambia la cantidad
+    // 2. Reactivity: Recalculate total if quantity changes
     this.form.get('quantity')?.valueChanges.subscribe(qty => {
       const product = this.form.get('product')?.value;
-      // Si el usuario ya seleccionó un producto y este tiene precio, calculamos
+      // If the user has already selected a product and it has a price, calculate
       if (product && typeof product === 'object' && product.sale_price) {
         const newTotal = (product.sale_price * (qty || 0));
         this.form.patchValue({ total_amount: newTotal }, { emitEvent: false });
@@ -98,11 +96,11 @@ export class SalesForm implements OnInit {
 
   save() {
     if (this.form.valid) {
-      // Eliminamos el campo 'product' (objeto) antes de enviar al backend
+      // Remove the 'product' field (object) before sending to backend
       const { product, ...payload } = this.form.value;
       this.transactionService.createTransactionLog(payload).subscribe({
         next: () => this.router.navigate(['/inventory/sales']),
-        error: (err) => console.error('Error al guardar:', err)
+        error: (err) => console.error('Error saving:', err)
       });
     }
   }

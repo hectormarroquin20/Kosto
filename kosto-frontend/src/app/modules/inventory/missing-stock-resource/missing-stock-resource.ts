@@ -38,12 +38,11 @@ export class MissingStockResource {
   private readonly router = inject(Router);
   private readonly dialog = inject(MatDialog);
 
-  // Estado reactivo usando Signals
+  // Reactive state using Signals
   public missingResourceStock = signal<ResourceModel[]>([]);
   public isLoading = signal<boolean>(true);
 
-
-  // Las columnas que queremos mostrar en la tabla
+  // Columns to display in the table
   public displayedColumns: string[] = ['name', 'unit_cost', 'stock', 'unit_measure', 'updated_at', 'actions'];
 
   ngOnInit() {
@@ -55,7 +54,7 @@ export class MissingStockResource {
 
     this.resourcesService.getResources().subscribe({
       next: (response: any) => {
-        // Filtramos solo los recursos con stock igual a cero
+        // Filter resources with zero stock
         const zeroStockResources = response.data.filter((resource: ResourceModel) => resource.current_stock === 0);
         this.missingResourceStock.set(zeroStockResources);
         this.isLoading.set(false);
@@ -63,13 +62,13 @@ export class MissingStockResource {
       },
       error: (err) => {
         this.isLoading.set(false);
-        console.error('Error cargando el inventario:', err)
+        console.error('Error loading inventory:', err)
       }
     });
   }
 
   onEdit(resource: ResourceModel) {
-    // Navegamos al formulario pasando el objeto (puedes usar un QueryParam o un Service de estado)
+    // Navigate to the form passing the object (you can use a QueryParam or a state service)
     this.router.navigate(['/resources/edit', resource.id]);
   }
 

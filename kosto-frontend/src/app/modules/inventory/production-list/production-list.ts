@@ -10,6 +10,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { ProductionForm } from '../production-form/production-form';
 import { ProductModel } from '../../../core/models/product.interface';
 import { ProductService } from '../../../core/services/product.service';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-production-list',
@@ -19,6 +20,7 @@ import { ProductService } from '../../../core/services/product.service';
     MatIconModule,
     MatDialogModule,
     MatCardModule,
+    MatTooltipModule,
     TranslatePipe
   ],
   templateUrl: './production-list.html',
@@ -26,13 +28,13 @@ import { ProductService } from '../../../core/services/product.service';
 })
 export class ProductionList {
   private dialog = inject(MatDialog);
-  private productService = inject(ProductService); // 1. Inyectamos tu servicio real
+  private productService = inject(ProductService); // 1. Inject the actual service
 
-  // 2. La señal ahora arranca vacía y tipada con tu modelo
+  // 2. The signal starts empty and typed with your model
   dataSource = signal<ProductModel[]>([]);
   public isLoading = signal<boolean>(true);
 
-  // Nota: Cambié 'name' a 'name' (según tu modelo) y 'stock' a 'current_stock'
+  // Note: I changed 'name' to 'name' (according to your model) and 'stock' to 'current_stock'
   displayedColumns: string[] = ['name', 'sale_price', 'current_stock', 'actions'];
 
   ngOnInit() {
@@ -43,20 +45,18 @@ export class ProductionList {
     this.isLoading.set(true);
     this.productService.getProducts(true).subscribe({
       next: (response: any) => {
-        // 1. Extraemos los datos
-        const rawData = response.data || response; // Por si a veces viene directo o envuelto
+        // 1. Extract the data
+        const rawData = response.data || response; // In case it comes directly or wrapped
 
-        // 2. Normalización estricta: si es objeto, lo metemos en un array, si es array, lo dejamos
+        // 2. Strict normalization: if it's an object, put it in an array, if it's an array, leave it
         const dataArray = Array.isArray(rawData) ? rawData : [rawData];
-
-        console.log('Datos procesados para la tabla:', dataArray); // ¡MIRA ESTO EN LA CONSOLA!
 
         this.dataSource.set(dataArray);
         this.isLoading.set(false);
       },
       error: (err) => {
         this.isLoading.set(false);
-        console.error('Error cargando el inventario:', err);
+        console.error('Error loading inventory:', err);
       }
     });
   }
@@ -75,7 +75,7 @@ export class ProductionList {
 
     dialogRef.afterClosed().subscribe((needsRefresh: boolean) => {
       if (needsRefresh) {
-        // 4. Recargamos la tabla para ver el stock actualizado tras producir
+        // 4. Reload the table to see the updated stock after producing
         this.loadPremadeProducts();
       }
     });

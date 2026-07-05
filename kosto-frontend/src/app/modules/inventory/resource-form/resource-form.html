@@ -28,7 +28,8 @@
                     <mat-select formControlName="unit_of_measure"
                         [placeholder]="'RESOURCES.FORM.UNIT_PLACEHOLDER' | translate">
                         @for (unit of unitOptions; track unit.value) {
-                        <mat-option [value]="unit.value">{{ unit.label }}</mat-option>
+                        <!-- Solo agregas el pipe de traducción aquí -->
+                        <mat-option [value]="unit.value">{{ unit.label | translate }}</mat-option>
                         }
                     </mat-select>
                     @if (resourceForm.get('unit_of_measure')?.hasError('required')) {

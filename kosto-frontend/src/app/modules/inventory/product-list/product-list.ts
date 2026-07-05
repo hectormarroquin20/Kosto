@@ -33,8 +33,7 @@ export class ProductList implements OnInit {
   public products = signal<ProductModel[]>([]);
   public isLoading = signal<boolean>(true);
 
-
-  // CORREGIDO: Estos nombres deben coincidir con los matColumnDef en el HTML
+  // Define the columns to be displayed in the table
   public displayedColumns: string[] = ['name', 'price', 'stock', 'type', 'actions'];
 
   ngOnInit() {
@@ -45,28 +44,29 @@ export class ProductList implements OnInit {
     this.isLoading.set(true);
     this.productService.getProducts().subscribe({
       next: (response: any) => {
-        // Aseguramos que sea un array
+        // Ensure the data is an array
         const data = response.data || [];
         this.products.set(data);
         this.isLoading.set(false);
       },
       error: (err) => {
         this.isLoading.set(false);
-        console.error('Error cargando el inventario:', err);
+        console.error('Error loading inventory:', err);
       }
     });
   }
 
   onDelete(id: string) {
-    if (confirm('¿Estás seguro de eliminar este producto?')) {
+    if (confirm('Are you sure you want to delete this product?')) {
       this.productService.deleteProduct(id).subscribe({
         next: () => this.loadProducts(),
-        error: (err) => alert('Error al borrar: ' + err.message)
+        error: (err) => alert('Error deleting: ' + err.message)
       });
     }
   }
 
   onEdit(product: ProductModel) {
+    // Navigate to the edit page for the selected product
     this.router.navigate(['/products/edit', product.id]);
   }
 
@@ -79,6 +79,7 @@ export class ProductList implements OnInit {
 
     dialogRef.afterClosed().subscribe((updated: boolean) => {
       if (updated) {
+        // Reload the products list after updating stock
         this.loadProducts();
       }
     });

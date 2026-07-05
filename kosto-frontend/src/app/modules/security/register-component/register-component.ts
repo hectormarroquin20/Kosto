@@ -36,11 +36,11 @@ export class RegisterComponent {
   private router = inject(Router);
   private tenantService = inject(TenantService);
 
-  // Manejo de estado visual con Signals (Angular 20)
+  // State management with Signals (Angular 20)
   hidePassword = signal(true);
   isLoading = signal(false);
 
-  // Formulario reactivo estricto (NonNullable)
+  // Reactive strict form
   registerForm = this.fb.group({
     companyName: ['', [Validators.required, Validators.minLength(3)]],
     email: ['', [Validators.required, Validators.email]],
@@ -56,23 +56,23 @@ export class RegisterComponent {
 
     this.isLoading.set(true);
 
-    // Construimos el objeto con el tier inicial definido
+    // Construct the payload with initial tier defined
     const payload = {
       company_name: this.registerForm.value.companyName,
       email: this.registerForm.value.email,
       password: this.registerForm.value.password,
-      tier: 'freemium' // Valor inicial para registros nuevos
+      tier: 'freemium' // Initial value for new registrations
     };
 
     this.tenantService.createTenant(payload).subscribe({
       next: (response) => {
         this.isLoading.set(false);
-        console.log('Empresa creada exitosamente:', response);
+        console.log('Company created successfully:', response);
         this.router.navigate(['/login']);
       },
       error: (err) => {
         this.isLoading.set(false);
-        console.error('Error al registrar empresa:', err);
+        console.error('Error registering company:', err);
       }
     });
   }

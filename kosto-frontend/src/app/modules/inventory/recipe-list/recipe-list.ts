@@ -41,16 +41,16 @@ export class RecipeList implements OnInit {
   public isLoading = signal<boolean>(true);
   public filter = signal('');
 
-  // Estado reactivo usando Signals
+  // Reactive state using Signals
   public recipes = signal<RecipeItem[]>([]);
   public products = signal<any[]>([]);
   public resources = signal<any[]>([]);
 
-  // Cruzado de datos: Mapas de nombres para búsqueda rápida
+  // Cross-data mapping for quick lookups
   public productMap = computed(() => new Map(this.products().map(p => [p.id, p.name])));
   public resourceMap = computed(() => new Map(this.resources().map(r => [r.id, { name: r.name, stock: r.current_stock }])));
 
-  // Recetas filtradas reactivamente
+  // Reactive filtered recipes
   public filteredRecipes = computed(() => {
     const f = this.filter().toLowerCase();
     if (!f) return this.recipes();
@@ -62,7 +62,7 @@ export class RecipeList implements OnInit {
   public displayedColumns: string[] = ['product_id', 'resource_id', 'required_quantity', 'actions'];
 
   ngOnInit() {
-    // CORRECCIÓN: Llamamos a loadAll en lugar de loadRecipes
+    // CORRECTION: Call loadAll instead of loadRecipes
     this.loadAll();
   }
 
@@ -89,10 +89,10 @@ export class RecipeList implements OnInit {
   }
 
   onDelete(id: string) {
-    if (confirm('¿Estás seguro de eliminar esta receta?')) {
+    if (confirm('Are you sure you want to delete this recipe?')) {
       this.recipeItemsService.deleteRecipeItem(id).subscribe({
-        next: () => this.loadAll(), // Recargamos todo al borrar
-        error: (err) => alert('Error al borrar: ' + err.message)
+        next: () => this.loadAll(), // Reload all after deleting
+        error: (err) => alert('Error deleting: ' + err.message)
       });
     }
   }
@@ -104,9 +104,9 @@ export class RecipeList implements OnInit {
   hasSufficientStock(resourceId: string, required: number): boolean {
     const res = this.resourceMap().get(resourceId);
     if (!res) {
-      console.warn('ID no encontrado en mapa:', resourceId);
+      console.warn('ID not found in map:', resourceId);
     }
-    console.warn('ID SI encontrado en mapa:', resourceId);
+    console.warn('ID found in map:', resourceId);
     return res ? res.stock >= required : false;
   }
 }

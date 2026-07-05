@@ -31,20 +31,20 @@ export class TransactionLog {
   private readonly transactionLogService = inject(TransactionLogService);
   private readonly productService = inject(ProductService);
 
-  // Estado reactivo usando Signals
+  // Reactive state using Signals
   public transactionLogs = signal<TransactionLogModel[]>([]);
   public products = signal<ProductModel[]>([]);
 
   public isLoading = signal<boolean>(true);
 
-  // Creamos un mapa para búsqueda rápida O(1) en el HTML
+  // Create a quick search map O(1) for the HTML
   public productMap = computed(() => {
-    const map = new Map<string, ProductModel>(); // Guardamos todo el objeto
+    const map = new Map<string, ProductModel>(); // Store the whole object
     this.products().forEach(p => map.set(p.id!, p));
     return map;
   });
 
-  // Las columnas que queremos mostrar en la tabla
+  // Columns we want to display in the table
   public displayedColumns: string[] = ['type', 'product_name', 'quantity', 'total_amount', 'transaction_date'];
 
   ngOnInit() {
@@ -55,24 +55,24 @@ export class TransactionLog {
     this.isLoading.set(true);
     this.transactionLogService.getTransactionLogs().subscribe({
       next: (response: any) => {
-        // CORRECCIÓN: Si response.data es un objeto, lo metemos en un arreglo [response.data]
-        // Si response.data es un arreglo, usamos response.data directamente
+        // FIX: If response.data is an object, put it in an array [response.data]
+        // If response.data is an array, use response.data directly
         const data = Array.isArray(response.data) ? response.data : [response.data];
 
         this.transactionLogs.set(data);
       },
-      error: (err) => console.error('Error cargando los registros:', err)
+      error: (err) => console.error('Error loading the logs:', err)
     });
     forkJoin({
       logs: this.transactionLogService.getTransactionLogs(),
       prods: this.productService.getProducts()
     }).subscribe({
       next: (res) => {
-        // Normalización estricta: si viene { data: ... } usamos data, si no, el res directo
+        // Strict normalization: if it comes { data: ... } use data, if not, the res directly
         const logsRaw = (res.logs as any).data || res.logs;
         const prodsRaw = (res.prods as any).data || res.prods;
 
-        // Fuerza a que siempre sea un array, incluso si viene un solo objeto
+        // Force it to always be an array, even if it comes as a single object
         const logsData = Array.isArray(logsRaw) ? logsRaw : [logsRaw];
         const prodsData = Array.isArray(prodsRaw) ? prodsRaw : [prodsRaw];
 
@@ -82,7 +82,7 @@ export class TransactionLog {
       },
       error: (err) => {
         this.isLoading.set(false);
-        console.error('Error cargando datos:', err)
+        console.error('Error loading data:', err)
       }
     });
   }

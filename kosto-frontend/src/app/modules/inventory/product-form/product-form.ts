@@ -16,12 +16,12 @@ import { IAuthService } from '../../../core/models/auth.interface';
 
 import { ActivatedRoute } from '@angular/router';
 
-import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-product-form',
   imports: [
-    ReactiveFormsModule, // <-- Vital para usar [formGroup]
+    ReactiveFormsModule,
     RouterLink,
     MatCardModule,
     MatFormFieldModule,
@@ -37,14 +37,14 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 export class ProductForm {
   private readonly fb = inject(FormBuilder);
   private readonly productService = inject(ProductService);
-  private readonly authService = inject(IAuthService); // <--- Inyectamos el gestor de sesión
+  private readonly authService = inject(IAuthService);
   private readonly router = inject(Router);
 
   private readonly route = inject(ActivatedRoute);
   public isEditMode = false;
   public productId: string | null = null;
 
-  // El formulario queda inmaculado, solo con campos de negocio
+  // The form remains clean, only with business-related fields
   public productForm = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(3)]],
     sale_price: [0, [Validators.required, Validators.min(0.01)]],
@@ -61,7 +61,7 @@ export class ProductForm {
         const product = productList.find((p: any) => p.id === id);
 
         if (product) {
-          // patchValue llena el formulario con los datos encontrados
+          // patchValue fills the form with the found data
           this.productForm.patchValue({
             name: product.name,
             sale_price: product.sale_price,
@@ -69,7 +69,7 @@ export class ProductForm {
           });
         }
       },
-      error: (err) => console.error('Error cargando producto para editar:', err)
+      error: (err) => console.error('Error loading product for editing:', err)
     });
   }
 
@@ -77,7 +77,7 @@ export class ProductForm {
     this.productId = this.route.snapshot.paramMap.get('id');
     if (this.productId) {
       this.isEditMode = true;
-      // Aquí cargarías los datos del producto para llenar el formulario
+      // You would load the product data here to fill in the form
       this.loadProductData(this.productId);
     }
   }
@@ -104,7 +104,7 @@ export class ProductForm {
 
       this.productService.updateProduct(updatePayload).subscribe({
         next: () => this.router.navigate(['/products']),
-        error: (err) => console.error('Error al actualizar:', err)
+        error: (err) => console.error('Error updating:', err)
       });
 
     } else {
@@ -114,14 +114,14 @@ export class ProductForm {
           const shouldCreateRecipe = this.productForm.get('create_recipe')?.value;
 
           if (shouldCreateRecipe && newProduct.id) {
-            // Redirigimos a la edición del producto en el módulo de recetas
-            // (Como acordamos, ahora editamos basándonos en el product_id)
+            // Redirect to the recipe edit module based on the product_id
+            // (As agreed, we now edit based on the product_id)
             this.router.navigate(['/recipes/edit', newProduct.id]);
           } else {
             this.router.navigate(['/products']);
           }
         },
-        error: (err) => console.error('Error al crear:', err)
+        error: (err) => console.error('Error creating:', err)
       });
     }
   }

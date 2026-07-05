@@ -13,7 +13,6 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { AddStockResourceDialog } from '../add-resource-stock-dialog/add-stock-dialog';
 import { MatDialog } from '@angular/material/dialog';
 
-
 @Component({
   selector: 'app-resource-list',
   imports: [
@@ -32,12 +31,11 @@ export class ResourceList {
   private readonly router = inject(Router);
   private readonly dialog = inject(MatDialog);
 
-  // Estado reactivo usando Signals
+  // Reactive state using Signals
   public resources = signal<ResourceModel[]>([]);
   public isLoading = signal<boolean>(true);
 
-
-  // Las columnas que queremos mostrar en la tabla
+  // Columns we want to show in the table
   public displayedColumns: string[] = ['name', 'unit_cost', 'stock', 'unit_measure', 'updated_at', 'actions'];
 
   ngOnInit() {
@@ -55,25 +53,25 @@ export class ResourceList {
       },
       error: (err) => {
         this.isLoading.set(false);
-        console.error('Error cargando el inventario:', err)
+        console.error('Error loading inventory:', err)
       }
     });
   }
 
   onDelete(id: string) {
-    if (confirm('¿Estás seguro de eliminar este producto?')) {
+    if (confirm('Are you sure you want to delete this product?')) {
       this.resourcesService.deleteResource(id).subscribe({
         next: () => {
-          // Recargamos la tabla después de borrar
+          // Reload the table after deleting
           this.loadResources();
         },
-        error: (err) => alert('Error al borrar: ' + err.message)
+        error: (err) => alert('Error deleting: ' + err.message)
       });
     }
   }
 
   onEdit(resource: ResourceModel) {
-    // Navegamos al formulario pasando el objeto (puedes usar un QueryParam o un Service de estado)
+    // Navigate to the form passing the object (you can use a QueryParam or a State Service)
     this.router.navigate(['/resources/edit', resource.id]);
   }
 

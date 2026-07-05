@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 
-// Asegúrate de que las rutas a tus modelos y servicios sean correctas
+// Ensure that the routes to your models and services are correct
 import { ResourceModel } from '../../../core/models/resource.interface';
 import { ResourceService } from '../../../core/services/resource.service';
 import { IAuthService } from '../../../core/models/auth.interface';
@@ -42,24 +42,24 @@ export class ResourceForm implements OnInit {
   private readonly route = inject(ActivatedRoute);
 
   public readonly unitOptions = [
-    { value: 'kg', label: 'Kilogramos (kg)' },
-    { value: 'lb', label: 'Libras (lb)' },
-    { value: 'lt', label: 'Litros (lt)' },
-    { value: 'ml', label: 'Mililitros (ml)' },
-    { value: 'gr', label: 'Gramos (gr)' },
-    { value: 'unid', label: 'Unidades (unid)' }
+    { value: 'kg', label: 'UNITS.KILOGRAMS' },
+    { value: 'lb', label: 'UNITS.POUNDS' },
+    { value: 'lt', label: 'UNITS.LITERS' },
+    { value: 'ml', label: 'UNITS.MILLILITERS' },
+    { value: 'gr', label: 'UNITS.GRAMS' },
+    { value: 'unid', label: 'UNITS.UNITS' }
   ];
 
   public isEditMode = false;
   public resourceId: string | null = null;
 
-  // Formulario alineado EXACTAMENTE con la BD
+  // Form aligned EXACTLY with the DB
   public resourceForm = this.fb.group({
     name: ['', [Validators.required, Validators.maxLength(255)]],
     unit_of_measure: ['', [Validators.required, Validators.maxLength(50)]],
     unit_cost: [0, [Validators.required, Validators.min(0)]],
     current_stock: [0, [Validators.required, Validators.min(0)]],
-    is_active: [true] // Por defecto true
+    is_active: [true] // Default true
   });
 
   ngOnInit() {
@@ -86,7 +86,7 @@ export class ResourceForm implements OnInit {
           });
         }
       },
-      error: (err) => console.error('Error cargando insumo:', err)
+      error: (err) => console.error('Error loading resource:', err)
     });
   }
 
@@ -108,12 +108,12 @@ export class ResourceForm implements OnInit {
 
       this.resourceService.updateResource(updatePayload).subscribe({
         next: () => this.router.navigate(['/resources']),
-        error: (err) => console.error('Error al actualizar:', err)
+        error: (err) => console.error('Error updating resource:', err)
       });
     } else {
       this.resourceService.createResource(payload).subscribe({
         next: () => this.router.navigate(['/resources']),
-        error: (err) => console.error('Error al crear:', err)
+        error: (err) => console.error('Error creating resource:', err)
       });
     }
   }

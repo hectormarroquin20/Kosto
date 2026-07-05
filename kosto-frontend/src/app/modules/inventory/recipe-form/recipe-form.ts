@@ -54,7 +54,7 @@ export class RecipeForm implements OnInit {
   get ingredients() { return this.recipeForm.get('ingredients') as FormArray; }
 
   ngOnInit() {
-    // Detectamos si es edición (ID de producto) o creación rápida (QueryParam)
+    // Detect if it's an edit (product ID) or quick creation (query parameter)
     const productId = this.route.snapshot.paramMap.get('id') || this.route.snapshot.queryParamMap.get('productId');
 
     forkJoin({
@@ -129,22 +129,22 @@ export class RecipeForm implements OnInit {
   onSubmit() {
     if (this.recipeForm.invalid) return;
 
-    // 1. Obtenemos los valores
+    // 1. Get the values
     const rawValue = this.recipeForm.getRawValue();
     const { product_id, ingredients } = rawValue;
 
-    // 2. Normalización de datos (asegurar que no sean null)
-    // Convertimos cualquier valor null/undefined a string vacío o manejamos el error
+    // 2. Data normalization (ensure no null)
+    // Convert any null/undefined value to an empty string or handle the error
     const sanitizedProductId = (product_id || '').toString();
 
     if (!sanitizedProductId) {
-      console.error("El product_id es obligatorio");
+      console.error("The product_id is required");
       return;
     }
 
-    // 3. Mapeo seguro
+    // 3. Safe mapping
     const ops = ingredients.map((ing: any) => {
-      // Nos aseguramos que resource_id sea string y quantity sea número
+      // Ensure resource_id is a string and quantity is a number
       const resourceId = (ing.resource_id || '').toString();
       const quantity = parseFloat(ing.required_quantity || '0');
 
@@ -155,13 +155,13 @@ export class RecipeForm implements OnInit {
       } as any);
     });
 
-    // 4. Ejecución
+    // 4. Execution
     forkJoin(ops).subscribe({
       next: () => {
-        console.log('Receta guardada/actualizada con éxito');
+        console.log('Recipe saved/updated successfully');
         this.router.navigate(['/recipes']);
       },
-      error: (err) => console.error('Error al guardar:', err)
+      error: (err) => console.error('Error saving:', err)
     });
   }
 }

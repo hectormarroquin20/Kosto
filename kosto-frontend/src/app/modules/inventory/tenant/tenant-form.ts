@@ -9,8 +9,7 @@ import { TenantModel } from '../../../core/models/tenant.inteface';
 import { TenantService } from '../../../core/services/tenant.service';
 import { IAuthService } from '../../../core/models/auth.interface';
 
-import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-tenant-form',
@@ -42,7 +41,7 @@ export class TenantForm implements OnInit {
   });
 
   ngOnInit() {
-    // Obtenemos el ID directamente del servicio de autenticación
+    // Get the tenant ID directly from the authentication service
     this.tenantId = this.authService.getTenantId();
 
     if (this.tenantId) {
@@ -57,33 +56,12 @@ export class TenantForm implements OnInit {
   }
 
   loadTenantData(id: string) {
-    // Si tu servicio devuelve todo el objeto de respuesta
-    // this.tenantService.getTenantbyId(id).subscribe({
-    //   next: (response: any) => {
-    //     console.log('¿Qué contiene response.data?', response.data);
-    //     console.log('Respuesta cruda:', response);
-
-    //     // AQUÍ ESTÁ EL CAMBIO: Extraemos .data antes de aplicar al formulario
-    //     const tenantData = response.data;
-
-    //     if (tenantData) {
-    //       // Si tenantData es el objeto directo, esto funcionará perfecto
-    //       this.tenantForm.patchValue({
-    //         company_name: tenantData.company_name,
-    //         tier: tenantData.tier,
-    //         created_at: tenantData.created_at,
-    //         is_active: tenantData.is_active
-    //       });
-    //     }
-    //   },
-    //   error: (err) => console.error('Error cargando datos de compañía:', err)
-    // });
     this.tenantService.getTenantbyId(id).subscribe({
       next: (response: any) => {
-        // response.data ahora es siempre un array: [ {company_name: "..."} ]
+        // response.data is now always an array: [ {company_name: "..."} ]
         const tenantArray = response.data;
 
-        // Tomamos el primer elemento si existe
+        // Take the first element if it exists
         if (tenantArray && tenantArray.length > 0) {
           const tenantData = tenantArray[0];
 
@@ -95,31 +73,31 @@ export class TenantForm implements OnInit {
           });
         }
       },
-      error: (err) => console.error('Error cargando datos de compañía:', err)
+      error: (err) => console.error('Error loading company data:', err)
     });
   }
 
   onSubmit() {
     if (!this.tenantId) {
-      console.error("Error crítico: El ID del tenant es nulo o undefined");
-      alert("No se pudo identificar tu cuenta. Por favor, recarga la página.");
+      console.error("Critical error: Tenant ID is null or undefined");
+      alert("Could not identify your account. Please reload the page.");
       return;
     }
 
     if (this.tenantForm.invalid) return;
 
-    // getRawValue() trae los campos incluso si están deshabilitados
+    // getRawValue() brings the fields even if they are disabled
     const rawData = this.tenantForm.getRawValue();
 
     const payload = {
       ...this.tenantForm.getRawValue(),
-      id: this.tenantId // Aseguramos enviar el ID
+      id: this.tenantId // Ensure sending the ID
     } as unknown as TenantModel;
 
     this.tenantService.updateTenant(payload).subscribe({
       next: () => {
-        alert('Compañía actualizada');
-        this.tenantForm.disable(); // Volvemos a bloquear tras guardar
+        alert('Company updated');
+        this.tenantForm.disable(); // Re-lock after saving
         this.isFieldsEnabled = false;
       }
     });
