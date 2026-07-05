@@ -29,6 +29,6 @@ export class CognitoIdentityService implements IIdentityService {
             ]
         });
         await this.client.send(command);
-        console.log(`✅ Usuario ${email} actualizado con el tenant ${tenantId}`);
+        console.log(`✅ User ${email} updated with tenant ${tenantId}`);
     }
 }

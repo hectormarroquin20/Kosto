@@ -68,7 +68,7 @@ export const forceDeleteTenant = async (id: string) => {
         );
         return (result.rowCount ?? 0) > 0;
     } catch (err: any) {
-        // Si el error es de restricción de llave foránea (código 23503 en Postgres)
+        // If the error is a foreign key constraint violation (code 23503 in PostgreSQL)
         if (err.code === '23503') {
             throw new Error('CONFLICT');
         }

@@ -1,13 +1,13 @@
 import { dbPool } from '../db/database';
-import { processProduction } from './production.controller'; // <-- Importamos la SSOT
+import { processProduction } from './production.controller'; // <-- Importing the SSOT
 
 export const registerSale = async (tenantId: string, productId: string, quantity: number, totalAmount: number) => {
     const client = await dbPool.connect();
 
     try {
-        await client.query('BEGIN'); // Iniciamos la transacción maestra
+        await client.query('BEGIN'); // Starting the master transaction
 
-        // 1. Verificamos el tipo de producto
+        // 1. Verify the product type
         const productQuery = await client.query(
             'SELECT is_pre_made FROM product WHERE id = $1 AND tenant_id = $2',
             [productId, tenantId]
@@ -16,9 +16,9 @@ export const registerSale = async (tenantId: string, productId: string, quantity
         if (productQuery.rowCount === 0) throw new Error('Product not found');
         const isPreMade = productQuery.rows[0].is_pre_made;
 
-        // 2. Lógica de Negocios
+        // 2. Business Logic
         if (isPreMade) {
-            // PASTEL: Solo descontamos de la vitrina (ya se produjo antes)
+            // CAKE: Only deduct from the display shelf (already produced before)
             const updateProduct = await client.query(
                 `UPDATE product SET current_stock = current_stock - $1 
                  WHERE id = $2 AND tenant_id = $3 AND current_stock >= $1`,
@@ -26,11 +26,11 @@ export const registerSale = async (tenantId: string, productId: string, quantity
             );
             if (updateProduct.rowCount === 0) throw new Error('Insufficient product stock in display');
         } else {
-            // CAFÉ (Make to Order): Llamamos a la magia, pasándole nuestra transacción
+            // COFFEE (Make to Order): Call the magic, passing our transaction
             await processProduction(tenantId, productId, quantity, client);
         }
 
-        // 3. Registrar el movimiento financiero
+        // 3. Register the financial transaction
         const logQuery = `
             INSERT INTO transaction_log (tenant_id, type, reference_id, quantity, total_amount)
             VALUES ($1, 'sale', $2, $3, $4)
@@ -38,7 +38,7 @@ export const registerSale = async (tenantId: string, productId: string, quantity
         `;
         const result = await client.query(logQuery, [tenantId, productId, quantity, totalAmount]);
 
-        await client.query('COMMIT'); // Se guardan la venta y la producción al mismo tiempo
+        await client.query('COMMIT'); // Saving the sale and production at the same time
         return result.rows[0];
 
     } catch (err) {

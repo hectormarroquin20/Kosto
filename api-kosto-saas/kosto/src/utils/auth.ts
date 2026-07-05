@@ -3,10 +3,10 @@ import { APIGatewayProxyEvent } from "aws-lambda";
 export const getTenantFromHeader = (event: APIGatewayProxyEvent): string | null => {
     const headers = event.headers;
 
-    // Buscamos la llave ignorando mayúsculas/minúsculas
+    // We search for the key ignoring case
     const foundKey = Object.keys(headers).find(k => k.toLowerCase() === 'x-tenant-id');
 
-    // Si encontramos la llave, retornamos su valor (o null si el valor fuera undefined)
-    // Si no encontramos la llave, retornamos null explícitamente
+    // If we find the key, return its value (or null if the value were undefined)
+    // If we don't find the key, return null explicitly
     return foundKey ? (headers[foundKey] ?? null) : null;
 };

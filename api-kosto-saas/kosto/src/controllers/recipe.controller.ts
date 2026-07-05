@@ -30,7 +30,7 @@ export const upsertRecipeItem = async (tenantId: string, payload: Partial<Recipe
 export const getRecipeItem = async (tenantId: string, productId?: string) => {
     const client = await dbPool.connect();
     try {
-        // Base de la query
+        // Base query
         let queryText = `
             SELECT *
             FROM recipe_item
@@ -38,7 +38,7 @@ export const getRecipeItem = async (tenantId: string, productId?: string) => {
         `;
         const params: any[] = [tenantId];
 
-        // Si pasan productId, filtramos. Si no, devuelve todo (comportamiento actual)
+        // If productId is passed, we filter. Otherwise, return all (current behavior)
         if (productId) {
             queryText += ` AND product_id = $2`;
             params.push(productId);

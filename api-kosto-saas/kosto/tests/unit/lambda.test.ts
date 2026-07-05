@@ -3,11 +3,10 @@ import { lambdaHandler } from '../../app';
 import { APIGatewayProxyEvent } from 'aws-lambda';
 import { upsertRecipeItem } from '@/controllers/recipe.controller';
 
-import { CognitoIdentityProviderClient } from "@aws-sdk/client-cognito-identity-provider";
 import { CognitoIdentityService } from '@/services/cognito-identity.service';
 import { createTenant } from '@/controllers/tenant.controller';
 
-// Mockeamos los controladores para no tocar la BD real
+// We mock the controllers to avoid interacting with the real database
 jest.mock('@/controllers/product.controller');
 jest.mock('@/controllers/recipe.controller');
 jest.mock('@/controllers/tenant.controller');
@@ -41,31 +40,26 @@ describe('LambdaHandler Integration Tests', () => {
     } as any as APIGatewayProxyEvent);
 
     test('Resources: POST y DELETE', async () => {
-        const payload = { name: 'Agua', unit_cost: "1.0", unit_of_measure: "litros" };
+        const payload = { name: 'Water', unit_cost: "1.0", unit_of_measure: "liters" };
         expect((await lambdaHandler(send('POST', '/resources', payload))).statusCode).toBe(201);
         expect((await lambdaHandler(send('DELETE', '/resources/force-delete', null, { id: '1' }))).statusCode).toBe(200);
     });
 
-    test('Products: CRUD completo', async () => {
+    test('Products: Full CRUD', async () => {
         expect((await lambdaHandler(send('POST', '/products', { name: 'Taco', sale_price: "5.0", is_pre_made: true }))).statusCode).toBe(201);
         expect((await lambdaHandler(send('PUT', '/products', { id: '1', name: 'Taco', sale_price: "6.0", is_pre_made: true }))).statusCode).toBe(200);
         expect((await lambdaHandler(send('DELETE', '/products', null, { id: '1' }))).statusCode).toBe(200);
     });
 
-    test('Recipes: Validación de conversión de número', async () => {
-        // Aquí probamos específicamente tu conflicto de tipos
+    test('Recipes: Validation of number conversion', async () => {
+        // Here we specifically test your type conflict
         const res = await lambdaHandler(send('POST', '/recipes', {
             product_id: 'p1', resource_id: 'r1', required_quantity: "10.5"
         }));
         expect(res.statusCode).toBe(201);
     });
 
-    // test('Tenants: Rutas dinámicas y estáticas', async () => {
-    //     expect((await lambdaHandler(send('GET', '/tenants/tenant-123'))).statusCode).toBe(200);
-    //     expect((await lambdaHandler(send('POST', '/tenants', { company_name: 'Test', tier: 'pro' }))).statusCode).toBe(201);
-    // });
-
-    test('Tenants: Rutas dinámicas y estáticas', async () => {
+    test('Tenants: Dynamic and static routes', async () => {
         jest.mocked(createTenant).mockResolvedValue({
             id: 'mock-tenant-123',
             company_name: 'Test'
@@ -81,24 +75,22 @@ describe('LambdaHandler Integration Tests', () => {
             password: 'Password123!'
         }));
 
-        // 5. Tus expects listos
+        // 5. Your expects ready
         expect(res.statusCode).toBe(201);
 
-        // 6. Limpieza para no afectar otros tests del mismo archivo
+        // 6. Cleanup to not affect other tests in the same file
         cognitoSpy.mockRestore();
         (createTenant as jest.Mock).mockReset();
     });
 
-
-
-    test('Production: Captura de errores (try/catch)', async () => {
-        // Simulamos un error en el controlador de producción
+    test('Production: Error capture (try/catch)', async () => {
+        // Simulate an error in the production controller
         const res = await lambdaHandler(send('POST', '/production', { product_id: 'p1', quantity: 1 }));
-        // Si el controlador falla, debería retornar 400 según tu código
+        // If the controller fails, it should return 400 according to your code
         expect(res.statusCode).toBeLessThan(500);
     });
 
-    test('Ruta no encontrada', async () => {
-        expect((await lambdaHandler(send('GET', '/ruta-inexistente'))).statusCode).toBe(404);
+    test('Not found route', async () => {
+        expect((await lambdaHandler(send('GET', '/nonexistent-route'))).statusCode).toBe(404);
     });
 });

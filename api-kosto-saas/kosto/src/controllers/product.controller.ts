@@ -36,22 +36,6 @@ export const createProduct = async (tenantId: string, payload: Partial<ProductMo
     }
 };
 
-// Obtener todos los productos del tenant
-// export const getProducts = async (tenantId: string) => {
-//     const client = await dbPool.connect();
-//     try {
-//         const queryText = `
-//             SELECT id, name, sale_price, current_stock, is_pre_made, is_active, created_at
-//             FROM product
-//             WHERE tenant_id = $1 AND is_active = TRUE
-//             ORDER BY name ASC;
-//         `;
-//         const result = await client.query(queryText, [tenantId]);
-//         return result.rows;
-//     } finally {
-//         client.release();
-//     }
-// };
 export const getProducts = async (tenantId: string, isPreMade?: boolean) => {
     const client = await dbPool.connect();
     try {
@@ -115,7 +99,7 @@ export const forceDeleteProduct = async (tenantId: string, id: string) => {
         );
         return (result.rowCount ?? 0) > 0;
     } catch (err: any) {
-        // Si el error es de restricción de llave foránea (código 23503 en Postgres)
+        // If the error is a foreign key constraint violation (code 23503 in Postgres)
         if (err.code === '23503') {
             throw new Error('CONFLICT');
         }

@@ -25,23 +25,23 @@ describe('Resource Controller Unit Tests', () => {
         jest.clearAllMocks();
     });
 
-    test('createResource debería validar campos requeridos', async () => {
+    test('createResource should validate required fields', async () => {
         await expect(createResource('t1', {} as any))
             .rejects.toThrow('ValidationError: Missing required fields');
     });
 
-    test('createResource debería insertar y retornar el recurso creado', async () => {
-        const mockRow = { id: 'res1', name: 'Harina', unit_of_measure: 'kg', unit_cost: 1.5, current_stock: 0 };
+    test('createResource should insert and return the created resource', async () => {
+        const mockRow = { id: 'res1', name: 'Flour', unit_of_measure: 'kg', unit_cost: 1.5, current_stock: 0 };
         mockClient.query.mockResolvedValue({ rows: [mockRow] });
 
-        const payload = { name: 'Harina', unit_of_measure: 'kg', unit_cost: 1.5 };
+        const payload = { name: 'Flour', unit_of_measure: 'kg', unit_cost: 1.5 };
         const result = await createResource('t1', payload);
 
         expect(result).toEqual(mockRow);
         expect(mockClient.release).toHaveBeenCalled();
     });
 
-    test('getResources debería retornar recursos activos ordenados', async () => {
+    test('getResources should return active resources ordered by name', async () => {
         mockClient.query.mockResolvedValue({ rows: [{ name: 'A' }, { name: 'B' }] });
 
         const result = await getResources('t1');
@@ -50,16 +50,16 @@ describe('Resource Controller Unit Tests', () => {
         expect(mockClient.query).toHaveBeenCalledWith(expect.stringContaining('ORDER BY name ASC'), ['t1']);
     });
 
-    test('updateResource debería actualizar y retornar los datos', async () => {
-        const mockRow = { id: 'res1', name: 'Harina', unit_of_measure: 'kg', unit_cost: 2.0 };
+    test('updateResource should update and return the updated data', async () => {
+        const mockRow = { id: 'res1', name: 'Flour', unit_of_measure: 'kg', unit_cost: 2.0 };
         mockClient.query.mockResolvedValue({ rows: [mockRow] });
 
-        const result = await updateResource('t1', 'res1', { name: 'Harina', unit_of_measure: 'kg', unit_cost: 2.0 });
+        const result = await updateResource('t1', 'res1', { name: 'Flour', unit_of_measure: 'kg', unit_cost: 2.0 });
 
         expect(result.unit_cost).toBe(2.0);
     });
 
-    test('forceDeleteResource debería lanzar error CONFLICT ante FK violation (23503)', async () => {
+    test('forceDeleteResource should throw CONFLICT error on foreign key violation (23503)', async () => {
         const pgError: any = new Error('Foreign key violation');
         pgError.code = '23503';
         mockClient.query.mockRejectedValue(pgError);
@@ -68,7 +68,7 @@ describe('Resource Controller Unit Tests', () => {
             .rejects.toThrow('CONFLICT');
     });
 
-    test('softDeleteResource debería retornar true si el update afecta una fila', async () => {
+    test('softDeleteResource should return true if the update affects a row', async () => {
         mockClient.query.mockResolvedValue({ rowCount: 1 });
 
         const result = await softDeleteResource('t1', 'res1');

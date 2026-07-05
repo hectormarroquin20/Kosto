@@ -14,7 +14,6 @@ import { getTransaction, registerSale } from './src/controllers/transaction.cont
 import { IIdentityService } from '@/models/identity.interface';
 import { CognitoIdentityService } from '@/services/cognito-identity.service';
 
-
 const getBody = (event: APIGatewayProxyEvent) => {
     try { return event.body ? JSON.parse(event.body) : {}; } catch { return {}; }
 };
@@ -72,10 +71,10 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
         }
         if (path === '/products') {
             if (method === 'GET') {
-                // Extraemos el parámetro de la URL: /products?is_pre_made=true
+                // Extract the query parameter from the URL: /products?is_pre_made=true
                 const isPreMadeParam = event.queryStringParameters?.is_pre_made;
 
-                // Convertimos el string 'true' a booleano real
+                // Convert the string 'true' to a boolean value
                 const isPreMade = isPreMadeParam !== undefined
                     ? isPreMadeParam.toLowerCase() === 'true'
                     : undefined;
@@ -121,11 +120,11 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
             }
             if (method === 'PUT') {
                 const b = getBody(event);
-                console.log("Objeto en body", b)
+                console.log("Object in body", b)
                 return buildResponse(200, { data: await updateTenant(id, b) });
             }
         }
-        // Esta es la ruta para: GET /tenants y POST /tenants
+        // This is the route for GET /tenants and POST /tenants
         else if (path === '/tenants') {
             if (method === 'GET') {
                 return buildResponse(200, { data: await getTenant(tenantId) });
@@ -133,11 +132,11 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
             if (method === 'POST') {
                 const b = getBody(event);
 
-                // 1. Creamos en BD (Tu lógica actual)
+                // 1. Create in DB (Your current logic)
                 const tenant = await createTenant(b.company_name, b.tier);
 
-                // 2. Delegamos la creación del usuario a un servicio desacoplado
-                // Esto podría ser un llamado a un "IdentityManager" que decidiremos qué implementar
+                // 2. Delegate user creation to a decoupled service
+                // This could be a call to an "IdentityManager" that we'll decide what to implement
                 await identityService.createUser({
                     email: b.email,
                     password: b.password,
@@ -162,15 +161,14 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
                 const result = await processProduction(tenantId, b.product_id, b.quantity);
                 return buildResponse(201, { data: result });
             } catch (err: any) {
-                // Aquí es donde sucede la magia: capturamos el mensaje del error lanzado en el controlador
+                // Here is where the magic happens: we capture the error message thrown in the controller
                 return buildResponse(400, { error: err.message });
             }
         }
 
-
         return buildResponse(404, { error: 'Route not found' });
     } catch (err: any) {
-        console.error('--- ERROR DETALLADO ---');
+        console.error('--- DETAILED ERROR ---');
         console.error(err);
         return buildResponse(500, { error: 'Internal Server Error', details: err.message });
     }

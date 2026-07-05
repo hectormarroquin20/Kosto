@@ -4,21 +4,21 @@ import { types } from 'pg';
 
 describe('Database Configuration', () => {
 
-    test('debería tener configurados los parsers de tipos correctamente', () => {
-        // Obtenemos el parser configurado para el tipo 1700 (Numeric)
+    test('should have the type parsers configured correctly', () => {
+        // Get the parser configured for type 1700 (Numeric)
         const numericParser = types.getTypeParser(1700);
-        // Probamos que el parser convierta el string de DB a number
+        // Test that the parser converts a string from the DB to a number
         expect(numericParser('123.45')).toBe(123.45);
 
-        // Probamos el parser de fechas (Type 1082: DATE)
+        // Test the date parser (Type 1082: DATE)
         const dateParser = types.getTypeParser(1082);
         const dateResult = dateParser('2026-07-02');
         expect(dateResult).toBeInstanceOf(Date);
         expect(dateResult.getFullYear()).toBe(2026);
     });
 
-    test('dbPool debería tener la configuración correcta', () => {
-        // Accedemos a la configuración interna del pool
+    test('dbPool should have the correct configuration', () => {
+        // Access the internal configuration of the pool
         const config = (dbPool as any).options;
 
         expect(config.max).toBe(2);

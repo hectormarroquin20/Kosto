@@ -25,7 +25,7 @@ describe('Tenant Controller Unit Tests', () => {
         jest.clearAllMocks();
     });
 
-    test('createTenant debería insertar y retornar el nuevo tenant', async () => {
+    test('createTenant should insert and return the new tenant', async () => {
         const mockRow = { id: 't1', company_name: 'Kosto Corp', tier: 'freemium' };
         mockClient.query.mockResolvedValue({ rows: [mockRow] });
 
@@ -39,7 +39,7 @@ describe('Tenant Controller Unit Tests', () => {
         expect(mockClient.release).toHaveBeenCalled();
     });
 
-    test('getTenant debería retornar un tenant por su ID', async () => {
+    test('getTenant should return a tenant by its ID', async () => {
         const mockRow = { id: 't1', company_name: 'Kosto Corp' };
         mockClient.query.mockResolvedValue({ rows: [mockRow] });
 
@@ -49,7 +49,7 @@ describe('Tenant Controller Unit Tests', () => {
         expect(mockClient.query).toHaveBeenCalledWith(expect.stringContaining('WHERE id = $1'), ['t1']);
     });
 
-    test('updateTenant debería actualizar los campos correctamente', async () => {
+    test('updateTenant should update the fields correctly', async () => {
         const mockRow = { id: 't1', company_name: 'Nuevo Nombre', tier: 'pro' };
         mockClient.query.mockResolvedValue({ rows: [mockRow] });
 
@@ -62,7 +62,7 @@ describe('Tenant Controller Unit Tests', () => {
         );
     });
 
-    test('forceDeleteTenant debería lanzar error CONFLICT ante FK violation (23503)', async () => {
+    test('forceDeleteTenant should throw an error CONFLICT for FK violation (23503)', async () => {
         const pgError: any = new Error('Foreign key violation');
         pgError.code = '23503';
         mockClient.query.mockRejectedValue(pgError);
@@ -71,7 +71,7 @@ describe('Tenant Controller Unit Tests', () => {
             .rejects.toThrow('CONFLICT');
     });
 
-    test('softDeleteTenant debería retornar true si el update fue exitoso', async () => {
+    test('softDeleteTenant should return true if the update was successful', async () => {
         mockClient.query.mockResolvedValue({ rowCount: 1 });
 
         const result = await softDeleteTenant('t1');

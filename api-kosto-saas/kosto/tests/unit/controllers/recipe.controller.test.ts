@@ -19,7 +19,7 @@ describe('Recipe Controller Unit Tests', () => {
         jest.clearAllMocks();
     });
 
-    test('addRecipeItem debería insertar y retornar la fila', async () => {
+    test('should insert and return the row', async () => {
         const mockRow = { id: '1', product_id: 'p1', resource_id: 'r1', required_quantity: 5 };
         mockClient.query.mockResolvedValue({ rows: [mockRow] });
 
@@ -30,7 +30,7 @@ describe('Recipe Controller Unit Tests', () => {
         expect(mockClient.release).toHaveBeenCalled();
     });
 
-    test('getRecipeItem debería retornar todas las recetas activas', async () => {
+    test('should return all active recipes', async () => {
         const mockRows = [{ id: '1' }, { id: '2' }];
         mockClient.query.mockResolvedValue({ rows: mockRows });
 
@@ -41,7 +41,7 @@ describe('Recipe Controller Unit Tests', () => {
         expect(mockClient.release).toHaveBeenCalled();
     });
 
-    test('updateRecipeItem debería retornar la fila actualizada', async () => {
+    test('should return the updated row', async () => {
         const mockRow = { id: '1', product_id: 'p1', resource_id: 'r1', required_quantity: 10 };
         mockClient.query.mockResolvedValue({ rows: [mockRow] });
 
@@ -51,7 +51,7 @@ describe('Recipe Controller Unit Tests', () => {
         expect(mockClient.release).toHaveBeenCalled();
     });
 
-    test('forceDeleteRecipeItem debería retornar true si se eliminó algo', async () => {
+    test('should return true if something was deleted', async () => {
         mockClient.query.mockResolvedValue({ rowCount: 1 });
 
         const result = await forceDeleteRecipeItem('t1', '1');

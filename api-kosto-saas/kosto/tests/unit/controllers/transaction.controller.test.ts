@@ -6,20 +6,20 @@ import { processProduction } from '@/controllers/production.controller';
 jest.mock('@/db/database');
 jest.mock('@/controllers/production.controller');
 
-describe('Sale Controller Unit Tests', () => {
+describe('Sales Controller Unit Tests', () => {
     let mockClient: any;
 
     beforeEach(() => {
-        // 1. Creamos el cliente mock que tendrá el método query
+        // 1. Create the mock client that will have the query method
         mockClient = {
             query: jest.fn(),
             release: jest.fn()
         };
 
-        // 2. Mockeamos el método 'connect' del pool para que devuelva nuestro mockClient
+        // 2. Mock the 'connect' method of the pool to return our mockClient
         (dbPool.connect as jest.Mock<any>).mockResolvedValue(mockClient);
 
-        // 3. Opcional: Mockeamos el método 'query' del pool directamente si el código lo usa
+        // 3. Optionally, mock the 'query' method of the pool directly if the code uses it
         (dbPool.query as jest.Mock<any>) = mockClient.query;
     });
 
@@ -27,20 +27,20 @@ describe('Sale Controller Unit Tests', () => {
         jest.clearAllMocks();
     });
 
-    test('registerSale debería manejar venta de producto pre-fabricado (Pastel)', async () => {
-        // 1. Mock para el BEGIN
+    test('registerSale should handle pre-fabricated product sale (Cake)', async () => {
+        // 1. Mock for BEGIN
         mockClient.query.mockResolvedValueOnce({});
 
-        // 2. Mock para el SELECT product (ahora este sí recibe la respuesta correcta)
+        // 2. Mock for the SELECT product (now this one will return the correct response)
         mockClient.query.mockResolvedValueOnce({ rowCount: 1, rows: [{ is_pre_made: true }] });
 
-        // 3. Mock para el UPDATE product
+        // 3. Mock for the UPDATE product
         mockClient.query.mockResolvedValueOnce({ rowCount: 1 });
 
-        // 4. Mock para el INSERT transaction_log
+        // 4. Mock for the INSERT transaction_log
         mockClient.query.mockResolvedValueOnce({ rows: [{ id: 'tx1' }] });
 
-        // 5. Mock para el COMMIT
+        // 5. Mock for COMMIT
         mockClient.query.mockResolvedValueOnce({});
 
         const result = await registerSale('t1', 'p1', 1, 50.0);
@@ -49,14 +49,14 @@ describe('Sale Controller Unit Tests', () => {
         expect(mockClient.query).toHaveBeenCalledWith('COMMIT');
     });
 
-    test('registerSale debería llamar a processProduction con el mismo cliente (Café)', async () => {
+    test('registerSale should call processProduction with the same client (Coffee)', async () => {
         // 1. Mock BEGIN
         mockClient.query.mockResolvedValueOnce({});
 
         // 2. Mock SELECT product
         mockClient.query.mockResolvedValueOnce({ rowCount: 1, rows: [{ is_pre_made: false }] });
 
-        // 3. Mockeamos la respuesta de processProduction para que no intente hacer queries reales
+        // 3. Mock the response of processProduction to avoid real queries
         (processProduction as jest.Mock<any>).mockResolvedValue({ success: true });
 
         // 4. Mock INSERT transaction_log
@@ -67,17 +67,17 @@ describe('Sale Controller Unit Tests', () => {
 
         const result = await registerSale('t1', 'p1', 1, 10.0);
 
-        // Verificaciones
+        // Verifications
         expect(processProduction).toHaveBeenCalledWith('t1', 'p1', 1, mockClient);
         expect(result.id).toBe('tx1');
         expect(mockClient.query).toHaveBeenCalledWith('COMMIT');
     });
 
-    test('registerSale debería hacer ROLLBACK si algo falla en la venta', async () => {
-        // Simular error al insertar el log
+    test('registerSale should do ROLLBACK if something goes wrong in the sale', async () => {
+        // Simulate error while inserting the log
         mockClient.query.mockResolvedValueOnce({ rowCount: 1, rows: [{ is_pre_made: true }] }); // Select product
         mockClient.query.mockResolvedValueOnce({ rowCount: 1 }); // Update product
-        mockClient.query.mockRejectedValueOnce(new Error('DB Error')); // Error en log
+        mockClient.query.mockRejectedValueOnce(new Error('DB Error')); // DB error during log
 
         await expect(registerSale('t1', 'p1', 1, 50.0)).rejects.toThrow('DB Error');
 

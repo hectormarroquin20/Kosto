@@ -3,7 +3,7 @@ import { buildResponse } from '@/utils/response';
 
 describe('buildResponse', () => {
 
-    test('debería retornar el status y los headers correctos', () => {
+    test('should return the correct status and headers', () => {
         const response = buildResponse(200, { message: 'OK' });
 
         expect(response.statusCode).toBe(200);
@@ -11,8 +11,8 @@ describe('buildResponse', () => {
         expect(response.headers['Access-Control-Allow-Origin']).toBe('*');
     });
 
-    test('debería convertir un objeto único en un array en la propiedad data', () => {
-        const body = { data: { id: 1, name: 'Producto' } };
+    test('should convert a single object into an array in the data property', () => {
+        const body = { data: { id: 1, name: 'Product' } };
         const response = buildResponse(200, body);
         const parsedBody = JSON.parse(response.body);
 
@@ -21,7 +21,7 @@ describe('buildResponse', () => {
         expect(parsedBody.data[0].id).toBe(1);
     });
 
-    test('debería mantener un array existente en la propiedad data', () => {
+    test('should keep an existing array in the data property', () => {
         const body = { data: [{ id: 1 }, { id: 2 }] };
         const response = buildResponse(200, body);
         const parsedBody = JSON.parse(response.body);
@@ -29,7 +29,7 @@ describe('buildResponse', () => {
         expect(parsedBody.data).toHaveLength(2);
     });
 
-    test('debería convertir null/undefined en data a un array vacío', () => {
+    test('should convert null/undefined in the data to an empty array', () => {
         const body = { data: null };
         const response = buildResponse(200, body);
         const parsedBody = JSON.parse(response.body);
@@ -37,14 +37,14 @@ describe('buildResponse', () => {
         expect(parsedBody.data).toEqual([]);
     });
 
-    test('debería ignorar la normalización si no existe la propiedad data', () => {
-        const body = { message: 'No hay data aquí' };
+    test('should ignore normalization if the data property does not exist', () => {
+        const body = { message: 'No data here' };
         const response = buildResponse(200, body);
         const parsedBody = JSON.parse(response.body);
 
-        // 1. Verificamos que data no exista
+        // 1. Verify that data does not exist
         expect(parsedBody.data).toBeUndefined();
-        // 2. Verificamos que el mensaje sea el correcto
-        expect(parsedBody.message).toBe('No hay data aquí');
+        // 2. Verify that the message is correct
+        expect(parsedBody.message).toBe('No data here');
     });
 });
