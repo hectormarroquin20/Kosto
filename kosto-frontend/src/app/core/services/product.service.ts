@@ -1,15 +1,12 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Service, inject } from '@angular/core';
 import { ProductModel } from '../models/product.interface';
+import { environment } from '../../../environments/environment';
 
 @Service()
-export class Product {
-    private readonly http = inject(HttpClient); // <--- Así se inyecta ahora
-    private readonly apiUrl = 'http://127.0.0.1:3000';
-
-    // getProducts() {
-    //     return this.http.get<ProductModel[]>(`${this.apiUrl}/products`);
-    // }
+export class ProductService {
+    private readonly http = inject(HttpClient);
+    private readonly apiUrl = environment.apiUrl;
 
     getProducts(isPreMade?: boolean) {
         let params = new HttpParams();
@@ -30,7 +27,8 @@ export class Product {
     }
 
     deleteProduct(id: string) {
-        // Nota: Al ser DELETE con query params, usamos { params: ... }
+        // Note: When DELETE uses query params, we use { params: ... }
         return this.http.delete(`${this.apiUrl}/products`, { params: { id } });
     }
 }
+

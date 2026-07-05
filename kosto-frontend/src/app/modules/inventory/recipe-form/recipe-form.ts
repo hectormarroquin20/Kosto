@@ -12,9 +12,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslatePipe } from '@ngx-translate/core';
 
-import { RecipeItems } from '@/core/services/recipe-items';
-import { Product } from '@/core/services/product';
-import { Resource } from '@/core/services/resource';
+import { RecipeItemsService } from '@/core/services/recipe-items.service';
+import { ProductService } from '@/core/services/product.service';
+import { ResourceService } from '@/core/services/resource.service';
 
 @Component({
   selector: 'app-recipe-form',
@@ -35,9 +35,9 @@ import { Resource } from '@/core/services/resource';
 })
 export class RecipeForm implements OnInit {
   private readonly fb = inject(FormBuilder);
-  private readonly recipeService = inject(RecipeItems);
-  private readonly productService = inject(Product);
-  private readonly resourceService = inject(Resource);
+  private readonly recipeService = inject(RecipeItemsService);
+  private readonly productService = inject(ProductService);
+  private readonly resourceService = inject(ResourceService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
 

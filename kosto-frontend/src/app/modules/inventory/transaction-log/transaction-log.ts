@@ -7,12 +7,12 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { ProductModel } from '../../../core/models/product.interface';
-import { Product } from '../../../core/services/product';
+import { ProductService } from '../../../core/services/product.service';
 import { forkJoin } from 'rxjs';
 
-import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-transaction-log',
@@ -29,7 +29,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 })
 export class TransactionLog {
   private readonly transactionLogService = inject(TransactionLogService);
-  private readonly productService = inject(Product);
+  private readonly productService = inject(ProductService);
 
   // Estado reactivo usando Signals
   public transactionLogs = signal<TransactionLogModel[]>([]);
@@ -45,7 +45,6 @@ export class TransactionLog {
   });
 
   // Las columnas que queremos mostrar en la tabla
-  // public displayedColumns: string[] = ['type', 'reference_id', 'quantity', 'total_amount', 'transaction_date'];
   public displayedColumns: string[] = ['type', 'product_name', 'quantity', 'total_amount', 'transaction_date'];
 
   ngOnInit() {

@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 import { Observable, startWith, map } from 'rxjs';
 
 import { TransactionLogService } from '../../../core/services/transaction-log.service';
-import { Product } from '../../../core/services/product'; // Tu servicio de productos
+import { ProductService } from '../../../core/services/product.service'; // Tu servicio de productos
 import { ProductModel } from '../../../core/models/product.interface';
 
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
@@ -36,7 +36,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 export class SalesForm implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly transactionService = inject(TransactionLogService);
-  private readonly productService = inject(Product);
+  private readonly productService = inject(ProductService);
   protected readonly router = inject(Router);
 
   // Estado local de productos

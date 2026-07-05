@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 
-import { Product } from '../../../core/services/product';
+import { ProductService } from '../../../core/services/product.service';
 import { ProductModel } from '../../../core/models/product.interface';
 
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -36,7 +36,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 })
 export class ProductForm {
   private readonly fb = inject(FormBuilder);
-  private readonly productService = inject(Product);
+  private readonly productService = inject(ProductService);
   private readonly authService = inject(IAuthService); // <--- Inyectamos el gestor de sesión
   private readonly router = inject(Router);
 

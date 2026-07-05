@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { Resource } from '../../../core/services/resource';
+import { ResourceService } from '../../../core/services/resource.service';
 import { ResourceModel } from '../../../core/models/resource.interface';
 
 import { MatTableModule } from '@angular/material/table';
@@ -14,7 +14,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { TranslatePipe } from '@ngx-translate/core';
-import { AddStockResourceDialog } from '../add-stock-dialog/add-stock-dialog';
+import { AddStockResourceDialog } from '../add-resource-stock-dialog/add-stock-dialog';
 
 
 @Component({
@@ -34,12 +34,12 @@ import { AddStockResourceDialog } from '../add-stock-dialog/add-stock-dialog';
   styleUrl: './missing-stock-resource.scss',
 })
 export class MissingStockResource {
-  private readonly resourcesService = inject(Resource);
+  private readonly resourcesService = inject(ResourceService);
   private readonly router = inject(Router);
   private readonly dialog = inject(MatDialog);
 
   // Estado reactivo usando Signals
-  public resources = signal<ResourceModel[]>([]);
+  public missingResourceStock = signal<ResourceModel[]>([]);
   public isLoading = signal<boolean>(true);
 
 
@@ -57,7 +57,7 @@ export class MissingStockResource {
       next: (response: any) => {
         // Filtramos solo los recursos con stock igual a cero
         const zeroStockResources = response.data.filter((resource: ResourceModel) => resource.current_stock === 0);
-        this.resources.set(zeroStockResources);
+        this.missingResourceStock.set(zeroStockResources);
         this.isLoading.set(false);
 
       },

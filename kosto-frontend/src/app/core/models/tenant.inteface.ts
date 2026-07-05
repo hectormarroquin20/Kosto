@@ -1,10 +1,11 @@
 export interface TenantModel {
-    id?: string; // Opcional porque al crear el registro, aún no tiene ID
+    id?: string; // Optional because at the time of creating the record, it does not have an ID
     company_name: string;
-    unit_of_measure: string;
     tier: string;
-    created_at: string;
-    // Campos necesarios para el registro, aunque no vivan en la tabla tenant
+    created_at?: string;
+    is_active: boolean;
+    updated_at?: string;
+    // Necessary fields for registration, although they do not live in the tenant table (user data)
     email?: string;
     password?: string;
 }

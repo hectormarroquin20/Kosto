@@ -1,6 +1,6 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { ProductModel } from '../../../core/models/product.interface';
-import { Product } from '../../../core/services/product';
+import { ProductService } from '../../../core/services/product.service';
 import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -8,6 +8,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { Router, RouterLink } from '@angular/router';
 
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { AddProductStockDialog } from '../add-product-stock-dialog/add-product-stock-dialog';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-product-list',
@@ -24,8 +26,9 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
   styleUrl: './product-list.scss',
 })
 export class ProductList implements OnInit {
-  private readonly productService = inject(Product);
+  private readonly productService = inject(ProductService);
   private readonly router = inject(Router);
+  private readonly dialog = inject(MatDialog);
 
   public products = signal<ProductModel[]>([]);
   public isLoading = signal<boolean>(true);
@@ -65,5 +68,19 @@ export class ProductList implements OnInit {
 
   onEdit(product: ProductModel) {
     this.router.navigate(['/products/edit', product.id]);
+  }
+
+  openAddStockDialog(product: ProductModel) {
+    const dialogRef = this.dialog.open(AddProductStockDialog, {
+      width: '420px',
+      disableClose: true,
+      data: product
+    });
+
+    dialogRef.afterClosed().subscribe((updated: boolean) => {
+      if (updated) {
+        this.loadProducts();
+      }
+    });
   }
 }

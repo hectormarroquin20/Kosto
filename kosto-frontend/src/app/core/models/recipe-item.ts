@@ -4,4 +4,5 @@ export interface RecipeItem {
     resource_id: string;
     required_quantity: number;
     is_active: boolean;
+    tenant_id?: string;
 }

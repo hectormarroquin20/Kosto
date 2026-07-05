@@ -10,7 +10,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 
 import { MatMenuModule } from '@angular/material/menu';
-import { Tenant } from './core/services/tenant';
+import { TenantService } from './core/services/tenant.service';
 import { IAuthService } from '../../../kosto-frontend/src/app/core/models/auth.interface';
 
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
@@ -120,7 +120,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 })
 export class App implements OnInit {
   private document = inject(DOCUMENT);
-  private tenantService = inject(Tenant);
+  private tenantService = inject(TenantService);
   private readonly authService = inject(IAuthService); // Inyectamos la fachada
   private translate = inject(TranslateService);
   private router = inject(Router);

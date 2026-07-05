@@ -11,14 +11,15 @@ import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { provideAuth } from 'angular-auth-oidc-client';
 
 import { IAuthService } from './core/models/auth.interface';
-import { Auth } from './core/services/auth';
+import { AuthService } from './core/services/auth.service';
+import { environment } from '../environments/environment';
 
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
 
-    // 1. Mantenemos SOLO el HttpClient que tiene el interceptor
+    // 1. We keep ONLY the HttpClient with the interceptor
     provideHttpClient(withInterceptors([authInterceptor])),
 
     provideRouter(routes),
@@ -30,11 +31,9 @@ export const appConfig: ApplicationConfig = {
 
     provideAuth({
       config: {
-        authority: 'https://cognito-idp.us-east-1.amazonaws.com/us-east-1_eAzPdrLjW',
-        // redirectUrl: 'https://d84l1y8p4kdic.cloudfront.net',
-        // postLogoutRedirectUri: 'https://d84l1y8p4kdic.cloudfront.net',
-        redirectUrl: window.location.origin,
-        postLogoutRedirectUri: window.location.origin,
+        authority: environment.authority,
+        redirectUrl: environment.redirectUrl,
+        postLogoutRedirectUri: environment.postLogoutRedirectUri,
         clientId: '4m41ibsf6p1il704jiosr80m0p',
         scope: 'email openid profile phone',
         responseType: 'code',
@@ -43,13 +42,13 @@ export const appConfig: ApplicationConfig = {
       },
     }),
 
-    // 2. Tu interfaz que apunta a la implementación
-    { provide: IAuthService, useClass: Auth },
+    // 2. Your interface pointing to the implementation
+    { provide: IAuthService, useClass: AuthService },
 
-    // 3. El inicializador moderno
+    // 3. The modern initializer
     provideAppInitializer(() => {
       const authService = inject(IAuthService);
-      // Al retornar el Observable, Angular pausa la carga de la app hasta que Cognito responda
+      // Returning the Observable will pause the app loading until Cognito responds
       return authService.checkAuth();
     })
   ]

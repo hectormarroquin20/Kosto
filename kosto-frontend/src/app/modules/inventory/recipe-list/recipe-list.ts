@@ -1,6 +1,6 @@
 import { Component, computed, inject, signal, OnInit } from '@angular/core';
 import { RecipeItem } from '../../../core/models/recipe-item';
-import { RecipeItems } from '../../../core/services/recipe-items';
+import { RecipeItemsService } from '../../../core/services/recipe-items.service';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
@@ -10,8 +10,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
 import { Router, RouterLink } from '@angular/router';
-import { Product } from '../../../core/services/product';
-import { Resource } from '../../../core/services/resource';
+import { ProductService } from '../../../core/services/product.service';
+import { ResourceService } from '../../../core/services/resource.service';
 import { catchError, forkJoin, of } from 'rxjs';
 
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
@@ -33,9 +33,9 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
   styleUrl: './recipe-list.scss',
 })
 export class RecipeList implements OnInit {
-  private readonly recipeItemsService = inject(RecipeItems);
-  private readonly productService = inject(Product);
-  private readonly resourceService = inject(Resource);
+  private readonly recipeItemsService = inject(RecipeItemsService);
+  private readonly productService = inject(ProductService);
+  private readonly resourceService = inject(ResourceService);
   private readonly router = inject(Router);
 
   public isLoading = signal<boolean>(true);

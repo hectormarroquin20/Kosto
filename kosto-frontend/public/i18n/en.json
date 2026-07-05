@@ -196,5 +196,19 @@
         "BTN": "Register Company",
         "ALREADY_HAVE_ACCOUNT": "Already have a Kosto account?",
         "GO_TO_LOGIN": "Go to login portal"
+    },
+    "ADD_STOCK_DIALOG": {
+        "QUANTITY": "Quantity to add",
+        "NEW_UNIT_COST": "New unit cost",
+        "AVG_COST": "Average cost (editable)",
+        "CURRENT_STOCK": "Current stock:",
+        "ERRORS": {
+            "INVALID_QUANTITY": "Enter a valid quantity",
+            "INVALID_COST": "Enter a valid cost"
+        },
+        "ACTIONS": {
+            "CANCEL": "Cancel",
+            "ADD": "Add"
+        }
     }
 }

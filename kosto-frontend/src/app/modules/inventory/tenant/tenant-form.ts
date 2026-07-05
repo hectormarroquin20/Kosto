@@ -6,7 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
 import { TenantModel } from '../../../core/models/tenant.inteface';
-import { Tenant } from '../../../core/services/tenant';
+import { TenantService } from '../../../core/services/tenant.service';
 import { IAuthService } from '../../../core/models/auth.interface';
 
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
@@ -27,7 +27,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 })
 export class TenantForm implements OnInit {
   private readonly fb = inject(FormBuilder);
-  private readonly tenantService = inject(Tenant);
+  private readonly tenantService = inject(TenantService);
   private readonly authService = inject(IAuthService);
   private readonly router = inject(Router);
 

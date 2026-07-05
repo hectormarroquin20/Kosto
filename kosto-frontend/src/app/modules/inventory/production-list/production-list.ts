@@ -9,7 +9,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 
 import { ProductionForm } from '../production-form/production-form';
 import { ProductModel } from '../../../core/models/product.interface';
-import { Product } from '../../../core/services/product';
+import { ProductService } from '../../../core/services/product.service';
 
 @Component({
   selector: 'app-production-list',
@@ -26,7 +26,7 @@ import { Product } from '../../../core/services/product';
 })
 export class ProductionList {
   private dialog = inject(MatDialog);
-  private productService = inject(Product); // 1. Inyectamos tu servicio real
+  private productService = inject(ProductService); // 1. Inyectamos tu servicio real
 
   // 2. La señal ahora arranca vacía y tipada con tu modelo
   dataSource = signal<ProductModel[]>([]);
@@ -68,7 +68,8 @@ export class ProductionList {
       data: {
         product_id: product.id,
         product_name: product.name,
-        current_stock: product.current_stock
+        current_stock: product.current_stock,
+        sale_price: product.sale_price
       }
     });
 

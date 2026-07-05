@@ -4,7 +4,7 @@ import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 
 // Asegúrate de que las rutas a tus modelos y servicios sean correctas
 import { ResourceModel } from '../../../core/models/resource.interface';
-import { Resource } from '../../../core/services/resource';
+import { ResourceService } from '../../../core/services/resource.service';
 import { IAuthService } from '../../../core/models/auth.interface';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -36,7 +36,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 })
 export class ResourceForm implements OnInit {
   private readonly fb = inject(FormBuilder);
-  private readonly resourceService = inject(Resource);
+  private readonly resourceService = inject(ResourceService);
   private readonly authService = inject(IAuthService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);

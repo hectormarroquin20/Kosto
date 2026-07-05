@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { Resource } from '../../../core/services/resource';
+import { ResourceService } from '../../../core/services/resource.service';
 import { ResourceModel } from '../../../core/models/resource.interface';
 
 import { MatTableModule } from '@angular/material/table';
@@ -10,6 +10,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { Router, RouterLink } from '@angular/router';
 
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { AddStockResourceDialog } from '../add-resource-stock-dialog/add-stock-dialog';
+import { MatDialog } from '@angular/material/dialog';
 
 
 @Component({
@@ -26,8 +28,9 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
   styleUrl: './resource-list.scss',
 })
 export class ResourceList {
-  private readonly resourcesService = inject(Resource);
+  private readonly resourcesService = inject(ResourceService);
   private readonly router = inject(Router);
+  private readonly dialog = inject(MatDialog);
 
   // Estado reactivo usando Signals
   public resources = signal<ResourceModel[]>([]);
@@ -72,5 +75,19 @@ export class ResourceList {
   onEdit(resource: ResourceModel) {
     // Navegamos al formulario pasando el objeto (puedes usar un QueryParam o un Service de estado)
     this.router.navigate(['/resources/edit', resource.id]);
+  }
+
+  openAddStockDialog(resource: ResourceModel) {
+    const dialogRef = this.dialog.open(AddStockResourceDialog, {
+      width: '420px',
+      disableClose: true,
+      data: resource
+    });
+
+    dialogRef.afterClosed().subscribe((updated: boolean) => {
+      if (updated) {
+        this.loadResources();
+      }
+    });
   }
 }

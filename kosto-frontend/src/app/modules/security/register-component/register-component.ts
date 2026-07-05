@@ -11,7 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { TranslatePipe } from '@ngx-translate/core';
 import { LanguageSelector } from '../language-selector/language-selector.js';
-import { Tenant } from '../../../core/services/tenant.js';
+import { TenantService } from '../../../core/services/tenant.service.js';
 
 @Component({
   selector: 'app-register-component',
@@ -34,7 +34,7 @@ export class RegisterComponent {
   private fb = inject(NonNullableFormBuilder);
   private http = inject(HttpClient);
   private router = inject(Router);
-  private tenantService = inject(Tenant);
+  private tenantService = inject(TenantService);
 
   // Manejo de estado visual con Signals (Angular 20)
   hidePassword = signal(true);

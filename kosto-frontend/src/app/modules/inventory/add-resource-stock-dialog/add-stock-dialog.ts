@@ -5,9 +5,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Resource } from '../../../core/services/resource';
+import { Router } from '@angular/router';
+import { ResourceService } from '../../../core/services/resource.service';
 import { ResourceModel } from '../../../core/models/resource.interface';
 import { IAuthService } from '../../../core/models/auth.interface';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
     selector: 'add-stock-dialog',
@@ -18,15 +20,17 @@ import { IAuthService } from '../../../core/models/auth.interface';
         MatButtonModule,
         MatFormFieldModule,
         MatInputModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        TranslatePipe
     ]
 })
 export class AddStockResourceDialog {
     public data = inject(MAT_DIALOG_DATA) as ResourceModel;
     private dialogRef = inject(MatDialogRef<AddStockResourceDialog>);
     private fb = inject(FormBuilder);
-    private resourceService = inject(Resource);
+    private resourceService = inject(ResourceService);
     private authService = inject(IAuthService);
+    private router = inject(Router);
 
     // Track if user manually edited the average
     private avgOverridden = false;
@@ -74,7 +78,10 @@ export class AddStockResourceDialog {
         };
 
         this.resourceService.updateResource(updated).subscribe({
-            next: () => this.dialogRef.close(true),
+            next: () => {
+                this.dialogRef.close(true);
+                this.router.navigate(['/resources']);
+            },
             error: (err) => alert('Error updating stock: ' + (err?.message || err))
         });
     }

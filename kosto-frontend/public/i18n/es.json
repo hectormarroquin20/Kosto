@@ -199,5 +199,19 @@
         "BTN": "Registrar Empresa",
         "ALREADY_HAVE_ACCOUNT": "¿Ya tienes una cuenta de Kosto?",
         "GO_TO_LOGIN": "Ir al portal de acceso"
+    },
+    "ADD_STOCK_DIALOG": {
+        "QUANTITY": "Cantidad a agregar",
+        "NEW_UNIT_COST": "Costo por unidad nuevo",
+        "AVG_COST": "Costo promedio (editable)",
+        "CURRENT_STOCK": "Stock actual:",
+        "ERRORS": {
+            "INVALID_QUANTITY": "Ingresa una cantidad válida",
+            "INVALID_COST": "Ingresa un costo válido"
+        },
+        "ACTIONS": {
+            "CANCEL": "Cancelar",
+            "ADD": "Agregar"
+        }
     }
 }

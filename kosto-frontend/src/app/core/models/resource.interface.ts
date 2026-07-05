@@ -6,4 +6,6 @@ export interface ResourceModel {
     unit_cost: number;
     current_stock: number;
     created_at: string;
+    updated_at: string;
+    is_active: string;
 }

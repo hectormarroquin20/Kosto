@@ -18,7 +18,7 @@
             </div>
             } @else {
             <div class="table-responsive">
-                <table mat-table [dataSource]="resources()" class="mat-elevation-z2" style="width: 100%;">
+                <table mat-table [dataSource]="missingResourceStock()" class="mat-elevation-z2" style="width: 100%;">
 
                     <ng-container matColumnDef="name">
                         <th mat-header-cell *matHeaderCellDef> {{ 'RESOURCES.TABLE.NAME' | translate }} </th>

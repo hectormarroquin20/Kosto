@@ -1,11 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
 import { TenantModel } from '../models/tenant.inteface';
+import { environment } from '@root/src/environments/environment';
 
 @Service()
-export class Tenant {
-    private readonly http = inject(HttpClient); // <--- Así se inyecta ahora
-    private readonly apiUrl = 'http://127.0.0.1:3000';
+export class TenantService {
+    private readonly http = inject(HttpClient);
+    private readonly apiUrl = environment.apiUrl;
 
     getTenants() {
         return this.http.get<TenantModel[]>(`${this.apiUrl}/tenants`);
@@ -21,7 +22,7 @@ export class Tenant {
 
     updateTenant(tenant: TenantModel) {
         if (!tenant.id) {
-            throw new Error("No se puede actualizar sin un ID válido");
+            throw new Error("Cannot update without a valid ID");
         }
         return this.http.put(`${this.apiUrl}/tenants/${tenant.id}`, tenant);
     }
