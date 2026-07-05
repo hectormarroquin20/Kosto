@@ -56,8 +56,6 @@ export class TransactionLog {
     this.isLoading.set(true);
     this.transactionLogService.getTransactionLogs().subscribe({
       next: (response: any) => {
-        console.log('Lo que llega del backend:', response);
-
         // CORRECCIÓN: Si response.data es un objeto, lo metemos en un arreglo [response.data]
         // Si response.data es un arreglo, usamos response.data directamente
         const data = Array.isArray(response.data) ? response.data : [response.data];

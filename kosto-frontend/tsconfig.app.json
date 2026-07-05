@@ -10,7 +10,7 @@
   },
   "include": [
     "src/**/*.ts",
-    "src/app/modules/security/language-selector"
+    "src/**/*.d.ts"
   ],
   "exclude": [
     "src/**/*.spec.ts"

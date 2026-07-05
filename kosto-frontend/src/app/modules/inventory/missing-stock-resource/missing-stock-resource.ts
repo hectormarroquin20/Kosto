@@ -6,28 +6,37 @@ import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { ReactiveFormsModule } from '@angular/forms';
 
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 
-import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
+import { AddStockResourceDialog } from '../add-stock-dialog/add-stock-dialog';
 
 
 @Component({
-  selector: 'app-resource-list',
+  selector: 'app-missing-stock-resource',
   imports: [
     MatTableModule,
     MatCardModule,
     MatIconModule,
     MatButtonModule,
-    RouterLink,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule,
+    ReactiveFormsModule,
     TranslatePipe
   ],
-  templateUrl: './resource-list.html',
-  styleUrl: './resource-list.scss',
+  templateUrl: './missing-stock-resource.html',
+  styleUrl: './missing-stock-resource.scss',
 })
-export class ResourceList {
+export class MissingStockResource {
   private readonly resourcesService = inject(Resource);
   private readonly router = inject(Router);
+  private readonly dialog = inject(MatDialog);
 
   // Estado reactivo usando Signals
   public resources = signal<ResourceModel[]>([]);
@@ -38,15 +47,17 @@ export class ResourceList {
   public displayedColumns: string[] = ['name', 'unit_cost', 'stock', 'unit_measure', 'updated_at', 'actions'];
 
   ngOnInit() {
-    this.loadResources();
+    this.loadMissingStockResources();
   }
 
-  loadResources() {
+  loadMissingStockResources() {
     this.isLoading.set(true);
 
     this.resourcesService.getResources().subscribe({
       next: (response: any) => {
-        this.resources.set(response.data);
+        // Filtramos solo los recursos con stock igual a cero
+        const zeroStockResources = response.data.filter((resource: ResourceModel) => resource.current_stock === 0);
+        this.resources.set(zeroStockResources);
         this.isLoading.set(false);
 
       },
@@ -57,20 +68,22 @@ export class ResourceList {
     });
   }
 
-  onDelete(id: string) {
-    if (confirm('¿Estás seguro de eliminar este producto?')) {
-      this.resourcesService.deleteResource(id).subscribe({
-        next: () => {
-          // Recargamos la tabla después de borrar
-          this.loadResources();
-        },
-        error: (err) => alert('Error al borrar: ' + err.message)
-      });
-    }
-  }
-
   onEdit(resource: ResourceModel) {
     // Navegamos al formulario pasando el objeto (puedes usar un QueryParam o un Service de estado)
     this.router.navigate(['/resources/edit', resource.id]);
+  }
+
+  openAddStockDialog(resource: ResourceModel) {
+    const dialogRef = this.dialog.open(AddStockResourceDialog, {
+      width: '420px',
+      disableClose: true,
+      data: resource
+    });
+
+    dialogRef.afterClosed().subscribe((updated: boolean) => {
+      if (updated) {
+        this.loadMissingStockResources();
+      }
+    });
   }
 }
