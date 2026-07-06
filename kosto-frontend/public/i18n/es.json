@@ -163,6 +163,17 @@
         "GO_TO_REGISTER": "Ir al portal de registro"
     },
     "PRODUCTION": {
+        "TITLE": "Registrar Producción de Vitrina",
+        "SUBTITLE": "Gestión centralizada de registros de producción",
+        "LOADING": "Cargando registros de produccion...",
+        "NO_DATA": "No hay registras producción.",
+        "TABLE": {
+            "PRODUCT": "Nombre del Producto",
+            "SALE_PRICE": "Precio de Venta",
+            "CURRENT_STOCK": "Stock Disponible",
+            "TYPE": "Comportamiento",
+            "ACTIONS": "Acciones"
+        },
         "FORM": {
             "TITLE": "Registrar Producción de Vitrina",
             "SUBTITLE": "Cocinar o preparar productos por lote para agregar al inventario.",

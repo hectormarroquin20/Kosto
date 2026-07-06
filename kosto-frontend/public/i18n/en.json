@@ -160,6 +160,17 @@
         "GO_TO_REGISTER": "Go to registration portal"
     },
     "PRODUCTION": {
+        "TITLE": "Display Production Registrar",
+        "SUBTITLE": "Centralized management of production records",
+        "LOADING": "Loading production logs...",
+        "NO_DATA": "No registered in the database.",
+        "TABLE": {
+            "PRODUCT": "Product Name",
+            "SALE_PRICE": "Sale Price",
+            "CURRENT_STOCK": "Available Stock",
+            "TYPE": "Behavior",
+            "ACTIONS": "Actions"
+        },
         "FORM": {
             "TITLE": "Production Form",
             "SUBTITLE": "Cook or prepare products in batches to add to inventory.",
