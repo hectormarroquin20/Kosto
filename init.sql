@@ -12,6 +12,16 @@ CREATE TABLE tenant (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+CREATE INDEX idx_tenant_tier ON tenant(tier);
+-- 3.Resource (Raw Materials / Inputs)
+CREATE INDEX idx_transaction_tenant_date ON transaction_log(tenant_id, transaction_date);
+-- 8. Tenant Usage Tracking
+CREATE TABLE tenant_usage (
+    tenant_id UUID PRIMARY KEY REFERENCES tenant(id) ON DELETE CASCADE,
+    period_start TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    usage_count INTEGER NOT NULL DEFAULT 0,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
 -- 3. Resource (Raw Materials / Inputs)
 CREATE TABLE resource (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),

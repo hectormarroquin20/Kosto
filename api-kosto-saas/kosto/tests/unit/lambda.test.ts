@@ -13,6 +13,11 @@ jest.mock('@/controllers/tenant.controller');
 jest.mock('@/controllers/resource.controller');
 jest.mock('@/controllers/transaction.controller');
 jest.mock('@/controllers/production.controller');
+jest.mock('@/services/subscription.service', () => ({
+    SubscriptionService: {
+        checkLimits: jest.fn<any>().mockResolvedValue(true)
+    }
+}));
 jest.mock('@/utils/auth', () => ({
     getTenantFromHeader: () => 'test-tenant-id'
 }));
@@ -21,7 +26,6 @@ jest.mock('@/services/cognito-identity.service');
 describe('LambdaHandler Integration Tests', () => {
 
     beforeAll(() => {
-
         jest.mocked(upsertRecipeItem).mockResolvedValue({
             id: 'recipe-123',
             product_id: 'p1',
@@ -52,7 +56,6 @@ describe('LambdaHandler Integration Tests', () => {
     });
 
     test('Recipes: Validation of number conversion', async () => {
-        // Here we specifically test your type conflict
         const res = await lambdaHandler(send('POST', '/recipes', {
             product_id: 'p1', resource_id: 'r1', required_quantity: "10.5"
         }));
@@ -74,19 +77,14 @@ describe('LambdaHandler Integration Tests', () => {
             email: 'test@kosto.com',
             password: 'Password123!'
         }));
-
-        // 5. Your expects ready
         expect(res.statusCode).toBe(201);
 
-        // 6. Cleanup to not affect other tests in the same file
         cognitoSpy.mockRestore();
         (createTenant as jest.Mock).mockReset();
     });
 
     test('Production: Error capture (try/catch)', async () => {
-        // Simulate an error in the production controller
         const res = await lambdaHandler(send('POST', '/production', { product_id: 'p1', quantity: 1 }));
-        // If the controller fails, it should return 400 according to your code
         expect(res.statusCode).toBeLessThan(500);
     });
 
@@ -94,3 +92,4 @@ describe('LambdaHandler Integration Tests', () => {
         expect((await lambdaHandler(send('GET', '/nonexistent-route'))).statusCode).toBe(404);
     });
 });
+

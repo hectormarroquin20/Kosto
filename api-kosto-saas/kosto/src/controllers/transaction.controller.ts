@@ -33,10 +33,17 @@ export const registerSale = async (tenantId: string, productId: string, quantity
         // 3. Register the financial transaction
         const logQuery = `
             INSERT INTO transaction_log (tenant_id, type, reference_id, quantity, total_amount)
-            VALUES ($1, 'sale', $2, $3, $4)
+            VALUES ($1, 'SALE', $2, $3, $4)
             RETURNING id, transaction_date;
         `;
         const result = await client.query(logQuery, [tenantId, productId, quantity, totalAmount]);
+
+        // 4. Increment Usage Counter
+        await client.query(`
+            UPDATE tenant_usage
+            SET usage_count = usage_count + 1, updated_at = CURRENT_TIMESTAMP
+            WHERE tenant_id = $1;
+        `, [tenantId]);
 
         await client.query('COMMIT'); // Saving the sale and production at the same time
         return result.rows[0];

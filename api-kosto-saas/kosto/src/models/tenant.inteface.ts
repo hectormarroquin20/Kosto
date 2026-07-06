@@ -1,5 +1,4 @@
 export type SubscriptionTier = 'freemium' | 'pro' | 'business';
-export type TransactionType = 'purchase' | 'sale' | 'adjustment';
 
 export interface Tenant {
     id: string;
@@ -9,3 +8,5 @@ export interface Tenant {
     created_at?: Date;
     updated_at?: Date;
 }
+
+// ... existing code ...

@@ -19,5 +19,13 @@
 -- ALTER TABLE recipe_item ADD COLUMN is_active BOOLEAN NOT NULL DEFAULT TRUE;
 -- ALTER TABLE tenant ADD COLUMN is_active BOOLEAN NOT NULL DEFAULT TRUE;
 -- ALTER TABLE tenant ADD COLUMN updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP;
-Delete FROM tenant
-WHERE id = '54a02c38-5a5a-4b4a-b1be-a6f0fe237a81';
+-- Delete FROM tenant
+-- WHERE id = '54a02c38-5a5a-4b4a-b1be-a6f0fe237a81';
+-- CREATE INDEX idx_tenant_tier ON tenant(tier);
+-- CREATE INDEX idx_transaction_tenant_date ON transaction_log(tenant_id, transaction_date);
+-- CREATE TABLE tenant_usage (
+--     tenant_id UUID PRIMARY KEY REFERENCES tenant(id) ON DELETE CASCADE,
+--     period_start TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+--     usage_count INTEGER NOT NULL DEFAULT 0,
+--     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+-- );

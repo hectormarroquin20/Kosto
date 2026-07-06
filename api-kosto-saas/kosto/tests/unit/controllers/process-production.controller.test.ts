@@ -1,5 +1,4 @@
 import { beforeEach, describe, expect, jest, test } from '@jest/globals';
-
 import { processProduction } from '@/controllers/production.controller';
 import { dbPool } from '@/db/database';
 

@@ -32,6 +32,39 @@ Resources:
           DB_USER: admin
           DB_PASSWORD: password123
           DB_NAME: saas_app
+          # Add these to ensure they are available in the Lambda environment
+          FREEMIUM_MAX_PRODUCTS: "15"
+          FREEMIUM_MAX_RESOURCES: "50"
+          FREEMIUM_MAX_TRANSACTIONS: "100"
+          FREEMIUM_MAX_RECIPES: "10"
+          FREEMIUM_MAX_USERS: "1"
+          FREEMIUM_CAN_EXPORT_DATA: "false"
+          FREEMIUM_CAN_ACCESS_REPORTING": "false"
+          FREEMIUM_CAN_ACCESS_ADVANCED_ANALYTICS: "false"
+          FREEMIUM_CUSTOM_BRANDING: "false"
+          FREEMIUM_API_ACCESS: "false"
+          FREEMIUM_PRIORITY_SUPPORT: "false"
+          PRO_MAX_PRODUCTS: "500"
+          PRO_MAX_RESOURCES: "500"
+          PRO_MAX_TRANSACTIONS: "1000"
+          PRO_MAX_RECIPES: "100"
+          PRO_MAX_USERS: "5"
+          PRO_CAN_EXPORT_DATA: "true"
+          PRO_CAN_ACCESS_REPORTING: "true"
+          PRO_CAN_ACCESS_ADVANCED_ANALYTICS: "false"
+          PRO_CUSTOM_BRANDING: "false"
+          PRO_API_ACCESS: "true"
+          BUSINESS_MAX_PRODUCTS: "5000"
+          BUSINESS_MAX_RESOURCES: "10000"
+          BUSINESS_MAX_TRANSACTIONS: "10000"
+          BUSINESS_MAX_RECIPES: "1000"
+          BUSINESS_MAX_USERS: "50"
+          BUSINESS_CAN_EXPORT_DATA: "true"
+          BUSINESS_CAN_ACCESS_REPORTING: "true"
+          BUSINESS_CAN_ACCESS_ADVANCED_ANALYTICS: "true"
+          BUSINESS_CUSTOM_BRANDING: "true"
+          BUSINESS_API_ACCESS: "true"
+          BUSINESS_PRIORITY_SUPPORT: "true"
       Events:
         GetProducts:
           Type: Api
@@ -90,11 +123,6 @@ Resources:
         PostProduction:
           Type: Api
           Properties: { RestApiId: !Ref KostoApiGateway, Path: /production, Method: POST }
-        # DeleteTenants:
-        #   Type: Api
-        #   Properties: { RestApiId: !Ref KostoApiGateway, Path: /tenants/{id}, Method: DELETE }
-
-    
     # Metadata debe ir al mismo nivel que Properties, no dentro
     Metadata:
       BuildMethod: esbuild
