@@ -16,6 +16,9 @@ import { Router } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { AddStockResourceDialog } from '../add-resource-stock-dialog/add-stock-dialog';
 
+import { TenantService } from '../../../core/services/tenant.service';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { IAuthService } from '@/core/models/auth.interface';
 
 @Component({
   selector: 'app-missing-stock-resource',
@@ -28,7 +31,8 @@ import { AddStockResourceDialog } from '../add-resource-stock-dialog/add-stock-d
     MatFormFieldModule,
     MatInputModule,
     ReactiveFormsModule,
-    TranslatePipe
+    TranslatePipe,
+    MatTooltipModule
   ],
   templateUrl: './missing-stock-resource.html',
   styleUrl: './missing-stock-resource.scss',
@@ -37,15 +41,33 @@ export class MissingStockResource {
   private readonly resourcesService = inject(ResourceService);
   private readonly router = inject(Router);
   private readonly dialog = inject(MatDialog);
+  private readonly authService = inject(IAuthService);
+  public tenantService = inject(TenantService); // Add this
 
   // Reactive state using Signals
   public missingResourceStock = signal<ResourceModel[]>([]);
   public isLoading = signal<boolean>(true);
+  public isBusinessTier = signal<boolean>(false); // Start false (disabled)
 
   // Columns to display in the table
   public displayedColumns: string[] = ['name', 'unit_cost', 'stock', 'unit_measure', 'updated_at', 'actions'];
+  private tenantId: string | null = null;
 
   ngOnInit() {
+    this.tenantId = this.authService.getTenantId();
+    if (this.tenantId) {
+      // Just fetch and update the service's signal
+      this.tenantService.getTenantbyId(this.tenantId).subscribe({
+        next: (response: any) => {
+          const tenant = response.data[0];
+          this.isBusinessTier.set(tenant?.tier === 'business');
+        },
+        error: (err) => {
+          console.error('Error fetching tenant:', err);
+          this.isBusinessTier.set(false); // Ensure it's disabled on error
+        }
+      });
+    }
     this.loadMissingStockResources();
   }
 
@@ -85,4 +107,10 @@ export class MissingStockResource {
       }
     });
   }
+
+  exportData() {
+    console.log('Export logic placeholder for Business Tier');
+    // We will implement the actual file generation in the next phase
+  }
 }
+

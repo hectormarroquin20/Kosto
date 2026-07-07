@@ -8,6 +8,11 @@
                 <mat-card-title>{{ 'RESOURCES.MISSING_TITLE' | translate }}</mat-card-title>
                 <mat-card-subtitle>{{ 'RESOURCES.MISSING_SUBTITLE' | translate }}</mat-card-subtitle>
             </div>
+            <button mat-button color="primary" [disabled]="!isBusinessTier()"
+                [matTooltip]="tenantService.isBusinessTier() ? '' : 'Only available for Business plans'"
+                (click)="exportData()">
+                <mat-icon>download</mat-icon> {{ 'ACTIONS.EXPORT' | translate }}
+            </button>
 
         </mat-card-header>
 

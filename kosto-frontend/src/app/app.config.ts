@@ -3,7 +3,8 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { authInterceptor } from './core/interceptors/auth.interceptor';
+import { authInterceptor } from './core/interceptors/auth.interceptor'; // Import your original auth interceptor
+import { subscriptionInterceptor } from './core/interceptors/subscription.interceptor';
 
 import { provideTranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -14,14 +15,17 @@ import { IAuthService } from './core/models/auth.interface';
 import { AuthService } from './core/services/auth.service';
 import { environment } from '../environments/environment';
 
-
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
 
     // 1. We keep ONLY the HttpClient with the interceptor
-    provideHttpClient(withInterceptors([authInterceptor])),
-
+    provideHttpClient(
+      withInterceptors([
+        authInterceptor,         // 1. First, add the tenant/auth header
+        subscriptionInterceptor  // 2. Then, handle the 403 limit checks
+      ])
+    ),
     provideRouter(routes),
 
     provideTranslateService({
@@ -53,3 +57,4 @@ export const appConfig: ApplicationConfig = {
     })
   ]
 };
+

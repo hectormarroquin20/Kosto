@@ -15,6 +15,10 @@ import { IAuthService } from '../../../kosto-frontend/src/app/core/models/auth.i
 
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
+// New import
+import { UpgradeModalComponent } from './components/upgrade-modal/upgrade-modal.component';
+import { SubscriptionModalService } from './core/services/subscription-modal.service';
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -27,7 +31,8 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
     MatIconModule,
     MatButtonModule,
     MatMenuModule,
-    TranslatePipe
+    TranslatePipe,
+    UpgradeModalComponent
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss'
@@ -38,6 +43,7 @@ export class App implements OnInit {
   private readonly authService = inject(IAuthService); // Injects the facade
   private translate = inject(TranslateService);
   private router = inject(Router);
+  public modalService = inject(SubscriptionModalService);
 
   public isDarkMode = false;
   public companyName = 'Kosto Inventory System';
@@ -109,3 +115,4 @@ export class App implements OnInit {
     this.router.navigate(['/']);
   }
 }
+

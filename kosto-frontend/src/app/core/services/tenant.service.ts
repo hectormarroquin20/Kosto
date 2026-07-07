@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Service } from '@angular/core';
+import { computed, inject, Service, signal } from '@angular/core';
 import { TenantModel } from '../models/tenant.inteface';
 import { environment } from '@root/src/environments/environment';
 
@@ -7,6 +7,8 @@ import { environment } from '@root/src/environments/environment';
 export class TenantService {
     private readonly http = inject(HttpClient);
     private readonly apiUrl = environment.apiUrl;
+
+    public tenant = signal<TenantModel | null>(null);
 
     getTenants() {
         return this.http.get<TenantModel[]>(`${this.apiUrl}/tenants`);
@@ -30,4 +32,12 @@ export class TenantService {
     deleteTenant(id: string) {
         return this.http.delete(`${this.apiUrl}/tenants`, { params: { id } });
     }
+
+    public isBusinessTier = computed(() => this.tenant()?.tier === 'business');
+
+    // Add to TenantService
+    public canExport = computed(() => ['pro', 'business'].includes(this.tenant()?.tier || ''));
 }
+
+
+

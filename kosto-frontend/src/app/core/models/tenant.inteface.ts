@@ -1,3 +1,5 @@
+export type SubscriptionTier = 'freemium' | 'pro' | 'business';
+
 export interface TenantModel {
     id?: string; // Optional because at the time of creating the record, it does not have an ID
     company_name: string;
