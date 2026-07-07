@@ -1,6 +1,7 @@
 // Kosto-monorepo/kosto-frontend/src/app/app.routes.ts (1-42)
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard'; // Adjust the path where it is located
+import { businessOnlyGuard } from './core/guards/business-only.guard';
 
 export const routes: Routes = [
     // PUBLIC ROUTE: No needs guard
@@ -38,5 +39,19 @@ export const routes: Routes = [
 
         ]
     },
+
+    // ADDITIONS
+    {
+        path: 'advanced-analytics',
+        loadComponent: () => import('@/modules/inventory/analytics.component/analytics.component')
+            .then(m => m.AnalyticsComponent)
+    },
+    {
+        path: 'custom-branding',
+        loadComponent: () => import('@/modules/inventory/branding.component/branding.component')
+            .then(m => m.BrandingComponent)
+    },
+
     { path: '**', redirectTo: 'products' }
 ];
+
