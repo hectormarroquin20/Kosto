@@ -2,7 +2,7 @@ import { dbPool } from '../db/database';
 import { buildUpdateQuery } from '../utils/sql';
 import { Tenant } from '../models/tenant.inteface';
 
-const TENANT_UPDATABLE_COLUMNS = ['company_name', 'tier', 'is_active'];
+const TENANT_UPDATABLE_COLUMNS = ['company_name', 'is_active'];
 const VALID_TIERS = ['freemium', 'pro', 'business'];
 
 export const createTenant = async (companyName: string, tier: string = 'freemium') => {
@@ -39,9 +39,7 @@ export const updateTenant = async (id: string, payload: Partial<Tenant>) => {
         const updatePayload: Partial<Tenant> = {};
 
         if (payload.company_name !== undefined) updatePayload.company_name = payload.company_name;
-        if (payload.tier !== undefined) updatePayload.tier = VALID_TIERS.includes(payload.tier) ? payload.tier : 'freemium';
         if (payload.is_active !== undefined) updatePayload.is_active = payload.is_active;
-
         const { text, values } = buildUpdateQuery(
             'tenant',
             updatePayload as Record<string, unknown>,
@@ -89,6 +87,25 @@ export const softDeleteTenant = async (id: string) => {
         `;
         const result = await client.query(queryText, [id]);
         return (result.rowCount ?? 0) > 0;
+    } finally {
+        client.release();
+    }
+};
+
+// Add this function
+export const upgradeTenantTier = async (id: string, newTier: 'freemium' | 'pro' | 'business') => {
+    const client = await dbPool.connect();
+    try {
+        if (!VALID_TIERS.includes(newTier)) throw new Error('Invalid tier');
+
+        const queryText = `
+            UPDATE tenant
+            SET tier = $1, updated_at = CURRENT_TIMESTAMP
+            WHERE id = $2
+            RETURNING id, tier;
+        `;
+        const result = await client.query(queryText, [newTier, id]);
+        return result.rows[0];
     } finally {
         client.release();
     }

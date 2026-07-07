@@ -28,7 +28,6 @@ export class TenantForm implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly tenantService = inject(TenantService);
   private readonly authService = inject(IAuthService);
-  private readonly router = inject(Router);
 
   public isFieldsEnabled = false;
   public tenantId: string | null = null;
@@ -52,6 +51,7 @@ export class TenantForm implements OnInit {
   toggleEdit() {
     this.isFieldsEnabled = !this.isFieldsEnabled;
     this.isFieldsEnabled ? this.tenantForm.enable() : this.tenantForm.disable();
+    this.tenantForm.get('tier')?.disable();
     this.tenantForm.get('created_at')?.disable();
   }
 
@@ -87,7 +87,6 @@ export class TenantForm implements OnInit {
     if (this.tenantForm.invalid) return;
 
     // getRawValue() brings the fields even if they are disabled
-    const rawData = this.tenantForm.getRawValue();
 
     const payload = {
       ...this.tenantForm.getRawValue(),
