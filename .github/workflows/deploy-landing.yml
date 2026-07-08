@@ -3,7 +3,7 @@ name: Deploy Insummi Landing
 on:
   push:
     branches:
-      - main # O la rama que estés usando
+      - main
 
 jobs:
   build:
@@ -12,24 +12,29 @@ jobs:
       run:
         working-directory: insummi-landing
     steps:
-      - name: Checkout del código
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Instalar Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'npm'
           cache-dependency-path: insummi-landing/package-lock.json
 
-      - name: Instalar dependencias
-        run: npm install
+      - name: Install & Build
+        run: |
+          npm install
+          npm run build
 
-      - name: Compilar proyecto
-        run: npm run build
-
-      - name: Subir artefacto de build
-        uses: actions/upload-artifact@v4
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          name: web-dist
-          path: insummi-landing/dist/
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+          
+      - name: Deploy to S3
+        run: aws s3 sync dist/ s3://${{ secrets.AWS_S3_BUCKET_NAME }} --delete
+
+      - name: Invalidate CloudFront Cache
+        run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DIST_ID }} --paths "/*"
