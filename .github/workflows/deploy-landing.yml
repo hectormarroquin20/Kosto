@@ -38,3 +38,11 @@ jobs:
 
       - name: Invalidate CloudFront Cache
         run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DIST_ID }} --paths "/*"
+
+      - name: Debug Secrets
+        run: |
+          if [ -z "${{ secrets.AWS_ACCESS_KEY_ID }}" ]; then
+            echo "Error: AWS_ACCESS_KEY_ID está vacío"
+          else
+            echo "AWS_ACCESS_KEY_ID está configurado"
+          fi
