@@ -1,9 +1,13 @@
-import { computed, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable } from '@angular/core';
+import { TenantService } from './tenant.service';
 
 @Injectable({ providedIn: 'root' })
 export class AdService {
-    // This would typically be set after the user/tenant is loaded
-    tier = signal<string>('freemium');
+    private tenantService = inject(TenantService);
 
-    shouldShowAds = computed(() => this.tier() === 'freemium');
+    // This computed signal is now reactive: it updates whenever app.ts calls .set()
+    shouldShowAds = computed(() => {
+        const tier = this.tenantService.tenant()?.tier;
+        return tier === 'freemium';
+    });
 }

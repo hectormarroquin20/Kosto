@@ -1,40 +1,39 @@
-<main style="padding: 2rem; max-width: 1200px; margin: 0 auto;">
+<main style="padding: 2rem; max-width: 1200px; margin: 0 auto; display: flex; gap: 2rem;">
 
-    <mat-card>
-        <mat-card-header
-            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+    <!-- Left side: The Table (Main) -->
+    <div style="flex: 3;">
+        <mat-card>
+            <mat-card-header
+                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <div>
+                    <mat-card-title>{{ 'PRODUCTS.TITLE' | translate }}</mat-card-title>
+                    <mat-card-subtitle>{{ 'PRODUCTS.SUBTITLE' | translate }}</mat-card-subtitle>
+                </div>
+                <button mat-raised-button color="primary" routerLink="/products/new">
+                    <mat-icon>add</mat-icon> {{ 'PRODUCTS.NEW_BTN' | translate }}
+                </button>
+            </mat-card-header>
 
-            <div>
-                <mat-card-title>{{ 'PRODUCTS.TITLE' | translate }}</mat-card-title>
-                <mat-card-subtitle>{{ 'PRODUCTS.SUBTITLE' | translate }}</mat-card-subtitle>
-            </div>
+            <mat-card-content>
+                @if (isLoading()) {
+                <div style="text-align: center; padding: 3rem;">
+                    <p>{{ 'PRODUCTS.LOADING' | translate }}</p>
+                </div>
+                } @else {
+                <div class="table-responsive">
+                    <table mat-table [dataSource]="products()" class="mat-elevation-z2" style="width: 100%;">
 
-            <button mat-raised-button color="primary" routerLink="/products/new">
-                <mat-icon>add</mat-icon> {{ 'PRODUCTS.NEW_BTN' | translate }}
-            </button>
+                        <ng-container matColumnDef="name">
+                            <th mat-header-cell *matHeaderCellDef> {{ 'PRODUCTS.TABLE.NAME' | translate }} </th>
+                            <td mat-cell *matCellDef="let element"><strong>{{element.name}}</strong></td>
+                        </ng-container>
 
-        </mat-card-header>
+                        <ng-container matColumnDef="price">
+                            <th mat-header-cell *matHeaderCellDef> {{ 'PRODUCTS.TABLE.PRICE' | translate }} </th>
+                            <td mat-cell *matCellDef="let element"> ${{element.sale_price}} </td>
+                        </ng-container>
 
-        <mat-card-content>
-            @if (isLoading()) {
-            <div style="text-align: center; padding: 3rem;">
-                <p>{{ 'PRODUCTS.LOADING' | translate }}</p>
-            </div>
-            } @else {
-            <div class="table-responsive">
-                <table mat-table [dataSource]="products()" class="mat-elevation-z2" style="width: 100%;">
-
-                    <ng-container matColumnDef="name">
-                        <th mat-header-cell *matHeaderCellDef> {{ 'PRODUCTS.TABLE.NAME' | translate }} </th>
-                        <td mat-cell *matCellDef="let element"><strong>{{element.name}}</strong></td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="price">
-                        <th mat-header-cell *matHeaderCellDef> {{ 'PRODUCTS.TABLE.PRICE' | translate }} </th>
-                        <td mat-cell *matCellDef="let element"> ${{element.sale_price}} </td>
-                    </ng-container>
-
-                    <!-- <ng-container matColumnDef="stock">
+                        <!-- <ng-container matColumnDef="stock">
                         <th mat-header-cell *matHeaderCellDef> {{ 'PRODUCTS.TABLE.STOCK' | translate }} </th>
                         <td mat-cell *matCellDef="let element">
                             <span [style.color]="element.current_stock === 0 ? 'red' : 'green'">
@@ -43,55 +42,57 @@
                         </td>
                     </ng-container> -->
 
-                    <ng-container matColumnDef="stock">
-                        <th mat-header-cell *matHeaderCellDef> {{ 'PRODUCTS.TABLE.STOCK' | translate }} </th>
-                        <td mat-cell *matCellDef="let element">
-                            @if (element.is_pre_made) {
-                            <span [style.color]="element.current_stock === 0 ? 'red' : 'green'">
-                                {{ element.current_stock }}
-                            </span>
-                            } @else {
-                            <span style="color: gray;">N/A</span>
-                            }
-                        </td>
-                    </ng-container>
+                        <ng-container matColumnDef="stock">
+                            <th mat-header-cell *matHeaderCellDef> {{ 'PRODUCTS.TABLE.STOCK' | translate }} </th>
+                            <td mat-cell *matCellDef="let element">
+                                @if (element.is_pre_made) {
+                                <span [style.color]="element.current_stock === 0 ? 'red' : 'green'">
+                                    {{ element.current_stock }}
+                                </span>
+                                } @else {
+                                <span style="color: gray;">N/A</span>
+                                }
+                            </td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="type">
-                        <th mat-header-cell *matHeaderCellDef> {{ 'PRODUCTS.TABLE.TYPE' | translate }} </th>
-                        <td mat-cell *matCellDef="let element">
-                            {{ (element.is_pre_made ? 'PRODUCTS.TYPES.PRE_MADE' : 'PRODUCTS.TYPES.MAKE_TO_ORDER') |
-                            translate }}
-                        </td>
-                    </ng-container>
+                        <ng-container matColumnDef="type">
+                            <th mat-header-cell *matHeaderCellDef> {{ 'PRODUCTS.TABLE.TYPE' | translate }} </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ (element.is_pre_made ? 'PRODUCTS.TYPES.PRE_MADE' : 'PRODUCTS.TYPES.MAKE_TO_ORDER') |
+                                translate }}
+                            </td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="actions">
-                        <th mat-header-cell *matHeaderCellDef> {{ 'PRODUCTS.TABLE.ACTIONS' | translate }} </th>
-                        <td mat-cell *matCellDef="let element">
-                            <button mat-icon-button color="primary" (click)="onEdit(element)">
-                                <mat-icon>edit</mat-icon>
-                            </button>
-                            <button mat-icon-button color="warn" (click)="onDelete(element.id)">
-                                <mat-icon>delete</mat-icon>
-                            </button>
-                            @if (element.is_pre_made) {
-                            <button mat-icon-button color="primary" (click)="openAddStockDialog(element)">
-                                <mat-icon>add</mat-icon>
-                            </button>
-                            }
-                        </td>
-                    </ng-container>
+                        <ng-container matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef> {{ 'PRODUCTS.TABLE.ACTIONS' | translate }} </th>
+                            <td mat-cell *matCellDef="let element">
+                                <button mat-icon-button color="primary" (click)="onEdit(element)">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button color="warn" (click)="onDelete(element.id)">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                                @if (element.is_pre_made) {
+                                <button mat-icon-button color="primary" (click)="openAddStockDialog(element)">
+                                    <mat-icon>add</mat-icon>
+                                </button>
+                                }
+                            </td>
+                        </ng-container>
 
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
-                    <tr class="mat-row" *matNoDataRow>
-                        <td class="mat-cell" colspan="5" style="text-align: center; padding: 2rem;">
-                            {{ 'PRODUCTS.NO_DATA' | translate }}
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            }
-        </mat-card-content>
-    </mat-card>
+                        <tr class="mat-row" *matNoDataRow>
+                            <td class="mat-cell" colspan="5" style="text-align: center; padding: 2rem;">
+                                {{ 'PRODUCTS.NO_DATA' | translate }}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                }
+            </mat-card-content>
+        </mat-card>
+    </div>
+
 </main>

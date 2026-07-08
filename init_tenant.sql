@@ -29,6 +29,7 @@
 --     usage_count INTEGER NOT NULL DEFAULT 0,
 --     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 -- );
--- UPDATE tenant
--- SET tier = 'business'
--- WHERE id = '79c6022d-d6d9-414c-bf34-a33e33f42187';
+UPDATE tenant -- SET tier = 'business'
+    -- SET tier = 'pro'
+SET tier = 'freemium'
+WHERE id = '79c6022d-d6d9-414c-bf34-a33e33f42187';

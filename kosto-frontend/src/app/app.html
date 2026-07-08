@@ -91,8 +91,18 @@
       </mat-menu>
     </mat-toolbar>
 
-    <div style="padding: 20px;">
-      <router-outlet></router-outlet>
+    <!-- Wrap the outlet and the ads in a flex container -->
+    <div style="display: flex; gap: 20px; align-items: flex-start; padding: 20px;">
+      <div style="flex: 3;">
+        <router-outlet></router-outlet>
+      </div>
+
+      @if (adService.shouldShowAds()) {
+      <div style="flex: 1;">
+        <app-ad-banner />
+      </div>
+      }
+
     </div>
   </mat-sidenav-content>
 

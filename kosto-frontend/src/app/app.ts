@@ -18,6 +18,8 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 // New import
 import { UpgradeModalComponent } from './components/upgrade-modal/upgrade-modal.component';
 import { SubscriptionModalService } from './core/services/subscription-modal.service';
+import { AdBannerComponent } from './components/ads/ads.component';
+import { AdService } from './core/services/ad.service';
 
 @Component({
   selector: 'app-root',
@@ -32,18 +34,20 @@ import { SubscriptionModalService } from './core/services/subscription-modal.ser
     MatButtonModule,
     MatMenuModule,
     TranslatePipe,
-    UpgradeModalComponent
+    UpgradeModalComponent,
+    AdBannerComponent
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
 export class App implements OnInit {
   private document = inject(DOCUMENT);
-  private tenantService = inject(TenantService);
+  private tenantService = inject(TenantService); // Already there
   private readonly authService = inject(IAuthService); // Injects the facade
   private translate = inject(TranslateService);
   private router = inject(Router);
   public modalService = inject(SubscriptionModalService);
+  public adService = inject(AdService)
 
   public isDarkMode = false;
   public companyName = 'Kosto Inventory System';
@@ -59,7 +63,13 @@ export class App implements OnInit {
       if (this.tenantId) {
         this.tenantService.getTenantbyId(this.tenantId).subscribe({
           next: (res: any) => {
-            this.companyName = res.company_name || res.data?.company_name || 'Kosto SaaS';
+            const tenantData = res.data?.[0] || res; // Handles your array vs object response
+
+            // 1. Update company name
+            this.companyName = tenantData.company_name || 'Kosto SaaS';
+
+            // 2. IMPORTANT: Update the central Tenant signal so AdService works!
+            this.tenantService.tenant.set(tenantData);
           },
           error: () => console.log("No se pudo cargar el nombre de la empresa")
         });
