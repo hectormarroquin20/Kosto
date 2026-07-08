@@ -1,0 +1,46 @@
+---
+import { languages } from "../i18n/ui";
+
+// Detectamos el idioma actual desde la URL
+const segments = Astro.url.pathname.split("/").filter(Boolean);
+const currentLang = segments[0] in languages ? segments[0] : "es";
+
+// Obtenemos la ruta sin el primer segmento si es un idioma
+const pathSegments = segments[0] in languages ? segments.slice(1) : segments;
+const path = "/" + pathSegments.join("/");
+---
+
+<div class="relative group">
+    <button
+        class="flex items-center gap-2 px-3 py-1 text-sm font-semibold text-slate-600 bg-white border border-slate-200 rounded-lg hover:border-indigo-300 transition-all"
+    >
+        <span class="text-lg">{currentLang === "es" ? "🇪🇸" : "🇺🇸"}</span>
+        <svg
+            class="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            ><path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"></path></svg
+        >
+    </button>
+
+    <div
+        class="absolute right-0 mt-2 w-32 bg-white border border-slate-100 rounded-xl shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 overflow-hidden"
+    >
+        {
+            Object.entries(languages).map(([code, name]) => (
+                <a
+                    href={`/${code}${path === "/" ? "" : path}`}
+                    class="flex items-center gap-3 px-4 py-2 text-sm text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
+                >
+                    <span>{code === "es" ? "🇪🇸" : "🇺🇸"}</span>
+                    {name}
+                </a>
+            ))
+        }
+    </div>
+</div>

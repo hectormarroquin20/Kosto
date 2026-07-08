@@ -1,22 +1,25 @@
 ---
 // @ts-ignore
 import "/src/styles/global.css";
+import LanguagePicker from "../components/LanguagePicker.astro";
+import { getLangFromUrl, useTranslations } from "../i18n/utils";
 
 interface Props {
 	title: string;
 }
 
 const { title } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang={lang}>
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<title>{title}</title>
 	</head>
-	<!-- <body class="bg-slate-50 text-slate-900 antialiased"> -->
 	<body
 		class="min-h-screen bg-gradient-to-br from-indigo-400 via-slate-50 to-slate-400 text-slate-900 antialiased flex flex-col min-h-screen"
 	>
@@ -24,43 +27,103 @@ const { title } = Astro.props;
 			class="sticky top-0 z-50 bg-white/70 backdrop-blur-lg border-b border-indigo-200/50 shadow-sm"
 		>
 			<nav
-				class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between"
+				class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between relative z-50"
 			>
+				<!-- 1. Izquierda: Logo -->
 				<a
-					href="/"
-					class="text-xl font-bold text-indigo-700 tracking-tight"
-					>Insummi</a
+					href={`/${lang}`}
+					class="text-xl font-bold text-indigo-700 shrink-0 relative z-50"
 				>
+					Insummi
+				</a>
 
+				<!-- 2. Centro: Enlaces (Ocultos en móvil) -->
 				<div
-					class="flex items-center gap-8 text-sm font-medium text-slate-600"
+					class="hidden md:flex flex-1 justify-center gap-6 text-sm font-medium text-slate-600"
 				>
 					<a
-						href="/about"
+						href={`/${lang}/about`}
 						class="hover:text-indigo-600 transition-colors"
-						>Acerca de</a
+						>{t("nav.about")}</a
 					>
 					<a
-						href="/privacy"
+						href={`/${lang}/privacy`}
 						class="hover:text-indigo-600 transition-colors"
-						>Privacidad</a
+						>{t("nav.privacy")}</a
 					>
 					<a
-						href="/contact"
+						href={`/${lang}/contact`}
 						class="hover:text-indigo-600 transition-colors"
-						>Contacto</a
+						>{t("nav.contact")}</a
 					>
+				</div>
 
-					<div class="h-4 w-px bg-slate-300"></div>
+				<!-- 3. Derecha: Contenedor estricto para Picker + Sándwich + Login -->
+				<div
+					class="flex items-center gap-2 sm:gap-4 shrink-0 relative z-50"
+				>
+					<!-- Language Picker (Siempre visible) -->
+					<LanguagePicker />
 
+					<!-- Línea separadora y Login (Ocultos en móvil) -->
+					<div class="hidden md:block h-4 w-px bg-slate-300"></div>
 					<a
 						href="https://app.insummi.com"
-						class="text-indigo-600 font-semibold border border-indigo-200 hover:bg-indigo-50 transition-colors px-4 py-2 rounded-lg"
+						class="hidden md:flex text-indigo-600 font-semibold border border-indigo-200 hover:bg-indigo-50 px-4 py-2 rounded-lg"
 					>
-						Iniciar Sesión
+						{t("nav.login")}
 					</a>
+
+					<!-- Botón Sándwich (Visible SOLO en móvil) -->
+					<button
+						id="mobile-menu-btn"
+						class="md:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-lg transition-colors focus:outline-none"
+						aria-label="Abrir menú"
+					>
+						<svg
+							class="w-6 h-6"
+							fill="none"
+							stroke="currentColor"
+							viewBox="0 0 24 24"
+						>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M4 6h16M4 12h16M4 18h16"></path>
+						</svg>
+					</button>
 				</div>
 			</nav>
+			<div
+				id="mobile-menu"
+				class="hidden absolute top-full left-0 w-full bg-white shadow-xl border-t border-slate-100 md:hidden flex flex-col p-4 gap-4 z-40"
+			>
+				<a
+					href={`/${lang}/about`}
+					class="text-slate-600 font-medium hover:text-indigo-600 px-2 py-1"
+					>{t("nav.about")}</a
+				>
+				<a
+					href={`/${lang}/privacy`}
+					class="text-slate-600 font-medium hover:text-indigo-600 px-2 py-1"
+					>{t("nav.privacy")}</a
+				>
+				<a
+					href={`/${lang}/contact`}
+					class="text-slate-600 font-medium hover:text-indigo-600 px-2 py-1"
+					>{t("nav.contact")}</a
+				>
+
+				<div class="h-px w-full bg-slate-200 my-1"></div>
+
+				<a
+					href="https://app.insummi.com"
+					class="text-center text-indigo-600 font-semibold border border-indigo-200 bg-indigo-50 hover:bg-indigo-100 transition-colors px-4 py-2 rounded-lg"
+				>
+					{t("nav.login")}
+				</a>
+			</div>
 		</header>
 
 		<main class="flex-grow w-full">
@@ -72,15 +135,30 @@ const { title } = Astro.props;
 				class="max-w-7xl mx-auto px-4 text-center text-sm text-slate-500"
 			>
 				<div class="flex justify-center gap-6 mb-4">
-					<a href="/privacy" class="hover:text-indigo-600"
-						>Política de Privacidad</a
+					<a href={`/${lang}/privacy`} class="hover:text-indigo-600"
+						>{t("footer.privacy")}</a
 					>
-					<a href="/about" class="hover:text-indigo-600">Acerca de</a>
-					<a href="/contact" class="hover:text-indigo-600">Contacto</a
+					<a href={`/${lang}/about`} class="hover:text-indigo-600"
+						>{t("footer.about")}</a
+					>
+					<a href={`/${lang}/contact`} class="hover:text-indigo-600"
+						>{t("footer.contact")}</a
 					>
 				</div>
-				<p>© 2026 Insummi. Todos los derechos reservados.</p>
+				<p>{t("footer.rights")}</p>
 			</div>
 		</footer>
 	</body>
+	<script>
+		// Astro ejecuta este script del lado del cliente una vez que el HTML está listo
+		const mobileBtn = document.getElementById("mobile-menu-btn");
+		const mobileMenu = document.getElementById("mobile-menu");
+
+		if (mobileBtn && mobileMenu) {
+			mobileBtn.addEventListener("click", () => {
+				// Quitamos o ponemos la clase 'hidden' de Tailwind para mostrar/ocultar
+				mobileMenu.classList.toggle("hidden");
+			});
+		}
+	</script>
 </html>

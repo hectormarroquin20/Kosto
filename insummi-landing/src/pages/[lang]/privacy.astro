@@ -1,0 +1,98 @@
+---
+import { useTranslations } from "../../i18n/utils";
+import Layout from "../../layouts/Layout.astro";
+
+export function getStaticPaths() {
+    return [{ params: { lang: "es" } }, { params: { lang: "en" } }];
+}
+
+const { lang } = Astro.params;
+const t = useTranslations(lang as "es" | "en");
+---
+
+<Layout title={t("privacy.title")}>
+    <main class="max-w-3xl mx-auto px-6 py-16">
+        <h1
+            class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-8 tracking-tight"
+        >
+            {t("privacy.h1")}
+        </h1>
+        <p class="text-slate-500 mb-12 font-medium italic">
+            {t("privacy.updated")}
+        </p>
+
+        <div class="space-y-10 text-slate-700 leading-relaxed">
+            <p class="text-lg">
+                {t("privacy.intro")}
+            </p>
+
+            <section>
+                <h2
+                    class="text-xl font-bold text-indigo-900 mb-4 flex items-center"
+                >
+                    <span class="w-1.5 h-6 bg-indigo-500 mr-3 rounded-full"
+                    ></span>
+                    {t("privacy.s1.title")}
+                </h2>
+                <p class="mb-4">{t("privacy.s1.text")}</p>
+                <ul class="list-disc list-inside space-y-2 ml-4">
+                    <li>{t("privacy.s1.li1")}</li>
+                    <li>{t("privacy.s1.li2")}</li>
+                    <li>{t("privacy.s1.li3")}</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2
+                    class="text-xl font-bold text-indigo-900 mb-4 flex items-center"
+                >
+                    <span class="w-1.5 h-6 bg-indigo-500 mr-3 rounded-full"
+                    ></span>
+                    {t("privacy.s2.title")}
+                </h2>
+                <p class="mb-4">{t("privacy.s2.text")}</p>
+                <p
+                    class="bg-indigo-50 p-4 rounded-lg border-l-4 border-indigo-500 text-indigo-900 font-medium"
+                >
+                    {t("privacy.s2.note")}
+                </p>
+            </section>
+
+            <section>
+                <h2
+                    class="text-xl font-bold text-indigo-900 mb-4 flex items-center"
+                >
+                    <span class="w-1.5 h-6 bg-indigo-500 mr-3 rounded-full"
+                    ></span>
+                    {t("privacy.s3.title")}
+                </h2>
+                <p>{t("privacy.s3.text")}</p>
+                <p class="mt-4">{t("privacy.s3.ads")}</p>
+            </section>
+
+            <section>
+                <h2
+                    class="text-xl font-bold text-indigo-900 mb-4 flex items-center"
+                >
+                    <span class="w-1.5 h-6 bg-indigo-500 mr-3 rounded-full"
+                    ></span>
+                    {t("privacy.s4.title")}
+                </h2>
+                <p>
+                    {t("privacy.s4.text")}
+                    <a
+                        href="mailto:admin@insummi.com"
+                        class="text-indigo-600 font-semibold hover:underline"
+                        >admin@insummi.com</a
+                    >.
+                </p>
+            </section>
+
+            <section class="pt-8 border-t border-slate-200">
+                <p class="text-sm text-slate-500">
+                    {t("privacy.legal")}
+                </p>
+            </section>
+        </div>
+    </main>
+</Layout>

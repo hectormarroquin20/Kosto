@@ -1,0 +1,86 @@
+---
+import { useTranslations } from "../../i18n/utils";
+import Layout from "../../layouts/Layout.astro";
+
+export function getStaticPaths() {
+	return [{ params: { lang: "es" } }, { params: { lang: "en" } }];
+}
+
+const { lang } = Astro.params;
+const t = useTranslations(lang as "es" | "en");
+---
+
+<Layout title={t("about.title")}>
+	<main class="max-w-3xl mx-auto px-6 py-16">
+		<h1
+			class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-12 tracking-tight"
+		>
+			{t("about.h1")}
+		</h1>
+
+		<div class="space-y-10 text-slate-700 leading-relaxed">
+			<section>
+				<h2
+					class="text-xl font-bold text-indigo-900 mb-3 flex items-center"
+				>
+					<span class="w-1.5 h-6 bg-indigo-500 mr-3 rounded-full"
+					></span>
+					{t("about.mission.title")}
+				</h2>
+				<p>{t("about.mission.text")}</p>
+			</section>
+
+			<section>
+				<h2
+					class="text-xl font-bold text-indigo-900 mb-3 flex items-center"
+				>
+					<span class="w-1.5 h-6 bg-indigo-500 mr-3 rounded-full"
+					></span>
+					{t("about.who.title")}
+				</h2>
+				<p>{t("about.who.text")}</p>
+			</section>
+
+			<section>
+				<h2
+					class="text-xl font-bold text-indigo-900 mb-3 flex items-center"
+				>
+					<span class="w-1.5 h-6 bg-indigo-500 mr-3 rounded-full"
+					></span>
+					{t("about.independent.title")}
+				</h2>
+				<p>{t("about.independent.text")}</p>
+			</section>
+
+			<section>
+				<h2
+					class="text-xl font-bold text-indigo-900 mb-3 flex items-center"
+				>
+					<span class="w-1.5 h-6 bg-indigo-500 mr-3 rounded-full"
+					></span>
+					{t("about.security.title")}
+				</h2>
+				<p>{t("about.security.text")}</p>
+			</section>
+
+			<section>
+				<h2
+					class="text-xl font-bold text-indigo-900 mb-3 flex items-center"
+				>
+					<span class="w-1.5 h-6 bg-indigo-500 mr-3 rounded-full"
+					></span>
+					{t("about.contact.title")}
+				</h2>
+				<p>
+					{t("about.contact.text").split("admin@insummi.com")[0]}
+					<a
+						href="mailto:admin@insummi.com"
+						class="text-indigo-600 font-semibold hover:underline"
+						>admin@insummi.com</a
+					>
+					{t("about.contact.text").split("admin@insummi.com")[1]}
+				</p>
+			</section>
+		</div>
+	</main>
+</Layout>
