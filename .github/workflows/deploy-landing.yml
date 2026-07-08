@@ -42,11 +42,11 @@ jobs:
       - name: Debug Secrets
         run: |
           if [ -z "${{ secrets.AWS_ACCESS_KEY_ID }}" ]; then
-            echo "Error: AWS_ACCESS_KEY_ID está vacío"
+            echo "Error: AWS_ACCESS_KEY_ID está vacío si"
           else
             echo "AWS_ACCESS_KEY_ID está configurado"
           fi
-          
+
       - name: Test Secrets
         run: |
           if [ -n "${{ secrets.AWS_ACCESS_KEY_ID }}" ]; then
