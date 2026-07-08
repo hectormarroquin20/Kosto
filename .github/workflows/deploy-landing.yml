@@ -17,7 +17,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: 'npm'
           cache-dependency-path: insummi-landing/package-lock.json
 
@@ -45,4 +45,13 @@ jobs:
             echo "Error: AWS_ACCESS_KEY_ID está vacío"
           else
             echo "AWS_ACCESS_KEY_ID está configurado"
+          fi
+          
+      - name: Test Secrets
+        run: |
+          if [ -n "${{ secrets.AWS_ACCESS_KEY_ID }}" ]; then
+            echo "Access Key cargada correctamente"
+          else
+            echo "Error: La Access Key no se pudo cargar"
+            exit 1
           fi
