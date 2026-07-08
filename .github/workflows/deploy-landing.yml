@@ -38,20 +38,3 @@ jobs:
 
       - name: Invalidate CloudFront Cache
         run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DIST_ID }} --paths "/*"
-
-      - name: Debug Secrets
-        run: |
-          if [ -z "${{ secrets.AWS_ACCESS_KEY_ID }}" ]; then
-            echo "Error: AWS_ACCESS_KEY_ID está vacío si"
-          else
-            echo "AWS_ACCESS_KEY_ID está configurado"
-          fi
-
-      - name: Test Secrets
-        run: |
-          if [ -n "${{ secrets.AWS_ACCESS_KEY_ID }}" ]; then
-            echo "Access Key cargada correctamente"
-          else
-            echo "Error: La Access Key no se pudo cargar"
-            exit 1
-          fi
