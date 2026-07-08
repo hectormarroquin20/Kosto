@@ -1,0 +1,107 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="Contacto - Insummi">
+    <main class="max-w-2xl mx-auto px-6 py-16">
+        <!-- Encabezado -->
+        <h1
+            class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-6 tracking-tight"
+        >
+            Contacto
+        </h1>
+
+        <div class="space-y-8 text-slate-700 leading-relaxed mb-12">
+            <h2 class="text-2xl font-semibold text-indigo-900">
+                Hablemos sobre Insummi
+            </h2>
+            <p class="text-lg">
+                Ya sea que tengas dudas sobre cómo implementar el sistema, hayas
+                encontrado un detalle técnico, o quieras proponer una nueva
+                funcionalidad, estoy aquí para ayudarte.
+            </p>
+            <p>
+                Al ser una plataforma de desarrollo independiente, recibes
+                soporte directo de quien construyó la herramienta, sin bots ni
+                tickets perdidos.
+            </p>
+
+            <!-- Bloque de contacto directo -->
+            <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-6">
+                <h3 class="font-bold text-indigo-900 mb-2">
+                    Soporte Técnico y Consultas Generales
+                </h3>
+                <p>
+                    Escríbeme directamente a <a
+                        href="mailto:admin@insummi.com"
+                        class="text-indigo-600 font-semibold hover:underline"
+                        >admin@insummi.com</a
+                    >. Procuro responder en un plazo de 24 a 48 horas hábiles.
+                </p>
+            </div>
+        </div>
+
+        <hr class="border-slate-200 mb-12" />
+
+        <!-- Formulario Moderno -->
+        <div
+            class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 p-8"
+        >
+            <h2 class="text-2xl font-bold text-slate-900 mb-6">
+                Envíame un mensaje rápido
+            </h2>
+
+            <form class="flex flex-col gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="flex flex-col gap-2">
+                        <label
+                            class="text-sm font-semibold text-slate-700"
+                            for="name">Nombre</label
+                        >
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            required
+                            class="px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
+                        />
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <label
+                            class="text-sm font-semibold text-slate-700"
+                            for="email">Correo Electrónico</label
+                        >
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            required
+                            class="px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
+                        />
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-2">
+                    <label
+                        class="text-sm font-semibold text-slate-700"
+                        for="message">Mensaje</label
+                    >
+                    <textarea
+                        id="message"
+                        name="message"
+                        required
+                        rows="5"
+                        class="px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
+                    ></textarea>
+                </div>
+
+                <button
+                    type="submit"
+                    class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-4 rounded-xl shadow-lg shadow-indigo-600/30 transition-all duration-300"
+                >
+                    Enviar Mensaje
+                </button>
+            </form>
+        </div>
+    </main>
+</Layout>
