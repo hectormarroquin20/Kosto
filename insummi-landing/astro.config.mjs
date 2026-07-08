@@ -5,7 +5,8 @@ import tailwind from '@astrojs/tailwind';
 export default defineConfig({
   output: 'static', // Confirmamos que es estático
   build: {
-    format: 'directory', // Esto convierte about.html en about/index.html
+    //format: 'directory', // Esto convierte about.html en about/index.html
+    format: 'file',
   },
 
   // site: 'https://insummi.com' // Replace with your actual domain
