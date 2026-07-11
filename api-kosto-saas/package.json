@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-cognito-identity-provider": "^3.1079.0",
-    "dotenv": "^17.4.2",
+    "@aws-sdk/client-secrets-manager": "^3.1085.0",
     "esbuild": "^0.28.1",
     "express": "^5.2.1",
     "pg": "^8.12.0"
@@ -21,7 +21,7 @@
     "@types/aws-lambda": "^8.10.162",
     "@types/express": "^5.0.6",
     "@types/jest": "^30.0.0",
-    "@types/node": "^20.14.0",
+    "@types/node": "^20.19.43",
     "@types/pg": "^8.11.0",
     "aws-sdk-client-mock": "^4.1.0",
     "jest": "^30.4.2",

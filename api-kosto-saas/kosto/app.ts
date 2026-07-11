@@ -14,9 +14,6 @@ import { getTransaction, registerSale } from './src/controllers/transaction.cont
 import { IIdentityService } from '@/models/identity.interface';
 import { CognitoIdentityService } from '@/services/cognito-identity.service';
 
-import * as dotenv from 'dotenv';
-dotenv.config();
-
 const getBody = (event: APIGatewayProxyEvent) => {
     try { return event.body ? JSON.parse(event.body) : {}; } catch { return {}; }
 };

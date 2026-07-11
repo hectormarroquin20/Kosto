@@ -33,10 +33,10 @@ Resources:
       Runtime: nodejs24.x
       Architectures:
         - x86_64
-      Environment:
-        Variables:
-          DATABASE_URL: !Ref DatabaseUrlParam
-          # DATABASE_URL=postgresql://admin:password123@saas_postgres_dev:5432/saas_app?sslmode=disable
+      # Environment:
+      #   Variables:
+      #     DATABASE_URL: !Ref DatabaseUrlParam
+      #     # DATABASE_URL=postgresql://admin:password123@saas_postgres_dev:5432/saas_app?sslmode=disable
       Events:
         GetProducts:
           Type: Api
