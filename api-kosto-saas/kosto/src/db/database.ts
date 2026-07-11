@@ -1,18 +1,12 @@
 // src/db/database.ts
 import { Pool, types } from 'pg';
 import * as dotenv from 'dotenv';
-import * as fs from 'fs';
-import * as path from 'path';
 
 // 1. Numbers (what we already put in place)
 types.setTypeParser(1700, (val) => parseFloat(val));
 types.setTypeParser(20, (val) => parseInt(val, 10));
 
 dotenv.config();
-
-// Esto te dirá dónde está parado el proceso de Node.js
-console.log("Ruta de trabajo actual:", process.cwd());
-console.log("¿Existe el .env?:", fs.existsSync(path.resolve('.env')));
 
 // 2. Dates (global configuration)
 const parseDate = (val: string) => new Date(val);
