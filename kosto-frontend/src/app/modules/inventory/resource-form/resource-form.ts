@@ -15,6 +15,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSelectModule } from '@angular/material/select';
 
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { FormKostoComponent } from "@/components/form-kosto/form-kosto";
 
 
 @Component({
@@ -29,7 +30,8 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
     MatButtonModule,
     MatSlideToggleModule,
     MatSelectModule,
-    TranslatePipe
+    TranslatePipe,
+    FormKostoComponent
   ],
   templateUrl: './resource-form.html',
   styleUrl: './resource-form.scss',

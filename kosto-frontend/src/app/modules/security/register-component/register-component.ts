@@ -12,6 +12,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { TranslatePipe } from '@ngx-translate/core';
 import { LanguageSelector } from '../language-selector/language-selector.js';
 import { TenantService } from '../../../core/services/tenant.service.js';
+import { FormKostoComponent } from "@/components/form-kosto/form-kosto";
 
 @Component({
   selector: 'app-register-component',
@@ -25,7 +26,8 @@ import { TenantService } from '../../../core/services/tenant.service.js';
     MatIconModule,
     MatDividerModule,
     TranslatePipe,
-    LanguageSelector
+    LanguageSelector,
+    FormKostoComponent
   ],
   templateUrl: './register-component.html',
   styleUrl: './register-component.scss',

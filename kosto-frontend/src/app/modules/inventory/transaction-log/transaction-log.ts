@@ -13,6 +13,7 @@ import { ProductService } from '../../../core/services/product.service';
 import { forkJoin } from 'rxjs';
 
 import { TranslatePipe } from '@ngx-translate/core';
+import { MainKostoComponent } from "@/components/main-kosto/main-kosto";
 
 @Component({
   selector: 'app-transaction-log',
@@ -22,7 +23,8 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatIconModule,
     MatButtonModule,
     RouterLink,
-    TranslatePipe
+    TranslatePipe,
+    MainKostoComponent
   ],
   templateUrl: './transaction-log.html',
   styleUrl: './transaction-log.scss',

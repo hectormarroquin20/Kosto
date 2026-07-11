@@ -10,6 +10,7 @@ import { TenantService } from '../../../core/services/tenant.service';
 import { IAuthService } from '../../../core/models/auth.interface';
 
 import { TranslatePipe } from '@ngx-translate/core';
+import { FormKostoComponent } from "@/components/form-kosto/form-kosto";
 
 @Component({
   selector: 'app-tenant-form',
@@ -20,7 +21,8 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    TranslatePipe
+    TranslatePipe,
+    FormKostoComponent
   ],
   templateUrl: './tenant-form.html',
 })

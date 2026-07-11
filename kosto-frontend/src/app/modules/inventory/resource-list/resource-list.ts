@@ -12,6 +12,7 @@ import { Router, RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { AddStockResourceDialog } from '../add-resource-stock-dialog/add-stock-dialog';
 import { MatDialog } from '@angular/material/dialog';
+import { MainKostoComponent } from "@/components/main-kosto/main-kosto";
 
 @Component({
   selector: 'app-resource-list',
@@ -21,7 +22,8 @@ import { MatDialog } from '@angular/material/dialog';
     MatIconModule,
     MatButtonModule,
     RouterLink,
-    TranslatePipe
+    TranslatePipe,
+    MainKostoComponent
   ],
   templateUrl: './resource-list.html',
   styleUrl: './resource-list.scss',

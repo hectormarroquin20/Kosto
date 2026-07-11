@@ -1,0 +1,24 @@
+<main class="p-8 max-w-screen-2xl my-0 mx-auto flex flex-col gap-8 w-full">
+
+    <mat-card class="w-full">
+
+        <mat-card-header class="flex justify-between items-center mb-6">
+            <div>
+                <mat-card-title class="text-xl font-bold">{{ title }}</mat-card-title>
+                @if (subtitle) {
+                <mat-card-subtitle>{{ subtitle }}</mat-card-subtitle>
+                }
+            </div>
+
+            <div>
+                <ng-content select="[kosto-actions]"></ng-content>
+            </div>
+        </mat-card-header>
+
+        <mat-card-content>
+            <ng-content></ng-content>
+        </mat-card-content>
+
+    </mat-card>
+
+</main>

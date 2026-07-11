@@ -15,6 +15,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { RecipeItemsService } from '@/core/services/recipe-items.service';
 import { ProductService } from '@/core/services/product.service';
 import { ResourceService } from '@/core/services/resource.service';
+import { FormKostoComponent } from "@/components/form-kosto/form-kosto";
 
 @Component({
   selector: 'app-recipe-form',
@@ -29,8 +30,7 @@ import { ResourceService } from '@/core/services/resource.service';
     MatSelectModule,
     MatIconModule,
     MatProgressSpinnerModule,
-    TranslatePipe
-  ],
+    TranslatePipe, FormKostoComponent],
   templateUrl: './recipe-form.html',
 })
 export class RecipeForm implements OnInit {

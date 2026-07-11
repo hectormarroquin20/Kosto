@@ -107,18 +107,16 @@ export class App implements OnInit {
   }
 
   async signOut() {
-    // 1. Direct gateway to Cognito
-    this.authService.logout();
+    // Limpieza local
+    localStorage.clear();
+    sessionStorage.clear();
 
-    // ==============================================================
-    // ORIGINAL LOGIC COMMENTED OUT (BACKUP)
-    // ==============================================================
-    // if (this.router) {
-    //   await this.router.navigate(['/login']);
-    //   window.location.reload();
-    // } else {
-    //   console.error("The Router is not initialized");
-    // }
+    // Redirección al endpoint de LOGOUT
+    const cognitoDomain = 'https://us-east-1eazpdrljw.auth.us-east-1.amazoncognito.com';
+    const clientId = '4m41ibsf6p1il704jiosr80m0p';
+    const logoutUri = encodeURIComponent('http://localhost:4200/login');
+
+    window.location.href = `${cognitoDomain}/logout?client_id=${clientId}&logout_uri=${logoutUri}`;
   }
 
   onLoginSuccess() {

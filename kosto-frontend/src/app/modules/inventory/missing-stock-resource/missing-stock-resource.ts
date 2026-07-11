@@ -19,6 +19,7 @@ import { AddStockResourceDialog } from '../add-resource-stock-dialog/add-stock-d
 import { TenantService } from '../../../core/services/tenant.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { IAuthService } from '@/core/models/auth.interface';
+import { MainKostoComponent } from "@/components/main-kosto/main-kosto";
 
 @Component({
   selector: 'app-missing-stock-resource',
@@ -32,7 +33,8 @@ import { IAuthService } from '@/core/models/auth.interface';
     MatInputModule,
     ReactiveFormsModule,
     TranslatePipe,
-    MatTooltipModule
+    MatTooltipModule,
+    MainKostoComponent
   ],
   templateUrl: './missing-stock-resource.html',
   styleUrl: './missing-stock-resource.scss',

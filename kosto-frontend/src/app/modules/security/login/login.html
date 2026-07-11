@@ -1,31 +1,35 @@
-<main style="display: flex; justify-content: center; align-items: center; height: 100vh;">
-    <!-- Centramos el contenido de la tarjeta para que se vea como un portal de SSO -->
-    <mat-card style="width: 400px; padding: 2rem; text-align: center;">
-        <mat-card-header style="margin-bottom: 1.5rem; justify-content: center;">
+<main class="bg-gradient-to-br from-indigo-400 via-slate-50 to-slate-400 flex justify-center items-center h-screen">
+    <!-- Center the card content to make it look like an SSO portal -->
+    <mat-card class="p-8 text-center w-[400px]" style="width: 400px; padding: 2rem; text-align: center;">
+        <mat-card-header class="mb-6 justify-center">
             <mat-card-title>{{ 'LOGIN.TITLE' | translate }}</mat-card-title>
             <app-language-selector></app-language-selector>
         </mat-card-header>
 
         <mat-card-content>
+            <!-- <app-form-kosto [title]="'LOGIN.FORM.TITLE' | translate"> 
+            <div class="flex justify-end mb-4">
+                <app-language-selector></app-language-selector>
+            </div>-->
 
             <!-- ============================================================== -->
-            <!-- NUEVO BOTÓN DE GATEWAY (SSO CON AWS COGNITO)                   -->
+            <!-- NEW GATEWAY BUTTON (SSO WITH AWS COGNITO)                   -->
             <!-- ============================================================== -->
-            <div style="display: flex; flex-direction: column; align-items: center; gap: 1.5rem; margin-top: 1rem;">
-                <p style="color: #666; margin: 0; font-size: 14px;">
+            <div class="flex flex-col items-center gap-6 mt-4">
+                <p class="m-0 text-sm text-[#666]">
                     {{ 'LOGIN.SUBTITLE' | translate }}
                 </p>
 
-                <!-- Usamos un botón grande con un icono de nube/seguridad -->
+                <!-- We use a large button with a cloud/security icon -->
                 <button mat-flat-button color="primary" (click)="onLogin()"
-                    style="width: 100%; padding: 24px 0; font-size: 16px; display: flex; align-items: center; justify-content: center;">
-                    <mat-icon style="margin-right: 8px;">cloud_done</mat-icon>
+                    class="w-full py-6 text-base flex items-center justify-center">
+                    <mat-icon class="mr-2">cloud_done</mat-icon>
                     {{ 'LOGIN.BTNCLOUD' | translate }}
                 </button>
             </div>
 
             <!-- ============================================================== -->
-            <!-- FORMULARIO ORIGINAL COMENTADO (LEGACY / RESPALDO)              -->
+            <!-- ORIGINAL FORM COMMENTED (LEGACY / BACKUP)              -->
             <!-- ============================================================== -->
             <!--
             <form [formGroup]="loginForm" (ngSubmit)="onLogin()"
@@ -50,10 +54,9 @@
             </form>
             -->
 
-            <div style="text-align: center; margin-top: 1.5rem; font-size: 14px;">
+            <div class="text-center mt-6 text-sm">
                 {{ 'LOGIN.ALREADY_HAVE_ACCOUNT' | translate }} <br>
-                <a routerLink="/register"
-                    style="color: #3f51b5; text-decoration: none; font-weight: 500; display: inline-block; margin-top: 8px;">
+                <a routerLink="/register" class="text-indigo-700 no-underline font-medium inline-block mt-2">
                     {{ 'LOGIN.GO_TO_REGISTER' | translate }}
                 </a>
             </div>
@@ -61,3 +64,4 @@
         </mat-card-content>
     </mat-card>
 </main>
+<!-- </app-form-kosto> -->

@@ -1,75 +1,62 @@
-<main style="padding: 2rem; max-width: 800px; margin: 0 auto;">
-    <mat-card>
-        <mat-card-header style="margin-bottom: 1.5rem;">
-            <mat-card-title>
-                {{ (isEditMode ? 'RESOURCES.FORM.EDIT_TITLE' : 'RESOURCES.FORM.NEW_TITLE') | translate }}
-            </mat-card-title>
-            <mat-card-subtitle>{{ 'RESOURCES.FORM.SUBTITLE' | translate }}</mat-card-subtitle>
-        </mat-card-header>
+<app-form-kosto [title]="(isEditMode ? 'RESOURCES.FORM.EDIT_TITLE' : 'RESOURCES.FORM.NEW_TITLE') | translate"
+    [subtitle]="'RESOURCES.FORM.SUBTITLE' | translate">
+    <form [formGroup]=" resourceForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
 
-        <mat-card-content>
-            <form [formGroup]="resourceForm" (ngSubmit)="onSubmit()"
-                style="display: flex; flex-direction: column; gap: 1rem;">
+        <mat-form-field appearance="outline">
+            <mat-label>{{ 'RESOURCES.FORM.NAME' | translate }}</mat-label>
+            <input matInput formControlName="name" [placeholder]="'RESOURCES.FORM.NAME_PLACEHOLDER' | translate">
+            @if (resourceForm.get('name')?.hasError('required')) {
+            <mat-error>{{ 'RESOURCES.ERRORS.REQUIRED' | translate }}</mat-error>
+            }
+            @if (resourceForm.get('name')?.hasError('maxlength')) {
+            <mat-error>{{ 'RESOURCES.ERRORS.MAX_LENGTH' | translate }}</mat-error>
+            }
+        </mat-form-field>
 
-                <mat-form-field appearance="outline">
-                    <mat-label>{{ 'RESOURCES.FORM.NAME' | translate }}</mat-label>
-                    <input matInput formControlName="name"
-                        [placeholder]="'RESOURCES.FORM.NAME_PLACEHOLDER' | translate">
-                    @if (resourceForm.get('name')?.hasError('required')) {
-                    <mat-error>{{ 'RESOURCES.ERRORS.REQUIRED' | translate }}</mat-error>
-                    }
-                    @if (resourceForm.get('name')?.hasError('maxlength')) {
-                    <mat-error>{{ 'RESOURCES.ERRORS.MAX_LENGTH' | translate }}</mat-error>
-                    }
-                </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>{{ 'RESOURCES.FORM.UNIT' | translate }}</mat-label>
+            <mat-select formControlName="unit_of_measure" [placeholder]="'RESOURCES.FORM.UNIT_PLACEHOLDER' | translate">
+                @for (unit of unitOptions; track unit.value) {
+                <!-- Solo agregas el pipe de traducción aquí -->
+                <mat-option [value]="unit.value">{{ unit.label | translate }}</mat-option>
+                }
+            </mat-select>
+            @if (resourceForm.get('unit_of_measure')?.hasError('required')) {
+            <mat-error>{{ 'RESOURCES.ERRORS.REQUIRED' | translate }}</mat-error>
+            }
+        </mat-form-field>
 
-                <mat-form-field appearance="outline">
-                    <mat-label>{{ 'RESOURCES.FORM.UNIT' | translate }}</mat-label>
-                    <mat-select formControlName="unit_of_measure"
-                        [placeholder]="'RESOURCES.FORM.UNIT_PLACEHOLDER' | translate">
-                        @for (unit of unitOptions; track unit.value) {
-                        <!-- Solo agregas el pipe de traducción aquí -->
-                        <mat-option [value]="unit.value">{{ unit.label | translate }}</mat-option>
-                        }
-                    </mat-select>
-                    @if (resourceForm.get('unit_of_measure')?.hasError('required')) {
-                    <mat-error>{{ 'RESOURCES.ERRORS.REQUIRED' | translate }}</mat-error>
-                    }
-                </mat-form-field>
+        <div class="flex gap-4">
+            <mat-form-field appearance="outline" class="flex-[1]">
+                <mat-label>{{ 'RESOURCES.FORM.COST' | translate }}</mat-label>
+                <input matInput type="number" step="0.01" formControlName="unit_cost" placeholder="0.00">
+                @if (resourceForm.get('unit_cost')?.hasError('min')) {
+                <mat-error>{{ 'RESOURCES.ERRORS.MIN_ZERO' | translate }}</mat-error>
+                }
+            </mat-form-field>
 
-                <div style="display: flex; gap: 1rem;">
-                    <mat-form-field appearance="outline" style="flex: 1;">
-                        <mat-label>{{ 'RESOURCES.FORM.COST' | translate }}</mat-label>
-                        <input matInput type="number" step="0.01" formControlName="unit_cost" placeholder="0.00">
-                        @if (resourceForm.get('unit_cost')?.hasError('min')) {
-                        <mat-error>{{ 'RESOURCES.ERRORS.MIN_ZERO' | translate }}</mat-error>
-                        }
-                    </mat-form-field>
+            <mat-form-field appearance="outline" class="flex-[1]">
+                <mat-label>{{ 'RESOURCES.FORM.STOCK' | translate }}</mat-label>
+                <input matInput type="number" step="0.01" formControlName="current_stock" placeholder="0.00">
+                @if (resourceForm.get('current_stock')?.hasError('min')) {
+                <mat-error>{{ 'RESOURCES.ERRORS.MIN_ZERO' | translate }}</mat-error>
+                }
+            </mat-form-field>
+        </div>
 
-                    <mat-form-field appearance="outline" style="flex: 1;">
-                        <mat-label>{{ 'RESOURCES.FORM.STOCK' | translate }}</mat-label>
-                        <input matInput type="number" step="0.01" formControlName="current_stock" placeholder="0.00">
-                        @if (resourceForm.get('current_stock')?.hasError('min')) {
-                        <mat-error>{{ 'RESOURCES.ERRORS.MIN_ZERO' | translate }}</mat-error>
-                        }
-                    </mat-form-field>
-                </div>
+        <div class="mt-2 mb-4">
+            <mat-slide-toggle formControlName="is_active" color="primary">
+                {{ 'RESOURCES.FORM.IS_ACTIVE' | translate }}
+            </mat-slide-toggle>
+        </div>
 
-                <div style="margin-top: 0.5rem; margin-bottom: 1rem;">
-                    <mat-slide-toggle formControlName="is_active" color="primary">
-                        {{ 'RESOURCES.FORM.IS_ACTIVE' | translate }}
-                    </mat-slide-toggle>
-                </div>
+        <div class="flex gap-4 justify-end">
+            <button mat-button type="button" routerLink="/resources">{{ 'RESOURCES.FORM.CANCEL' | translate
+                }}</button>
+            <button mat-flat-button color="primary" type="submit" [disabled]="resourceForm.invalid">
+                {{ (isEditMode ? 'RESOURCES.FORM.SAVE' : 'RESOURCES.FORM.CREATE') | translate }}
+            </button>
+        </div>
 
-                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
-                    <button mat-button type="button" routerLink="/resources">{{ 'RESOURCES.FORM.CANCEL' | translate
-                        }}</button>
-                    <button mat-flat-button color="primary" type="submit" [disabled]="resourceForm.invalid">
-                        {{ (isEditMode ? 'RESOURCES.FORM.SAVE' : 'RESOURCES.FORM.CREATE') | translate }}
-                    </button>
-                </div>
-
-            </form>
-        </mat-card-content>
-    </mat-card>
-</main>
+    </form>
+</app-form-kosto>

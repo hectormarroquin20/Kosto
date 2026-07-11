@@ -1,6 +1,7 @@
-<button mat-button [matMenuTriggerFor]="menu" style="display: flex; align-items: center; gap: 8px;">
+<button mat-button [matMenuTriggerFor]="menu" class="flex items-center gap-2">
     <mat-icon>language</mat-icon>
-    <span style="font-weight: 500; font-size: 14px;">{{ currentLanguage | uppercase }}</span>
+    <span class="text-gray-500 font-medium text-sm uppercase">{{ currentLanguage |
+        uppercase }}</span>
 </button>
 
 <mat-menu #menu="matMenu">

@@ -10,6 +10,7 @@ import { Router, RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { AddProductStockDialog } from '../add-product-stock-dialog/add-product-stock-dialog';
 import { MatDialog } from '@angular/material/dialog';
+import { MainKostoComponent } from "@/components/main-kosto/main-kosto";
 
 @Component({
   selector: 'app-product-list',
@@ -20,7 +21,8 @@ import { MatDialog } from '@angular/material/dialog';
     MatIconModule,
     MatButtonModule,
     RouterLink,
-    TranslatePipe
+    TranslatePipe,
+    MainKostoComponent
   ],
   templateUrl: './product-list.html',
   styleUrl: './product-list.scss',

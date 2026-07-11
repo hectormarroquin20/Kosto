@@ -1,64 +1,46 @@
-<!-- Kosto-monorepo/kosto-frontend/src/app/modules/inventory/production-list/production-list.html -->
-<main style="padding: 2rem;">
-    <mat-card>
-        <mat-card-header style="margin-bottom: 1.5rem;" class="centered-header">
-            <div>
-                <mat-card-title>{{ 'PRODUCTION.TITLE' | translate }}</mat-card-title>
-                <mat-card-subtitle>{{ 'PRODUCTION.SUBTITLE' | translate }}</mat-card-subtitle>
-            </div>
-        </mat-card-header>
+<app-main-kosto [title]="'PRODUCTION.TITLE' | translate" [subtitle]="'PRODUCTION.SUBTITLE' | translate ">
 
-        <mat-card-content>
-            @if (isLoading()) {
-            <div style="text-align: center; padding: 3rem;">
-                <p>{{ 'PRODUCTS.LOADING' | translate }}</p>
-            </div>
-            } @else {
-            <div class="table-responsive">
-                <table mat-table [dataSource]="dataSource()" class="mat-elevation-z0" style="width: 100%;">
-                    <ng-container matColumnDef="name">
-                        <th mat-header-cell *matHeaderCellDef> {{ 'PRODUCTION.TABLE.PRODUCT' | translate }} </th>
-                        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-                    </ng-container>
+    @if (isLoading()) {
+    <div class="text-center p-12">
+        <p>{{ 'PRODUCTS.LOADING' | translate }}</p>
+    </div>
+    } @else {
+    <div class="table-responsive">
+        <table mat-table [dataSource]="dataSource()" class="mat-elevation-z0" class="w-full">
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef> {{ 'PRODUCTION.TABLE.PRODUCT' | translate }} </th>
+                <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+            </ng-container>
 
-                    <ng-container matColumnDef="sale_price">
-                        <th mat-header-cell *matHeaderCellDef> {{ 'PRODUCTION.TABLE.SALE_PRICE' | translate }} </th>
-                        <td mat-cell *matCellDef="let element"> ${{element.sale_price}} </td>
-                    </ng-container>
+            <ng-container matColumnDef="sale_price">
+                <th mat-header-cell *matHeaderCellDef> {{ 'PRODUCTION.TABLE.SALE_PRICE' | translate }} </th>
+                <td mat-cell *matCellDef="let element"> ${{element.sale_price}} </td>
+            </ng-container>
 
-                    <ng-container matColumnDef="current_stock">
-                        <th mat-header-cell *matHeaderCellDef> {{ 'PRODUCTION.TABLE.CURRENT_STOCK' | translate }} </th>
-                        <td mat-cell *matCellDef="let element">
-                            <span [style.color]="element.current_stock === 0 ? '#f44336' : 'inherit'">
-                                {{element.current_stock}}
-                            </span>
-                        </td>
-                    </ng-container>
+            <ng-container matColumnDef="current_stock">
+                <th mat-header-cell *matHeaderCellDef> {{ 'PRODUCTION.TABLE.CURRENT_STOCK' | translate }} </th>
+                <td mat-cell *matCellDef="let element">
+                    <span [style.color]="element.current_stock === 0 ? '#f44336' : 'inherit'">
+                        {{element.current_stock}}
+                    </span>
+                </td>
+            </ng-container>
 
-                    <ng-container matColumnDef="actions">
-                        <th mat-header-cell *matHeaderCellDef style="text-align: right;"> {{ 'PRODUCTION.TABLE.ACTIONS'
-                            | translate }} </th>
-                        <td mat-cell *matCellDef="let element" style="text-align: right;">
-                            <button mat-mini-fab color="primary" (click)="openProductionDialog(element)"
-                                [matTooltip]="'PRODUCTION.TOOLTIP.PRODUCE' | translate">
-                                <mat-icon>add</mat-icon>
-                            </button>
-                        </td>
-                    </ng-container>
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef class="text-right"> {{ 'PRODUCTION.TABLE.ACTIONS'
+                    | translate }} </th>
+                <td mat-cell *matCellDef="let element" class="text-right">
+                    <button mat-mini-fab color="primary" (click)="openProductionDialog(element)"
+                        [matTooltip]="'PRODUCTION.TOOLTIP.PRODUCE' | translate">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
 
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                </table>
-            </div>
-            }
-        </mat-card-content>
-    </mat-card>
-</main>
-
-<style>
-    .centered-header {
-        display: flex;
-        justify-content: center;
-        align-items: center;
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </div>
     }
-</style>
+
+</app-main-kosto>

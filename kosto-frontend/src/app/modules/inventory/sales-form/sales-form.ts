@@ -14,6 +14,7 @@ import { ProductService } from '../../../core/services/product.service';
 import { ProductModel } from '../../../core/models/product.interface';
 
 import { TranslatePipe } from '@ngx-translate/core';
+import { FormKostoComponent } from "@/components/form-kosto/form-kosto";
 
 @Component({
   selector: 'app-sales-form',
@@ -27,7 +28,8 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatInputModule,
     MatSelectModule,
     MatButtonModule,
-    TranslatePipe
+    TranslatePipe,
+    FormKostoComponent
   ],
   templateUrl: './sales-form.html',
   styleUrl: './sales-form.scss',

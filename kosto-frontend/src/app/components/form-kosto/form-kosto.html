@@ -1,0 +1,18 @@
+<main class="p-8 mx-auto w-[900px] max-w-[1200px]">
+    <div [style.max-width]="maxWidth">
+        <mat-card>
+            <mat-card-header class="mb-6">
+                <div>
+                    <mat-card-title class="text-xl font-bold">{{ title }}</mat-card-title>
+                    @if (subtitle) {
+                    <mat-card-subtitle>{{ subtitle }}</mat-card-subtitle>
+                    }
+                </div>
+            </mat-card-header>
+
+            <mat-card-content>
+                <ng-content></ng-content>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</main>

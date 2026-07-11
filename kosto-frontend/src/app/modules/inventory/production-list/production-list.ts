@@ -11,6 +11,7 @@ import { ProductionForm } from '../production-form/production-form';
 import { ProductModel } from '../../../core/models/product.interface';
 import { ProductService } from '../../../core/services/product.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MainKostoComponent } from "@/components/main-kosto/main-kosto";
 
 @Component({
   selector: 'app-production-list',
@@ -21,7 +22,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatDialogModule,
     MatCardModule,
     MatTooltipModule,
-    TranslatePipe
+    TranslatePipe,
+    MainKostoComponent
   ],
   templateUrl: './production-list.html',
   styleUrl: './production-list.scss',

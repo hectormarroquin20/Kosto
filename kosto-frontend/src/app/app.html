@@ -1,5 +1,5 @@
 @if (isLoggedIn()) {
-<mat-sidenav-container class="sidenav-container">
+<mat-sidenav-container class="sidenav-container h-screen">
 
   <mat-sidenav #sidenav mode="side" opened class="sidenav">
     <mat-toolbar color="primary">Kosto SaaS</mat-toolbar>
@@ -45,21 +45,20 @@
     </mat-nav-list>
   </mat-sidenav>
 
-  <mat-sidenav-content>
-    <mat-toolbar color="primary" class="top-toolbar">
+  <mat-sidenav-content class="flex gap-5 items-stretch h-full p-5">
+    <mat-toolbar color="primary" class="top-toolbar flex justify-between items-center">
 
-      <div style="flex: 1; display: flex; justify-content: flex-start;">
+      <div class="flex items-center">
         <button mat-icon-button (click)="sidenav.toggle()">
           <mat-icon>menu</mat-icon>
         </button>
       </div>
 
-      <div
-        style="flex: 1; display: flex; justify-content: center; align-items: center; font-weight: 500; text-align: center;">
+      <div class="flex-1 text-center font-medium">
         <span>{{ companyName }}</span>
       </div>
 
-      <div style="flex: 1; display: flex; justify-content: flex-end;">
+      <div class="flex justify-end">
         <button mat-icon-button [matMenuTriggerFor]="settingsMenu">
           <mat-icon>account_circle</mat-icon>
         </button>
@@ -92,17 +91,16 @@
     </mat-toolbar>
 
     <!-- Wrap the outlet and the ads in a flex container -->
-    <div style="display: flex; gap: 20px; align-items: flex-start; padding: 20px;">
-      <div style="flex: 3;">
+    <div class="flex gap-5 items-start p-5">
+      <div class="flex-[3] overflow-y-auto">
         <router-outlet></router-outlet>
       </div>
 
       @if (adService.shouldShowAds()) {
-      <div style="flex: 1;">
-        <app-ad-banner />
+      <div class="flex-1 h-full">
+        <app-ad-banner class="block h-full" />
       </div>
       }
-
     </div>
   </mat-sidenav-content>
 

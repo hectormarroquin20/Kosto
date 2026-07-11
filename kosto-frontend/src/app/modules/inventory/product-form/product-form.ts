@@ -17,6 +17,7 @@ import { IAuthService } from '../../../core/models/auth.interface';
 import { ActivatedRoute } from '@angular/router';
 
 import { TranslatePipe } from '@ngx-translate/core';
+import { FormKostoComponent } from "@/components/form-kosto/form-kosto";
 
 @Component({
   selector: 'app-product-form',
@@ -29,7 +30,8 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatButtonModule,
     MatSelectModule,
     TranslatePipe,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    FormKostoComponent
   ],
   templateUrl: './product-form.html',
   styleUrl: './product-form.scss',

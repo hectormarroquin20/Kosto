@@ -15,6 +15,8 @@ import { ResourceService } from '../../../core/services/resource.service';
 import { catchError, forkJoin, of } from 'rxjs';
 
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { MainKostoComponent } from "@/components/main-kosto/main-kosto";
+import { AdBannerComponent } from "@/components/ads/ads.component";
 
 @Component({
   selector: 'app-recipe-list',
@@ -27,7 +29,8 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
     MatIconModule,
     MatButtonModule,
     RouterLink,
-    TranslatePipe
+    TranslatePipe,
+    MainKostoComponent
   ],
   templateUrl: './recipe-list.html',
   styleUrl: './recipe-list.scss',

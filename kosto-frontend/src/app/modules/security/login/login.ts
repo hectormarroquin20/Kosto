@@ -12,6 +12,8 @@ import { Router, RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { LanguageSelector } from '../language-selector/language-selector';
+import { FormKostoComponent } from '@/components/form-kosto/form-kosto';
+
 
 @Component({
   selector: 'app-login',
