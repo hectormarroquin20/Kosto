@@ -1,4 +1,3 @@
-// src/db/database.ts
 import { Pool, types } from 'pg';
 import * as dotenv from 'dotenv';
 
