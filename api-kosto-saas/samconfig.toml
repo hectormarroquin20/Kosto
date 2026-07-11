@@ -13,5 +13,5 @@ capabilities = "CAPABILITY_IAM CAPABILITY_AUTO_EXPAND"
 confirm_changeset = false
 resolve_s3 = true
 disable_rollback = false
-# No pongas aquí el secreto en texto plano si vas a usar GitHub Secrets
-# El parámetro se pasará desde el workflow de GitHub, no desde aquí
+# Do not place secrets in plain text here if you are going to use GitHub Secrets
+# The parameter will be passed from the GitHub workflow, not from here
