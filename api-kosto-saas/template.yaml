@@ -33,9 +33,13 @@ Resources:
       Runtime: nodejs24.x
       Architectures:
         - x86_64
+      Policies:
+      - Statement:
+          - Effect: Allow
+            Action: secretsmanager:GetSecretValue
+            Resource: "arn:aws:secretsmanager:us-east-1:221082192802:secret:Kosto/DatabaseURL-*"
       # Environment:
       #   Variables:
-      #     DATABASE_URL: !Ref DatabaseUrlParam
       #     # DATABASE_URL=postgresql://admin:password123@saas_postgres_dev:5432/saas_app?sslmode=disable
       Events:
         GetProducts:
