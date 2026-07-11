@@ -13,8 +13,6 @@ types.setTypeParser(1082, parseDate); // DATE
 types.setTypeParser(1114, parseDate); // TIMESTAMP
 types.setTypeParser(1184, parseDate); // TIMESTAMPTZ
 
-console.log("CONECTANDO A:", process.env.DATABASE_URL || "NO DEFINIDO");
-
 export const dbPool = new Pool({
     connectionString: process.env.DATABASE_URL,
     ssl: { rejectUnauthorized: false },
