@@ -1,0 +1,42 @@
+# More information about the configuration file can be found here:
+# https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-config.html
+version = 0.1
+
+[default.global.parameters]
+stack_name = "api-kosto-saas"
+
+[default.build.parameters]
+cached = true
+parallel = true
+
+[default.validate.parameters]
+lint = true
+
+[default.deploy.parameters]
+capabilities = "CAPABILITY_IAM"
+confirm_changeset = true
+resolve_s3 = true
+
+[default.package.parameters]
+resolve_s3 = true
+
+[default.sync.parameters]
+watch = true
+
+[default.local_start_api.parameters]
+warm_containers = "EAGER"
+
+[default.local_start_lambda.parameters]
+warm_containers = "EAGER"
+
+version = 0.1
+
+[default.deploy.parameters]
+stack_name = "api-kosto-saas"
+region = "us-east-1"
+confirm_changeset = false # Omite la confirmación manual
+disable_rollback = false
+image_repositories = []
+# Aquí inyectas el secreto sin que te lo pida la terminal
+parameter_overrides = "DatabaseUrlParam='postgresql://tu_usuario:tu_password@tu_host:5432/tu_db'"
+capabilities = "CAPABILITY_IAM CAPABILITY_AUTO_EXPAND" # NECESARIO para que no falle por permisos
