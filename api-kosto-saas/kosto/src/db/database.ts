@@ -34,12 +34,15 @@ types.setTypeParser(20, (val) => parseInt(val, 10));
 const client = new SecretsManagerClient({ region: "us-east-1" });
 let pool: Pool | null = null;
 
+
 export const dbPool = {
     connect: async () => {
         if (!pool) {
             const response = await client.send(new GetSecretValueCommand({
                 SecretId: "Kosto/DatabaseURL"
             }));
+            const connectionString = response.SecretString;
+            console.log("DEBUG: Connection string recibida:", connectionString);
             pool = new Pool({
                 connectionString: response.SecretString,
                 ssl: { rejectUnauthorized: false },
@@ -53,6 +56,8 @@ export const dbPool = {
             const response = await client.send(new GetSecretValueCommand({
                 SecretId: "Kosto/DatabaseURL"
             }));
+            const connectionString = response.SecretString;
+            console.log("DEBUG: Connection string recibida:", connectionString);
             pool = new Pool({
                 connectionString: response.SecretString,
                 ssl: { rejectUnauthorized: false },
