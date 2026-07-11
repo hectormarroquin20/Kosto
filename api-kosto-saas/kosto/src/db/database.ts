@@ -1,11 +1,9 @@
 // import { Pool, types } from 'pg';
-// import * as dotenv from 'dotenv';
 
 // // 1. Numbers (what we already put in place)
 // types.setTypeParser(1700, (val) => parseFloat(val));
 // types.setTypeParser(20, (val) => parseInt(val, 10));
 
-// dotenv.config();
 
 // // 2. Dates (global configuration)
 // const parseDate = (val: string) => new Date(val);
@@ -41,8 +39,6 @@ export const dbPool = {
             const response = await client.send(new GetSecretValueCommand({
                 SecretId: "Kosto/DatabaseURL"
             }));
-            const connectionString = response.SecretString;
-            console.log("DEBUG: Connection string recibida:", connectionString);
             pool = new Pool({
                 connectionString: response.SecretString,
                 ssl: { rejectUnauthorized: false },
@@ -56,8 +52,6 @@ export const dbPool = {
             const response = await client.send(new GetSecretValueCommand({
                 SecretId: "Kosto/DatabaseURL"
             }));
-            const connectionString = response.SecretString;
-            console.log("DEBUG: Connection string recibida:", connectionString);
             pool = new Pool({
                 connectionString: response.SecretString,
                 ssl: { rejectUnauthorized: false },
