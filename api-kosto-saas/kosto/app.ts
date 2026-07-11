@@ -1,18 +1,21 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { createResource, forceDeleteResource, getResources, softDeleteResource, updateResource } from './src/controllers/resource.controller';
 import { buildResponse } from './src/utils/response';
+import { handleApiError } from './src/utils/helper-api-error';
 import { getTenantFromHeader } from './src/utils/auth';
 import { processProduction } from './src/controllers/production.controller';
-import { upsertRecipeItem, forceDeleteRecipeItem, getRecipeItem, updateRecipeItem } from './src/controllers/recipe.controller';
+import { upsertRecipeItem, forceDeleteRecipeItem, getRecipeItem } from './src/controllers/recipe.controller';
 import { createProduct, forceDeleteProduct, getProducts, softDeleteProduct, updateProduct } from './src/controllers/product.controller';
 
 // Controllers for tenants and transactions
 import { createTenant, getTenant, updateTenant } from './src/controllers/tenant.controller';
 import { getTransaction, registerSale } from './src/controllers/transaction.controller';
-import { SubscriptionService } from './src/services/subscription.service';
 
 import { IIdentityService } from '@/models/identity.interface';
 import { CognitoIdentityService } from '@/services/cognito-identity.service';
+
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 const getBody = (event: APIGatewayProxyEvent) => {
     try { return event.body ? JSON.parse(event.body) : {}; } catch { return {}; }
@@ -81,20 +84,10 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
 
                 return buildResponse(200, { data: await getProducts(tenantId, isPreMade) });
             }
-            // if (method === 'POST') {
-            //     const b = getBody(event);
-            //     return buildResponse(201, { data: await createProduct(tenantId, b) });
-            // }
             if (method === 'POST') {
-                const isAllowed = await SubscriptionService.checkLimits(tenantId, 'products');
-                if (!isAllowed) {
-                    return {
-                        statusCode: 403,
-                        headers: { 'X-Limit-Exceeded': 'true' },
-                        body: JSON.stringify({ error: 'Subscription limit exceeded' })
-                    };
-                }
                 const b = getBody(event);
+                // El trigger en la BD lanzará el error si se supera el límite.
+                // handleApiError lo capturará automáticamente.
                 return buildResponse(201, { data: await createProduct(tenantId, b) });
             }
             if (method === 'PUT') {
@@ -109,19 +102,9 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
         // ========================================================
         if (path === '/recipes') {
             if (method === 'GET') return buildResponse(200, { data: await getRecipeItem(tenantId) });
-            // if (method === 'POST') {
-            //     const b = getBody(event);
-            //     return buildResponse(201, { data: await upsertRecipeItem(tenantId, b) });
-            // }
             if (method === 'POST') {
-                const isAllowed = await SubscriptionService.checkLimits(tenantId, 'resources');
-                if (!isAllowed) {
-                    return {
-                        statusCode: 403,
-                        headers: { 'X-Limit-Exceeded': 'true' },
-                        body: JSON.stringify({ error: 'Subscription limit exceeded' })
-                    };
-                }
+                // La lógica de límite la maneja el TRIGGER en la base de datos.
+                // Si el trigger falla, el error llega al 'catch' global y lo manejas con 'handleApiError'.
                 const b = getBody(event);
                 return buildResponse(201, { data: await upsertRecipeItem(tenantId, b) });
             }
@@ -173,19 +156,7 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
 
         if (path === '/sales') {
             if (method === 'GET') return buildResponse(200, { data: await getTransaction(tenantId) });
-            // if (method === 'POST') {
-            //     const b = getBody(event);
-            //     return buildResponse(201, { data: await registerSale(tenantId, b.reference_id, b.quantity, b.total_amount) });
-            // }
             if (method === 'POST') {
-                const isAllowed = await SubscriptionService.checkLimits(tenantId, 'transactions');
-                if (!isAllowed) {
-                    return {
-                        statusCode: 403,
-                        headers: { 'X-Limit-Exceeded': 'true' },
-                        body: JSON.stringify({ error: 'Subscription limit exceeded' })
-                    };
-                }
                 const b = getBody(event);
                 return buildResponse(201, { data: await registerSale(tenantId, b.reference_id, b.quantity, b.total_amount) });
             }
@@ -204,8 +175,7 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
 
         return buildResponse(404, { error: 'Route not found' });
     } catch (err: any) {
-        console.error('--- DETAILED ERROR ---');
-        console.error(err);
-        return buildResponse(500, { error: 'Internal Server Error', details: err.message });
+        return handleApiError(err);
     }
 };
+

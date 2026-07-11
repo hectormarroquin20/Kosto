@@ -1,11 +1,11 @@
 import { dbPool } from '../db/database';
-import { processProduction } from './production.controller'; // <-- Importing the SSOT
+import { processProduction } from './production.controller';
 
 export const registerSale = async (tenantId: string, productId: string, quantity: number, totalAmount: number) => {
     const client = await dbPool.connect();
 
     try {
-        await client.query('BEGIN'); // Starting the master transaction
+        await client.query('BEGIN');
 
         // 1. Verify the product type
         const productQuery = await client.query(
@@ -18,7 +18,6 @@ export const registerSale = async (tenantId: string, productId: string, quantity
 
         // 2. Business Logic
         if (isPreMade) {
-            // CAKE: Only deduct from the display shelf (already produced before)
             const updateProduct = await client.query(
                 `UPDATE product SET current_stock = current_stock - $1 
                  WHERE id = $2 AND tenant_id = $3 AND current_stock >= $1`,
@@ -26,11 +25,11 @@ export const registerSale = async (tenantId: string, productId: string, quantity
             );
             if (updateProduct.rowCount === 0) throw new Error('Insufficient product stock in display');
         } else {
-            // COFFEE (Make to Order): Call the magic, passing our transaction
             await processProduction(tenantId, productId, quantity, client);
         }
 
         // 3. Register the financial transaction
+        // El trigger 'trg_increment_usage' se disparará automáticamente al finalizar este INSERT
         const logQuery = `
             INSERT INTO transaction_log (tenant_id, type, reference_id, quantity, total_amount)
             VALUES ($1, 'SALE', $2, $3, $4)
@@ -38,14 +37,7 @@ export const registerSale = async (tenantId: string, productId: string, quantity
         `;
         const result = await client.query(logQuery, [tenantId, productId, quantity, totalAmount]);
 
-        // 4. Increment Usage Counter
-        await client.query(`
-            UPDATE tenant_usage
-            SET usage_count = usage_count + 1, updated_at = CURRENT_TIMESTAMP
-            WHERE tenant_id = $1;
-        `, [tenantId]);
-
-        await client.query('COMMIT'); // Saving the sale and production at the same time
+        await client.query('COMMIT');
         return result.rows[0];
 
     } catch (err) {

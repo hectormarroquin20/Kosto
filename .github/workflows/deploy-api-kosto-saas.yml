@@ -1,0 +1,36 @@
+name: Deploy API Backend
+
+on:
+  push:
+    branches:
+      - main # O la rama que uses para el despliegue
+    paths:
+      - 'api-kosto-saas/**'
+
+jobs:
+  deploy-api:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: api-kosto-saas
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup SAM CLI
+        uses: aws-actions/setup-sam@v2
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Build SAM
+        run: sam build
+
+      - name: Deploy to AWS
+        run: |
+          sam deploy --no-confirm-changeset \
+            --parameter-overrides DatabaseUrlParam="${{ secrets.DATABASE_URL }}" \
+            --capabilities CAPABILITY_IAM

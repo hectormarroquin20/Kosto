@@ -28,3 +28,15 @@ warm_containers = "EAGER"
 
 [default.local_start_lambda.parameters]
 warm_containers = "EAGER"
+
+version = 0.1
+
+[default.deploy.parameters]
+stack_name = "api-kosto-saas"
+region = "us-east-1"
+confirm_changeset = false # Omite la confirmación manual
+disable_rollback = false
+image_repositories = []
+# Aquí inyectas el secreto sin que te lo pida la terminal
+parameter_overrides = "DatabaseUrlParam='postgresql://tu_usuario:tu_password@tu_host:5432/tu_db'"
+capabilities = "CAPABILITY_IAM CAPABILITY_AUTO_EXPAND" # NECESARIO para que no falle por permisos

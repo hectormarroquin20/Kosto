@@ -1,0 +1,16 @@
+{
+    "sqltools.connections": [
+        {
+            "ssh": "Disabled",
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "database": "saas_app",
+            "username": "admin",
+            "name": "saas_app",
+            "group": "saas_app",
+            "password": "password123"
+        }
+    ]
+}

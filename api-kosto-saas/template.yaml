@@ -7,6 +7,12 @@ Globals:
     Timeout: 10
     MemorySize: 128
 
+Parameters:
+  DatabaseUrlParam:
+    Type: String
+    Description: URL de conexión a la base de datos (Neon.tech)
+    NoEcho: true
+
 Resources:
   # Ahora KostoApiGateway está correctamente dentro de Resources
   KostoApiGateway:
@@ -16,7 +22,8 @@ Resources:
       Cors:
         AllowMethods: "'GET,POST,OPTIONS,DELETE,PUT'"
         AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,x-tenant-id'"
-        AllowOrigin: "'http://localhost:4200'"
+        # AllowOrigin: "'http://localhost:4200'"
+        AllowOrigin: "'*'"
 
   KostoApiFunction:
     Type: AWS::Serverless::Function
@@ -28,43 +35,8 @@ Resources:
         - x86_64
       Environment:
         Variables:
-          DB_HOST: saas_postgres_dev
-          DB_USER: admin
-          DB_PASSWORD: password123
-          DB_NAME: saas_app
-          # Add these to ensure they are available in the Lambda environment
-          FREEMIUM_MAX_PRODUCTS: "15"
-          FREEMIUM_MAX_RESOURCES: "50"
-          FREEMIUM_MAX_TRANSACTIONS: "100"
-          FREEMIUM_MAX_RECIPES: "10"
-          FREEMIUM_MAX_USERS: "1"
-          FREEMIUM_CAN_EXPORT_DATA: "false"
-          FREEMIUM_CAN_ACCESS_REPORTING": "false"
-          FREEMIUM_CAN_ACCESS_ADVANCED_ANALYTICS: "false"
-          FREEMIUM_CUSTOM_BRANDING: "false"
-          FREEMIUM_API_ACCESS: "false"
-          FREEMIUM_PRIORITY_SUPPORT: "false"
-          PRO_MAX_PRODUCTS: "500"
-          PRO_MAX_RESOURCES: "500"
-          PRO_MAX_TRANSACTIONS: "1000"
-          PRO_MAX_RECIPES: "100"
-          PRO_MAX_USERS: "5"
-          PRO_CAN_EXPORT_DATA: "true"
-          PRO_CAN_ACCESS_REPORTING: "true"
-          PRO_CAN_ACCESS_ADVANCED_ANALYTICS: "false"
-          PRO_CUSTOM_BRANDING: "false"
-          PRO_API_ACCESS: "true"
-          BUSINESS_MAX_PRODUCTS: "5000"
-          BUSINESS_MAX_RESOURCES: "10000"
-          BUSINESS_MAX_TRANSACTIONS: "10000"
-          BUSINESS_MAX_RECIPES: "1000"
-          BUSINESS_MAX_USERS: "50"
-          BUSINESS_CAN_EXPORT_DATA: "true"
-          BUSINESS_CAN_ACCESS_REPORTING: "true"
-          BUSINESS_CAN_ACCESS_ADVANCED_ANALYTICS: "true"
-          BUSINESS_CUSTOM_BRANDING: "true"
-          BUSINESS_API_ACCESS: "true"
-          BUSINESS_PRIORITY_SUPPORT: "true"
+          DATABASE_URL: !Ref DatabaseUrlParam
+          # DATABASE_URL=postgresql://admin:password123@saas_postgres_dev:5432/saas_app?sslmode=disable
       Events:
         GetProducts:
           Type: Api
