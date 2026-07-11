@@ -33,31 +33,32 @@ const client = new SecretsManagerClient({ region: "us-east-1" });
 let pool: Pool | null = null;
 
 
+async function getOrInitializePool(): Promise<Pool> {
+    if (!pool) {
+        const response = await client.send(new GetSecretValueCommand({
+            SecretId: "Kosto/DatabaseURL"
+        }));
+
+        if (!response.SecretString) throw new Error("Secret not found");
+
+        pool = new Pool({
+            connectionString: response.SecretString,
+            ssl: { rejectUnauthorized: true },
+            max: 2,
+            connectionTimeoutMillis: 2000,
+            idleTimeoutMillis: 30000,
+        });
+    }
+    return pool;
+}
+
 export const dbPool = {
     connect: async () => {
-        if (!pool) {
-            const response = await client.send(new GetSecretValueCommand({
-                SecretId: "Kosto/DatabaseURL"
-            }));
-            pool = new Pool({
-                connectionString: response.SecretString,
-                ssl: { rejectUnauthorized: false },
-                max: 2
-            });
-        }
-        return pool.connect();
+        const p = await getOrInitializePool();
+        return p.connect();
     },
     query: async (text: string, params?: any[]) => {
-        if (!pool) {
-            const response = await client.send(new GetSecretValueCommand({
-                SecretId: "Kosto/DatabaseURL"
-            }));
-            pool = new Pool({
-                connectionString: response.SecretString,
-                ssl: { rejectUnauthorized: false },
-                max: 2
-            });
-        }
-        return pool.query(text, params);
+        const p = await getOrInitializePool();
+        return p.query(text, params);
     }
 };
