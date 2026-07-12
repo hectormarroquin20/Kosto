@@ -96,8 +96,6 @@ export class RegisterComponent {
       password: this.registerForm.value.password!
     };
 
-    console.log("PAYLOAD: ", payload)
-
     this.tenantService.createTenant(payload).subscribe({
       next: () => {
         this.isLoading.set(false);
