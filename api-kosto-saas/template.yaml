@@ -22,7 +22,6 @@ Resources:
       Cors:
         AllowMethods: "'GET,POST,OPTIONS,DELETE,PUT'"
         AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,x-tenant-id'"
-        # AllowOrigin: "'http://localhost:4200'"
         AllowOrigin: "'*'"
 
   KostoApiFunction:
@@ -31,6 +30,14 @@ Resources:
       CodeUri: .
       Handler: kosto/app.lambdaHandler
       Runtime: nodejs24.x
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - cognito-idp:AdminCreateUser
+                - cognito-idp:AdminSetUserPassword
+                - cognito-idp:AdminAddUserToGroup
+              Resource: "arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/us-east-1_eAzPdrLjW"
       Architectures:
         - x86_64
       Environment:
