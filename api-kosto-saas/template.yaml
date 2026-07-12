@@ -33,11 +33,6 @@ Resources:
       Runtime: nodejs24.x
       Architectures:
         - x86_64
-      Policies:
-      - Statement:
-          - Effect: Allow
-            Action: secretsmanager:GetSecretValue
-            Resource: "arn:aws:secretsmanager:us-east-1:221082192802:secret:Kosto/DatabaseURL-*"
       Environment:
         Variables:
           NODE_OPTIONS: nodejs24.x
