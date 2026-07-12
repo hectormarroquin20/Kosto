@@ -5,9 +5,17 @@ export const handleApiError = (err: any): APIGatewayProxyResult => {
     console.error('--- DETAILED ERROR ---', err);
 
     // Detection of Cognito error (Password Policy)
-    if (err.name === 'InvalidPasswordException') {
+    if (err.name === 'InvalidPasswordException' || err.message?.includes('password')) {
         return buildResponse(400, {
-            code: 'ERROR_PASSWORD_POLICY'
+            code: 'ERROR_PASSWORD_POLICY',
+            error: 'The password does not meet the security requirements.'
+        });
+    }
+
+    if (err.message === 'TENANT_ALREADY_EXISTS') {
+        return buildResponse(409, {
+            code: 'TENANT_EXISTS',
+            error: 'There is already a company registered with this email.'
         });
     }
 

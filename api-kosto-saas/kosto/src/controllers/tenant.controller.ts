@@ -5,18 +5,30 @@ import { Tenant } from '../models/tenant.inteface';
 const TENANT_UPDATABLE_COLUMNS = ['company_name', 'is_active'];
 const VALID_TIERS = ['freemium', 'pro', 'business'];
 
-export const createTenant = async (companyName: string, tier: string = 'freemium') => {
+export const createTenant = async (companyName: string, tier: string = 'freemium', admin_email: string) => {
     const client = await dbPool.connect();
     try {
         const safeTier = VALID_TIERS.includes(tier) ? tier : 'freemium';
 
         const queryText = `
-            INSERT INTO tenant (company_name, tier)
-            VALUES ($1, $2)
-            RETURNING id, company_name, tier, created_at;
+            INSERT INTO tenant (company_name, tier, admin_email)
+            VALUES ($1, $2, $3)
+            ON CONFLICT (admin_email) DO NOTHING
+            RETURNING id;
         `;
-        const result = await client.query(queryText, [companyName, safeTier]);
+        const result = await client.query(queryText, [companyName, safeTier, admin_email]);
         return result.rows[0];
+    } finally {
+        client.release();
+    }
+};
+
+export const findTenantByEmail = async (email: string) => {
+    const client = await dbPool.connect();
+    try {
+        const query = "SELECT id FROM tenant WHERE admin_email = $1 LIMIT 1";
+        const result = await client.query(query, [email]);
+        return result.rows[0] || null;
     } finally {
         client.release();
     }

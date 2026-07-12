@@ -209,7 +209,8 @@
         "LOADING": "Procesando configuración...",
         "BTN": "Registrar Empresa",
         "ALREADY_HAVE_ACCOUNT": "¿Ya tienes una cuenta de Kosto?",
-        "GO_TO_LOGIN": "Ir al portal de acceso"
+        "GO_TO_LOGIN": "Ir al portal de acceso",
+        "PASSWORD_INVALID_FORMAT": "La contraseña no cumple con los requisitos de seguridad necesarios."
     },
     "ADD_STOCK_DIALOG": {
         "QUANTITY": "Cantidad a agregar",
@@ -235,6 +236,15 @@
     },
     "ERRORS": {
         "ERROR_PASSWORD_POLICY": "Tu contraseña es demasiado débil. Debe incluir números, letras y al menos un símbolo.",
+        "TENANT_EXISTS": "Ya existe una empresa registrada con este correo electrónico.",
         "ERROR_GENERIC": "Ocurrió un error inesperado. Por favor intenta más tarde."
+    },
+    "PASSWORD_RULES": {
+        "TITLE": "La contraseña debe cumplir:",
+        "LENGTH": "Mínimo 8 caracteres",
+        "NUMBER": "Contener al menos 1 número",
+        "SPECIAL": "Contener al menos 1 carácter especial",
+        "UPPER": "Contener al menos 1 mayúscula",
+        "LOWER": "Contener al menos 1 minúscula"
     }
 }

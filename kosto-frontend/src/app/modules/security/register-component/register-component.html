@@ -41,26 +41,59 @@
         <mat-form-field appearance="outline">
             <mat-label>{{ 'REGISTER.EMAIL' | translate }}</mat-label>
             <input matInput formControlName="email" type="email">
-            @if (registerForm.controls.email.hasError('email')) {
+            <!-- Email error -->
+            @if (registerForm.controls.email.invalid && registerForm.controls.email.dirty) {
             <mat-error>{{ 'REGISTER.EMAIL_INVALID' | translate }}</mat-error>
             }
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+
+        <mat-form-field appearance="outline" class="w-full">
             <mat-label>{{ 'REGISTER.PASSWORD' | translate }}</mat-label>
             <input matInput formControlName="password" [type]="hidePassword() ? 'password' : 'text'">
             <button mat-icon-button matSuffix (click)="togglePassword()" type="button">
                 <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
             </button>
-            @if (registerForm.controls.password.hasError('minlength')) {
-            <mat-error>{{ 'REGISTER.PASSWORD_MIN_LENGTH' | translate }}</mat-error>
-            }
         </mat-form-field>
+        <!-- Password error (using the defined pattern) -->
+        @if (registerForm.controls.password.invalid && registerForm.controls.password.dirty) {
+        <mat-error>{{ 'REGISTER.PASSWORD_INVALID_FORMAT' | translate }}</mat-error>
+        }
+
+        @if (registerForm.controls.password.dirty) {
+        <div class="mt-2 space-y-1 text-xs">
+            <p class="font-semibold text-gray-700">{{ 'PASSWORD_RULES.TITLE' | translate }}</p>
+
+            <div class="grid grid-cols-2 gap-x-2 gap-y-1">
+                <span class="text-gray-400 transition-colors duration-300"
+                    [class.text-green-700]="passwordStatus().length">
+                    {{ passwordStatus().length ? '✔' : '○' }} {{ 'PASSWORD_RULES.LENGTH' | translate }}
+                </span>
+                <span class="text-gray-400 transition-colors duration-300"
+                    [class.text-green-700]="passwordStatus().number">
+                    {{ passwordStatus().number ? '✔' : '○' }} {{ 'PASSWORD_RULES.NUMBER' | translate }}
+                </span>
+                <span class="text-gray-400 transition-colors duration-300"
+                    [class.text-green-700]="passwordStatus().special">
+                    {{ passwordStatus().special ? '✔' : '○' }} {{ 'PASSWORD_RULES.SPECIAL' | translate }}
+                </span>
+                <span class="text-gray-400 transition-colors duration-300"
+                    [class.text-green-700]="passwordStatus().upper">
+                    {{ passwordStatus().upper ? '✔' : '○' }} {{ 'PASSWORD_RULES.UPPER' | translate }}
+                </span>
+                <span class="text-gray-400 transition-colors duration-300"
+                    [class.text-green-700]="passwordStatus().lower">
+                    {{ passwordStatus().lower ? '✔' : '○' }} {{ 'PASSWORD_RULES.LOWER' | translate }}
+                </span>
+            </div>
+        </div>
+        }
 
         <button mat-flat-button color="primary" type="submit" [disabled]="registerForm.invalid || isLoading()"
             class="text-base mt-4 py-6">
             {{ isLoading() ? ('REGISTER.LOADING' | translate) : ('REGISTER.BTN' | translate) }}
         </button>
+
     </form>
 
     <div class="text-center mt-4 text-sm">

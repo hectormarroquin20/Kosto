@@ -1,30 +1,31 @@
 import { CognitoIdentityService } from "./cognito-identity.service";
 import { IIdentityService } from "@/models/identity.interface";
-import { createTenant, forceDeleteTenant } from "@/controllers/tenant.controller";
+import { createTenant, findTenantByEmail, forceDeleteTenant } from "@/controllers/tenant.controller";
 
 export const registerTenantFlow = async (data: any) => {
-    // 1. Create in the database (with its own internal connection)
-    const tenant = await createTenant(data.company_name, data.tier);
+    // 1. Pre-verification (Idempotency)
+    const existing = await findTenantByEmail(data.email);
+    if (existing) throw new Error("TENANT_ALREADY_EXISTS");
+
+    // 2. Attempt creation in DB
+    const tenant = await createTenant(data.company_name, data.tier, data.email);
     const identityService: IIdentityService = new CognitoIdentityService();
 
     try {
-        // 2. Attempt to register in Cognito
+        // 3. Creation in Cognito
         await identityService.createUser({
             email: data.email,
             password: data.password,
             tenantId: tenant.id
         });
-
         return tenant;
     } catch (error) {
-        console.error(`ERROR: Registro de tenant ${tenant.id} falló en Cognito. Iniciando compensación...`);
-        try {
-            await forceDeleteTenant(tenant.id);
-            console.info(`Compensación exitosa: Tenant ${tenant.id} borrado.`);
-        } catch (cleanupError) {
-            // Aquí es donde disparas una alerta de nivel crítico
-            console.error(`CRITICAL: La compensación falló para el tenant ${tenant.id}. Requiere atención manual.`, cleanupError);
-        }
+        // 4. Compensation (Only if Cognito failed)
+        console.error(`ERROR: Failure in Cognito. Initiating rollback for ${tenant.id}...`);
+        await forceDeleteTenant(tenant.id).catch(e => {
+            // Critical log: Send to SNS or Slack webhook
+            console.error(`CRITICAL: Failure in rollback for ${tenant.id}`, e);
+        });
         throw error;
     }
 };

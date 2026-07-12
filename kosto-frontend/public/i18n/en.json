@@ -206,7 +206,8 @@
         "LOADING": "Processing configuration...",
         "BTN": "Register Company",
         "ALREADY_HAVE_ACCOUNT": "Already have a Kosto account?",
-        "GO_TO_LOGIN": "Go to login portal"
+        "GO_TO_LOGIN": "Go to login portal",
+        "PASSWORD_INVALID_FORMAT": "La contraseña no cumple con los requisitos de seguridad necesarios."
     },
     "ADD_STOCK_DIALOG": {
         "QUANTITY": "Quantity to add",
@@ -232,6 +233,15 @@
     },
     "ERRORS": {
         "ERROR_PASSWORD_POLICY": "Your password is too weak. It must include numbers, letters, and at least one symbol.",
+        "TENANT_EXISTS": "A company is already registered with this email.",
         "ERROR_GENERIC": "An unexpected error occurred. Please try again later."
+    },
+    "PASSWORD_RULES": {
+        "TITLE": "The password must meet:",
+        "LENGTH": "Minimum 8 characters",
+        "NUMBER": "Contain at least 1 number",
+        "SPECIAL": "Contain at least 1 special character",
+        "UPPER": "Contain at least 1 uppercase letter",
+        "LOWER": "Contain at least 1 lowercase letter"
     }
 }

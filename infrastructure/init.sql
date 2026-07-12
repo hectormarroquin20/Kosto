@@ -8,10 +8,12 @@ CREATE TABLE tenant (
     company_name VARCHAR(255) NOT NULL,
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
     tier subscription_tier DEFAULT 'freemium',
+    admin_email VARCHAR(255) NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 CREATE INDEX idx_tenant_tier ON tenant(tier);
+CREATE UNIQUE INDEX idx_tenant_admin_email ON tenant(admin_email);
 -- 3. Tenant Usage Tracking
 CREATE TABLE tenant_usage (
     tenant_id UUID PRIMARY KEY REFERENCES tenant(id) ON DELETE CASCADE,
