@@ -6,7 +6,7 @@ Globals:
   Function:
     Timeout: 10
     MemorySize: 128
-# If you had other parameters, add them here below this same block
+
 Parameters:
   DatabaseUrlParam:
     Type: String
@@ -14,7 +14,6 @@ Parameters:
     NoEcho: true
 
 Resources:
-  # Now KostoApiGateway is correctly within Resources
   KostoApiGateway:
     Type: AWS::Serverless::Api
     Properties:
@@ -44,8 +43,10 @@ Resources:
         Variables:
           NODE_OPTIONS: nodejs24.x
           DATABASE_URL: !Ref DatabaseUrlParam
-          # DATABASE_URL: postgresql://admin:password123@saas_postgres_dev:5432/saas_app?sslmode=disable
       Events:
+        OptionsProducts:
+          Type: Api
+          Properties: { RestApiId: !Ref KostoApiGateway, Path: /products, Method: OPTIONS }
         GetProducts:
           Type: Api
           Properties: { RestApiId: !Ref KostoApiGateway, Path: /products, Method: GET }
@@ -58,6 +59,9 @@ Resources:
         DeleteProducts:
           Type: Api
           Properties: { RestApiId: !Ref KostoApiGateway, Path: /products, Method: DELETE }
+        OptionsResources:
+          Type: Api
+          Properties: { RestApiId: !Ref KostoApiGateway, Path: /resources, Method: OPTIONS }
         GetResources:
           Type: Api
           Properties: { RestApiId: !Ref KostoApiGateway, Path: /resources, Method: GET }
@@ -70,6 +74,9 @@ Resources:
         DeleteResources:
           Type: Api
           Properties: { RestApiId: !Ref KostoApiGateway, Path: /resources, Method: DELETE }
+        OptionsRecipes:
+          Type: Api
+          Properties: { RestApiId: !Ref KostoApiGateway, Path: /recipes, Method: OPTIONS }
         GetRecipes:
           Type: Api
           Properties: { RestApiId: !Ref KostoApiGateway, Path: /recipes, Method: GET }
@@ -82,15 +89,24 @@ Resources:
         DeleteRecipes:
           Type: Api
           Properties: { RestApiId: !Ref KostoApiGateway, Path: /recipes, Method: DELETE }
+        OptionsSales:
+          Type: Api
+          Properties: { RestApiId: !Ref KostoApiGateway, Path: /sales, Method: OPTIONS }
         GetSales:
           Type: Api
           Properties: { RestApiId: !Ref KostoApiGateway, Path: /sales, Method: GET }
         PostSales:
           Type: Api
           Properties: { RestApiId: !Ref KostoApiGateway, Path: /sales, Method: POST }
+        OptionsTenants:
+          Type: Api
+          Properties: { RestApiId: !Ref KostoApiGateway, Path: /tenants, Method: OPTIONS }
         GetTenants:
           Type: Api
           Properties: { RestApiId: !Ref KostoApiGateway, Path: '/tenants', Method: GET }
+        OptionsTenantsId:
+          Type: Api
+          Properties: { RestApiId: !Ref KostoApiGateway, Path: '/tenants/{id}', Method: OPTIONS }
         GetTenantById:
           Type: Api
           Properties: { RestApiId: !Ref KostoApiGateway, Path: '/tenants/{id}', Method: GET }
@@ -100,10 +116,12 @@ Resources:
         UpdateTenants:
           Type: Api
           Properties: { RestApiId: !Ref KostoApiGateway, Path: '/tenants/{id}', Method: PUT }
+        OptionsProductions:
+          Type: Api
+          Properties: { RestApiId: !Ref KostoApiGateway, Path: /production, Method: OPTIONS }
         PostProduction:
           Type: Api
           Properties: { RestApiId: !Ref KostoApiGateway, Path: /production, Method: POST }
-    # Metadata must be at the same level as Properties, not inside
     Metadata:
       BuildMethod: esbuild
       BuildProperties:
