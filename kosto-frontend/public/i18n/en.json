@@ -229,5 +229,9 @@
         "MILLILITERS": "Milliliters (ml)",
         "GRAMS": "Grams (gr)",
         "UNITS": "Units (unid)"
+    },
+    "ERRORS": {
+        "ERROR_PASSWORD_POLICY": "Your password is too weak. It must include numbers, letters, and at least one symbol.",
+        "ERROR_GENERIC": "An unexpected error occurred. Please try again later."
     }
 }

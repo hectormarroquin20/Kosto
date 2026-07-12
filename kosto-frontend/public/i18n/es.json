@@ -232,5 +232,9 @@
         "MILLILITERS": "Mililitros (ml)",
         "GRAMS": "Gramos (gr)",
         "UNITS": "Unidades (unid)"
+    },
+    "ERRORS": {
+        "ERROR_PASSWORD_POLICY": "Tu contraseña es demasiado débil. Debe incluir números, letras y al menos un símbolo.",
+        "ERROR_GENERIC": "Ocurrió un error inesperado. Por favor intenta más tarde."
     }
 }
