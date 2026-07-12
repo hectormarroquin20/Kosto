@@ -8,11 +8,12 @@ import { upsertRecipeItem, forceDeleteRecipeItem, getRecipeItem } from './src/co
 import { createProduct, forceDeleteProduct, getProducts, softDeleteProduct, updateProduct } from './src/controllers/product.controller';
 
 // Controllers for tenants and transactions
-import { createTenant, getTenant, updateTenant } from './src/controllers/tenant.controller';
+import { getTenant, updateTenant } from './src/controllers/tenant.controller';
 import { getTransaction, registerSale } from './src/controllers/transaction.controller';
 
 import { IIdentityService } from '@/models/identity.interface';
 import { CognitoIdentityService } from '@/services/cognito-identity.service';
+import { registerTenantFlow } from '@/services/tenantService';
 
 const getBody = (event: APIGatewayProxyEvent) => {
     try { return event.body ? JSON.parse(event.body) : {}; } catch { return {}; }
@@ -136,16 +137,8 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
             if (method === 'POST') {
                 const b = getBody(event);
 
-                // 1. Create in DB (Your current logic)
-                const tenant = await createTenant(b.company_name, b.tier);
-
-                // 2. Delegate user creation to a decoupled service
-                // This could be a call to an "IdentityManager" that we'll decide what to implement
-                await identityService.createUser({
-                    email: b.email,
-                    password: b.password,
-                    tenantId: tenant.id
-                });
+                // 1. Create a register
+                const tenant = await registerTenantFlow(b);
 
                 return buildResponse(201, { data: tenant });
             }

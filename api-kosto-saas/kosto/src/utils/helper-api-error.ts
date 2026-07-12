@@ -4,7 +4,14 @@ import { buildResponse } from "./response";
 export const handleApiError = (err: any): APIGatewayProxyResult => {
     console.error('--- DETAILED ERROR ---', err);
 
-    // Si el error viene de Postgres (triggered por RAISE EXCEPTION)
+    // Detection of Cognito error (Password Policy)
+    if (err.name === 'InvalidPasswordException') {
+        return buildResponse(400, {
+            code: 'ERROR_PASSWORD_POLICY'
+        });
+    }
+
+    // If the error comes from Postgres (triggered by RAISE EXCEPTION)
     if (err.message && err.message.includes('LIMIT_EXCEEDED')) {
         return {
             statusCode: 403,
@@ -13,7 +20,7 @@ export const handleApiError = (err: any): APIGatewayProxyResult => {
         };
     }
 
-    // Errores de validación personalizados
+    // Custom validation errors
     if (err.message.includes('ValidationError')) {
         return buildResponse(400, { error: err.message });
     }

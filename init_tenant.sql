@@ -20,7 +20,7 @@
 -- ALTER TABLE tenant ADD COLUMN is_active BOOLEAN NOT NULL DEFAULT TRUE;
 -- ALTER TABLE tenant ADD COLUMN updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP;
 -- Delete FROM tenant
--- WHERE id = '54a02c38-5a5a-4b4a-b1be-a6f0fe237a81';
+-- WHERE id = '8adcb3c5-cd9a-410b-9623-68e237dc4f0c';
 -- CREATE INDEX idx_tenant_tier ON tenant(tier);
 -- CREATE INDEX idx_transaction_tenant_date ON transaction_log(tenant_id, transaction_date);
 -- CREATE TABLE tenant_usage (
@@ -29,7 +29,7 @@
 --     usage_count INTEGER NOT NULL DEFAULT 0,
 --     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 -- );
-UPDATE tenant -- SET tier = 'business'
-    -- SET tier = 'pro'
-SET tier = 'freemium'
-WHERE id = '79c6022d-d6d9-414c-bf34-a33e33f42187';
+-- UPDATE tenant -- SET tier = 'business'
+--     -- SET tier = 'pro'
+-- SET tier = 'freemium'
+-- WHERE id = '79c6022d-d6d9-414c-bf34-a33e33f42187';
