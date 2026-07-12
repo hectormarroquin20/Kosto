@@ -6,5 +6,5 @@ export const environment = {
     postLogoutRedirectUri: 'https://d84l1y8p4kdic.cloudfront.net',
     // redirectUrl: 'd8jpbx679xp2v.cloudfront.net',
     // postLogoutRedirectUri: 'https://d8jpbx679xp2v.cloudfront.net',
-    redirectUrl: window.location.origin + '/callback',
+    redirectUrl: window.location.origin + '/products',
 };
