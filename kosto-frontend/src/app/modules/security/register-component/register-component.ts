@@ -17,6 +17,7 @@ import { TenantService } from '../../../core/services/tenant.service.js';
 import { FormKostoComponent } from "@/components/form-kosto/form-kosto";
 
 import { toSignal } from '@angular/core/rxjs-interop';
+import { TenantModel } from '@/core/models/tenant.inteface.js';
 
 @Component({
   selector: 'app-register-component',
@@ -91,7 +92,13 @@ export class RegisterComponent {
 
     this.isLoading.set(true);
 
-    this.tenantService.createTenant(this.registerForm.value).subscribe({
+    const payload: TenantModel = {
+      company_name: this.registerForm.value.companyName!,
+      email: this.registerForm.value.email!,
+      password: this.registerForm.value.password!
+    };
+
+    this.tenantService.createTenant(payload).subscribe({
       next: () => {
         this.isLoading.set(false);
         this.router.navigate(['/login']);
