@@ -1,10 +1,10 @@
-import { Component, computed, inject, OnInit, signal, WritableSignal } from '@angular/core';
+import { Component, computed, inject, OnInit } from '@angular/core';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { DOCUMENT } from '@angular/common';
 
-// Importaciones de Angular Material
-import { MatToolbarModule } from '@angular/material/toolbar'; // <-- Resolves the error of mat-toolbar
-import { MatButtonModule } from '@angular/material/button';   // <-- Resolves the error if you use mat-button
+// Angular Material imports
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -42,8 +42,8 @@ import { AdService } from './core/services/ad.service';
 })
 export class App implements OnInit {
   private document = inject(DOCUMENT);
-  private tenantService = inject(TenantService); // Already there
-  private readonly authService = inject(IAuthService); // Injects the facade
+  private tenantService = inject(TenantService);
+  private readonly authService = inject(IAuthService);
   private translate = inject(TranslateService);
   private router = inject(Router);
   public modalService = inject(SubscriptionModalService);
@@ -71,7 +71,7 @@ export class App implements OnInit {
             // 2. IMPORTANT: Update the central Tenant signal so AdService works!
             this.tenantService.tenant.set(tenantData);
           },
-          error: () => console.log("No se pudo cargar el nombre de la empresa")
+          error: () => console.log("Could not load company name")
         });
       }
     }
@@ -107,11 +107,11 @@ export class App implements OnInit {
   }
 
   async signOut() {
-    // Limpieza local
+    // Local cleanup
     localStorage.clear();
     sessionStorage.clear();
 
-    // Redirección al endpoint de LOGOUT
+    // Redirect to LOGOUT endpoint
     const cognitoDomain = 'https://us-east-1eazpdrljw.auth.us-east-1.amazoncognito.com';
     const clientId = '4m41ibsf6p1il704jiosr80m0p';
     const logoutUri = encodeURIComponent('http://localhost:4200/login');
