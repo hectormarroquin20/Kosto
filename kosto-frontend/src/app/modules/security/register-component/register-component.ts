@@ -50,16 +50,9 @@ export class RegisterComponent {
 
   private passwordValue = signal('');
 
-  constructor() {
-    this.registerForm.controls.password.valueChanges.subscribe(val => {
-      this.passwordValue.set(val || '');
-    });
-  }
-
   // Reactive strict form
   registerForm = this.fb.group({
     companyName: ['', [Validators.required, Validators.minLength(3)]],
-    // Regex: asegura texto, @, texto, punto, y al menos 2 caracteres al final
     email: ['', [
       Validators.required,
       Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
@@ -67,10 +60,15 @@ export class RegisterComponent {
     password: ['', [
       Validators.required,
       Validators.minLength(8),
-      // Regex: 1 mayus, 1 minus, 1 num, 1 especial
       Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/)
     ]]
   });
+
+  constructor() {
+    this.registerForm.controls.password.valueChanges.subscribe(val => {
+      this.passwordValue.set(val || '');
+    });
+  }
 
   togglePassword() {
     this.hidePassword.update(value => !value);
