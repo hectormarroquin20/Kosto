@@ -4,6 +4,7 @@ import { createTenant, findTenantByEmail, forceDeleteTenant } from "@/controller
 
 export const registerTenantFlow = async (data: any) => {
     // 1. Pre-verification (Idempotency)
+    console.log("DATA: ", data)
     const existing = await findTenantByEmail(data.email);
     if (existing) throw new Error("TENANT_ALREADY_EXISTS");
 
