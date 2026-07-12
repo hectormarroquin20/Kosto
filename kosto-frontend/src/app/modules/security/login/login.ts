@@ -35,7 +35,6 @@ import { FormKostoComponent } from '@/components/form-kosto/form-kosto';
 export class Login {
   private fb = inject(FormBuilder);
   private oidcSecurityService = inject(OidcSecurityService);
-  //private router = inject(Router);
 
   loginForm: FormGroup = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
