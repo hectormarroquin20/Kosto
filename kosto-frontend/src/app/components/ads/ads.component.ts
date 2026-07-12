@@ -5,7 +5,7 @@ import { AdService } from '../../core/services/ad.service';
   selector: 'app-ad-banner',
   standalone: true,
   styles: [`.ad-banner {
-      width: 300px; /* O el tamaño que prefieras para tu publicidad */
+      width: 300px; /* Or the size you prefer for your ads */
       height: 100%;
       background-color: #f8f9fa;
       border-left: 1px solid #ddd;
