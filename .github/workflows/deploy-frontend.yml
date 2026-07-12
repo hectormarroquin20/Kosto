@@ -35,7 +35,7 @@ jobs:
           aws-region: us-east-1
 
       - name: Sync to S3
-        run: aws s3 sync dist/kosto-frontend/ s3://insummi-web-prod --delete
+        run: aws s3 sync dist/kosto-frontend/browser/  s3://insummi-web-prod --delete
 
       - name: Invalidate CloudFront Cache
         run: aws cloudfront create-invalidation --distribution-id ${{ secrets.FRONTEND_CLOUDFRONT_DIST_ID }} --paths "/*"
