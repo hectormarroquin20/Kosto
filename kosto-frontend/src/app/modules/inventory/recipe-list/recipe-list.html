@@ -1,67 +1,81 @@
 <app-main-kosto [title]="'RECIPES.TITLE' | translate" [subtitle]="'RECIPES.SUBTITLE' | translate">
 
-    <button kosto-actions mat-raised-button color="primary" routerLink="/recipes/new">
-        <mat-icon>add</mat-icon> {{ 'RECIPES.NEW_BTN' | translate }}
+    <!-- Botón estilo píldora -->
+    <button kosto-actions mat-button routerLink="/recipes/new"
+        class="!bg-gradient-to-r !from-blue-500 !to-purple-600 !text-white !rounded-full !px-6 !py-1 hover:!shadow-lg transition-shadow">
+        <div class="flex items-center gap-1">
+            <mat-icon class="!m-0">add</mat-icon>
+            <span class="font-medium">{{ 'RECIPES.NEW_BTN' | translate }}</span>
+        </div>
     </button>
 
-    <mat-form-field appearance="outline" class="w-full mb-4">
+    <!-- Form Field transparente -->
+    <mat-form-field appearance="outline" class="w-full mb-4 !bg-transparent">
         <mat-label>{{ 'RECIPES.FILTER_LABEL' | translate }}</mat-label>
         <input matInput (keyup)="filter.set($any($event.target).value)"
             [placeholder]="'RECIPES.FILTER_PLACEHOLDER' | translate">
     </mat-form-field>
 
     @if (isLoading()) {
-    <div class="text-center p-12">
+    <div class="text-center p-12 text-slate-500 font-medium">
         <p>{{ 'RECIPES.LOADING' | translate }}</p>
     </div>
     } @else {
-    <div class="table-responsive">
-        <table mat-table [dataSource]="filteredRecipes()" class="mat-elevation-z2 w-full">
+    <div class="table-responsive overflow-x-auto">
+        <!-- Tabla transparente -->
+        <table mat-table [dataSource]="filteredRecipes()" class="w-full !bg-transparent !shadow-none">
 
             <ng-container matColumnDef="product_id">
-                <th mat-header-cell *matHeaderCellDef> {{ 'RECIPES.TABLE.PRODUCT' | translate }} </th>
-                <td mat-cell *matCellDef="let element">
+                <th mat-header-cell *matHeaderCellDef class="!text-slate-800 !font-bold !text-sm"> {{
+                    'RECIPES.TABLE.PRODUCT' | translate }} </th>
+                <td mat-cell *matCellDef="let element" class="!text-slate-800">
                     {{ productMap().get(element.product_id) || ('RECIPES.LOADING_TEXT' | translate) }}
                 </td>
             </ng-container>
 
             <ng-container matColumnDef="resource_id">
-                <th mat-header-cell *matHeaderCellDef> {{ 'RECIPES.TABLE.RESOURCE' | translate }} </th>
+                <th mat-header-cell *matHeaderCellDef class="!text-slate-800 !font-bold !text-sm"> {{
+                    'RECIPES.TABLE.RESOURCE' | translate }} </th>
                 <td mat-cell *matCellDef="let element">
-                    <div class="font-medium">{{
-                        resourceMap().get(element.resource_id)?.name ||
+                    <div class="font-medium !text-slate-800">{{ resourceMap().get(element.resource_id)?.name ||
                         ('RECIPES.LOADING_TEXT' | translate) }}</div>
                     <small
-                        [style.color]="hasSufficientStock(element.resource_id, element.required_quantity) ? 'green' : 'red'">
-                        {{ (hasSufficientStock(element.resource_id, element.required_quantity) ?
-                        'RECIPES.STOCK.OK'
-                        : 'RECIPES.STOCK.INSUFFICIENT') | translate }}
+                        [class]="hasSufficientStock(element.resource_id, element.required_quantity) ? 'text-emerald-500' : 'text-red-500'">
+                        {{ (hasSufficientStock(element.resource_id, element.required_quantity) ? 'RECIPES.STOCK.OK' :
+                        'RECIPES.STOCK.INSUFFICIENT') | translate }}
                     </small>
                 </td>
             </ng-container>
 
             <ng-container matColumnDef="required_quantity">
-                <th mat-header-cell *matHeaderCellDef> {{ 'RECIPES.TABLE.QUANTITY' | translate }} </th>
-                <td mat-cell *matCellDef="let element"> {{element.required_quantity}} </td>
+                <th mat-header-cell *matHeaderCellDef class="!text-slate-800 !font-bold !text-sm"> {{
+                    'RECIPES.TABLE.QUANTITY' | translate }} </th>
+                <td mat-cell *matCellDef="let element" class="!text-slate-600"> {{element.required_quantity}} </td>
             </ng-container>
 
             <ng-container matColumnDef="actions">
-                <th mat-header-cell *matHeaderCellDef> {{ 'RECIPES.TABLE.ACTIONS' | translate }} </th>
+                <th mat-header-cell *matHeaderCellDef class="!text-slate-800 !font-bold !text-sm"> {{
+                    'RECIPES.TABLE.ACTIONS' | translate }} </th>
                 <td mat-cell *matCellDef="let element">
-                    <button mat-icon-button color="primary" (click)="onEdit(element)">
-                        <mat-icon>edit</mat-icon>
-                    </button>
-                    <button mat-icon-button color="warn" (click)="onDelete(element.id)">
-                        <mat-icon>delete</mat-icon>
-                    </button>
+                    <div class="flex gap-1 items-center">
+                        <button mat-icon-button (click)="onEdit(element)"
+                            class="!text-slate-400 hover:!text-blue-500 transition-colors">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <button mat-icon-button (click)="onDelete(element.id)"
+                            class="!text-slate-400 hover:!text-red-500 transition-colors">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
                 </td>
             </ng-container>
 
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns" class="!bg-transparent"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+                class="!bg-transparent hover:!bg-slate-50/50 transition-colors !border-b !border-slate-200"></tr>
 
             <tr class="mat-row" *matNoDataRow>
-                <td class="mat-cell" colspan="4" class="text-center p-8">
+                <td class="mat-cell text-center p-8 text-slate-500 font-medium" colspan="4">
                     {{ 'RECIPES.NO_DATA' | translate }}
                 </td>
             </tr>

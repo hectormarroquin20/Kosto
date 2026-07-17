@@ -1,0 +1,14 @@
+/* Estilos globales para estandarizar tus 15+ formularios */
+.kosto-form-field {
+    .mat-mdc-form-field-outline {
+        background-color: rgba(255, 255, 255, 0.5);
+        /* Fondo suave */
+        border-radius: 8px;
+    }
+
+    .mat-mdc-input-element {
+        color: #1e293b !important;
+        /* Slate-800 */
+        font-weight: 500;
+    }
+}

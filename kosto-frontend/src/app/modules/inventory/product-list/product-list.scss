@@ -1,0 +1,12 @@
+// ... existing code ...
+.table-responsive {
+    overflow-x: auto;
+    width: 100%;
+
+    table {
+        min-width: 600px;
+        /* Ensures the table doesn't get squashed on mobile */
+    }
+}
+
+// ... existing code ...

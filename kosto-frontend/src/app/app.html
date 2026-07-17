@@ -1,97 +1,115 @@
 @if (isLoggedIn()) {
-<mat-sidenav-container class="sidenav-container h-screen">
+<mat-sidenav-container class="sidenav-container h-screen ">
 
-  <mat-sidenav #sidenav [mode]="isMobile() ? 'over' : 'side'" [opened]="!isMobile()" class="sidenav">
-    <mat-toolbar color="primary">Kosto SaaS</mat-toolbar>
+  <!-- 1. DEGRADADO OSCURO: Aplicado a todo el contenedor sidenav -->
+  <!-- TAILWIND AL MÁXIMO: 
+       Añadimos 'w-[200px] md:w-[250px]' para controlar el ancho desde aquí y borrar el CSS -->
+  <mat-sidenav #sidenav [mode]="isMobile() ? 'over' : 'side'" [opened]="!isMobile()"
+    class="bg-gradient-to-br from-blue-900 to-purple-700 border-none w-[200px] md:w-[250px]">
 
-    <mat-nav-list (click)="isMobile() ? sidenav.close() : null">
-      <a mat-list-item routerLink="/products">
-        <mat-icon matListItemIcon>inventory</mat-icon>
-        <div matListItemTitle>{{ 'NAV.PRODUCTS' | translate }}</div>
+    <!-- TOOLBAR LATERAL: Usamos !bg-transparent, !text-white, !shadow-none y !rounded-none -->
+    <mat-toolbar class="!bg-transparent !text-white !shadow-none !rounded-none border-b border-white/10">
+      Kosto SaaS
+    </mat-toolbar>
+
+    <!-- LISTA DE NAVEGACIÓN -->
+    <mat-nav-list (click)="isMobile() ? sidenav.close() : null" class="!bg-transparent">
+
+      <!-- Usamos hover:!bg-white/10 para el efecto al pasar el mouse directamente en el <a> -->
+      <a mat-list-item routerLink="/products" class="hover:!bg-white/10 transition-colors">
+        <mat-icon matListItemIcon class="!text-white">inventory</mat-icon>
+        <div matListItemTitle class="!text-white">{{ 'NAV.PRODUCTS' | translate }}</div>
       </a>
 
-      <a mat-list-item routerLink="/resources">
-        <mat-icon matListItemIcon>category</mat-icon>
-        <div matListItemTitle>{{ 'NAV.RESOURCES' | translate }}</div>
+      <a mat-list-item routerLink="/resources" class="hover:!bg-white/10 transition-colors">
+        <mat-icon matListItemIcon class="!text-white">category</mat-icon>
+        <div matListItemTitle class="!text-white">{{ 'NAV.RESOURCES' | translate }}</div>
       </a>
 
-      <a mat-list-item routerLink="/recipes">
-        <mat-icon matListItemIcon>receipt_long</mat-icon>
-        <div matListItemTitle>{{ 'NAV.RECIPES' | translate }}</div>
+      <a mat-list-item routerLink="/recipes" class="hover:!bg-white/10 transition-colors">
+        <mat-icon matListItemIcon class="!text-white">receipt_long</mat-icon>
+        <div matListItemTitle class="!text-white">{{ 'NAV.RECIPES' | translate }}</div>
       </a>
 
-      <a mat-list-item routerLink="/sales/new">
-        <mat-icon matListItemIcon>point_of_sale</mat-icon>
-        <div matListItemTitle>{{ 'NAV.POS' | translate }}</div>
+      <a mat-list-item routerLink="/sales/new" class="hover:!bg-white/10 transition-colors">
+        <mat-icon matListItemIcon class="!text-white">point_of_sale</mat-icon>
+        <div matListItemTitle class="!text-white">{{ 'NAV.POS' | translate }}</div>
       </a>
 
-      <mat-divider></mat-divider>
+      <mat-divider class="border-white/20"></mat-divider>
 
-      <a mat-list-item routerLink="/transaction-logs">
-        <mat-icon matListItemIcon>history</mat-icon>
-        <div matListItemTitle>{{ 'NAV.TRANSACTIONS' | translate }}</div>
+      <a mat-list-item routerLink="/transaction-logs" class="hover:!bg-white/10 transition-colors">
+        <mat-icon matListItemIcon class="!text-white">history</mat-icon>
+        <div matListItemTitle class="!text-white">{{ 'NAV.TRANSACTIONS' | translate }}</div>
       </a>
 
-      <a mat-list-item routerLink="/production">
-        <mat-icon matListItemIcon>factory</mat-icon>
-        <div matListItemTitle>{{ 'NAV.PRODUCTION' | translate }}</div>
+      <a mat-list-item routerLink="/production" class="hover:!bg-white/10 transition-colors">
+        <mat-icon matListItemIcon class="!text-white">factory</mat-icon>
+        <div matListItemTitle class="!text-white">{{ 'NAV.PRODUCTION' | translate }}</div>
       </a>
 
-      <a mat-list-item routerLink="/missing-stock-resource">
-        <mat-icon matListItemIcon>factory</mat-icon>
-        <div matListItemTitle>{{ 'NAV.ZERORESOURCE' | translate }}</div>
+      <a mat-list-item routerLink="/missing-stock-resource" class="hover:!bg-white/10 transition-colors">
+        <mat-icon matListItemIcon class="!text-white">factory</mat-icon>
+        <div matListItemTitle class="!text-white">{{ 'NAV.ZERORESOURCE' | translate }}</div>
       </a>
 
     </mat-nav-list>
   </mat-sidenav>
 
-  <mat-sidenav-content class="flex flex-col h-full">
-    <mat-toolbar color="primary" class="top-toolbar flex justify-between items-center">
+  <!-- Contenedor principal con el fondo degradado -->
+  <mat-sidenav-content class="flex flex-col h-full  bg-gradient-to-br from-blue-100 via-sky-150 to-purple-200">
 
-      <div class="flex items-center">
-        <button mat-icon-button (click)="sidenav.toggle()">
-          <mat-icon>menu</mat-icon>
-        </button>
-      </div>
+    <div class="pt-5 px-5 pb-2 bg-gradient-to-br from-blue-100 via-sky-150 to-purple-200">
 
-      <div class="flex-1 text-center font-medium overflow-hidden text-ellipsis whitespace-nowrap px-2">
-        <span>{{ companyName }}</span>
-      </div>
+      <!-- TU BARRA: Ahora tiene bordes redondeados (rounded-xl) y sombra. 
+           Al estar dentro del div, NUNCA tocará el menú lateral ni los bordes de la pantalla. -->
+      <mat-toolbar class="bg-white flex justify-between items-center shadow-md z-10 relative rounded-xl w-full">
 
-      <div class="flex justify-end">
-        <button mat-icon-button [matMenuTriggerFor]="settingsMenu">
-          <mat-icon>account_circle</mat-icon>
-        </button>
-      </div>
+        <div class="flex items-center">
+          <button mat-icon-button (click)="sidenav.toggle()">
+            <mat-icon>menu</mat-icon>
+          </button>
+        </div>
 
-      <mat-menu #settingsMenu="matMenu">
-        <button mat-menu-item (click)="changeLanguage('es')">Español</button>
-        <button mat-menu-item (click)="changeLanguage('en')">English</button>
+        <div class="flex-1 text-center font-medium overflow-hidden text-ellipsis whitespace-nowrap px-2">
+          <span>{{ companyName }}</span>
+        </div>
 
-        <button mat-menu-item routerLink="/tenants">
-          <mat-icon>business</mat-icon>
-          <span>{{ 'MENU.COMPANY' | translate }}</span>
-        </button>
+        <div class="flex justify-end">
+          <button mat-icon-button [matMenuTriggerFor]="settingsMenu">
+            <mat-icon>account_circle</mat-icon>
+          </button>
+        </div>
 
-        <mat-divider></mat-divider>
+        <mat-menu #settingsMenu="matMenu">
+          <button mat-menu-item (click)="changeLanguage('es')">Español</button>
+          <button mat-menu-item (click)="changeLanguage('en')">English</button>
 
-        <button mat-menu-item (click)="toggleTheme()">
-          <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
-          <span>{{ isDarkMode ? ('MENU.LIGHT_MODE' | translate) : ('MENU.DARK_MODE' | translate) }}</span>
-        </button>
+          <button mat-menu-item routerLink="/tenants">
+            <mat-icon>business</mat-icon>
+            <span>{{ 'MENU.COMPANY' | translate }}</span>
+          </button>
 
-        <mat-divider></mat-divider>
+          <mat-divider></mat-divider>
 
-        <button mat-menu-item (click)="signOut()">
-          <mat-icon color="warn">logout</mat-icon>
-          <span>{{ 'MENU.SIGN_OUT' | translate }}</span>
-        </button>
+          <button mat-menu-item (click)="toggleTheme()">
+            <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
+            <span>{{ isDarkMode ? ('MENU.LIGHT_MODE' | translate) : ('MENU.DARK_MODE' | translate) }}</span>
+          </button>
 
-      </mat-menu>
-    </mat-toolbar>
+          <mat-divider></mat-divider>
 
-    <!-- Wrap the outlet and the ads in a flex container -->
-    <div class="flex-1 overflow-y-auto p-4 flex flex-col md:flex-row gap-5">
+          <button mat-menu-item (click)="signOut()">
+            <mat-icon color="warn">logout</mat-icon>
+            <span>{{ 'MENU.SIGN_OUT' | translate }}</span>
+          </button>
+
+        </mat-menu>
+      </mat-toolbar>
+    </div>
+
+    <!-- Área de contenido de las tablas (Ajustamos el padding para que encaje con el nuevo diseño) -->
+    <div class="flex-1 overflow-y-auto px-5 pb-5 pt-3 flex flex-col md:flex-row gap-5 bg-transparent">
       <div class="flex-1">
         <router-outlet></router-outlet>
       </div>
