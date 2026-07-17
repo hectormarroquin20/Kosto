@@ -1,13 +1,14 @@
-import { Component, computed, inject, OnInit } from '@angular/core';
+import { Component, computed, inject, OnInit, ViewChild, signal } from '@angular/core';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { DOCUMENT } from '@angular/common';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 // Angular Material imports
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
-import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 
 import { MatMenuModule } from '@angular/material/menu';
 import { TenantService } from './core/services/tenant.service';
@@ -41,17 +42,20 @@ import { AdService } from './core/services/ad.service';
   styleUrl: './app.scss'
 })
 export class App implements OnInit {
+  @ViewChild('sidenav') sidenav!: MatSidenav;
   private document = inject(DOCUMENT);
   private tenantService = inject(TenantService);
   private readonly authService = inject(IAuthService);
   private translate = inject(TranslateService);
   private router = inject(Router);
   public modalService = inject(SubscriptionModalService);
-  public adService = inject(AdService)
+  public adService = inject(AdService);
+  private breakpointObserver = inject(BreakpointObserver);
 
   public isDarkMode = false;
   public companyName = 'Kosto Inventory System';
   public tenantId: string | null = null;
+  public isMobile = signal(false);
 
   isLoggedIn = computed(() => this.authService.isLoggedIn());
 
@@ -86,9 +90,21 @@ export class App implements OnInit {
     // 2. Restore language
     const savedLang = localStorage.getItem('lang') || 'es';
     this.translate.use(savedLang);
+
+    // Responsive Sidebar Logic
+    this.breakpointObserver.observe(['(max-width: 768px)']).subscribe(result => {
+      this.isMobile.set(result.matches);
+    });
   }
 
   // 👇 RESTORED METHODS 👇
+
+  // Close sidenav on route change for mobile
+  onNavItemClick() {
+    if (window.innerWidth < 768) {
+      this.sidenav.close();
+    }
+  }
 
   changeLanguage(lang: string) {
     this.translate.use(lang);
