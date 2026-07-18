@@ -130,7 +130,7 @@ export class App implements OnInit {
     // Redirect to LOGOUT endpoint
     const cognitoDomain = 'https://us-east-1eazpdrljw.auth.us-east-1.amazoncognito.com';
     const clientId = '4m41ibsf6p1il704jiosr80m0p';
-    const logoutUri = encodeURIComponent('http://localhost:4200/login');
+    const logoutUri = encodeURIComponent('https://app.insummi.com/login');
 
     window.location.href = `${cognitoDomain}/logout?client_id=${clientId}&logout_uri=${logoutUri}`;
   }
