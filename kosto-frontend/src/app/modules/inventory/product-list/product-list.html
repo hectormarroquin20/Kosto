@@ -14,9 +14,11 @@
         <p class="text-slate-500 font-medium">{{ 'PRODUCTS.LOADING' | translate }}</p>
     </div>
     } @else {
-    <div class="table-responsive overflow-x-auto ">
-        <!-- Quitamos mat-elevation-z2 y hacemos transparente la tabla -->
-        <table mat-table [dataSource]="products()" class="w-full !bg-transparent !shadow-none">
+    <!-- Wrapper for both views -->
+    <div class="table-responsive overflow-x-auto">
+
+        <!-- Desktop Table: Visible on medium+ screens -->
+        <table mat-table [dataSource]="products()" class="hidden md:table w-full !bg-transparent !shadow-none">
 
             <ng-container matColumnDef="name">
                 <th mat-header-cell *matHeaderCellDef class="!text-slate-800 !font-bold !text-sm"> {{
@@ -89,6 +91,55 @@
                 </td>
             </tr>
         </table>
+
+        <!-- Mobile View: Visible only on small screens -->
+        <div class="md:hidden flex flex-col gap-4 mt-4">
+            @for (element of products(); track element.id) {
+            <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow">
+                <div class="flex justify-between items-start mb-3">
+                    <strong class="text-slate-800 text-lg">{{element.name}}</strong>
+                    <span class="text-xs font-medium bg-slate-100 px-2 py-1 rounded">
+                        {{ (element.is_pre_made ? 'PRODUCTS.TYPES.PRE_MADE' : 'PRODUCTS.TYPES.MAKE_TO_ORDER') |
+                        translate }}
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 text-sm mb-4">
+                    <div>
+                        <p class="text-slate-400 text-xs">{{ 'PRODUCTS.TABLE.PRICE' | translate }}</p>
+                        <p class="text-slate-600 font-semibold">${{element.sale_price}}</p>
+                    </div>
+                    <div>
+                        <p class="text-slate-400 text-xs">{{ 'PRODUCTS.TABLE.STOCK' | translate }}</p>
+                        @if (element.is_pre_made) {
+                        <p
+                            [class]="element.current_stock === 0 ? 'text-red-500 font-semibold' : 'text-emerald-500 font-semibold'">
+                            {{ element.current_stock }}
+                        </p>
+                        } @else {
+                        <p class="text-slate-400">N/A</p>
+                        }
+                    </div>
+                </div>
+
+                <div class="flex justify-end pt-3 border-t border-slate-100">
+                    <button mat-icon-button (click)="onEdit(element)" class="!text-slate-400">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-icon-button (click)="onDelete(element.id)" class="!text-slate-400">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                    @if (element.is_pre_made) {
+                    <button mat-icon-button (click)="openAddStockDialog(element)" class="!text-slate-400">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                    }
+                </div>
+            </div>
+            } @empty {
+            <p class="text-center p-8 text-slate-500">{{ 'PRODUCTS.NO_DATA' | translate }}</p>
+            }
+        </div>
     </div>
     }
 

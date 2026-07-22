@@ -6,8 +6,8 @@
     </div>
     } @else {
     <div class="table-responsive overflow-x-auto">
-        <!-- Eliminamos mat-elevation-z0, forzamos bg-transparent y quitamos sombras -->
-        <table mat-table [dataSource]="dataSource()" class="w-full !bg-transparent !shadow-none">
+        <!-- Desktop Table: Visible on md+ -->
+        <table mat-table [dataSource]="dataSource()" class="hidden md:table w-full !bg-transparent !shadow-none">
 
             <ng-container matColumnDef="name">
                 <th mat-header-cell *matHeaderCellDef class="!text-slate-800 !font-bold !text-sm"> {{
@@ -49,6 +49,25 @@
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"
                 class="!bg-transparent hover:!bg-slate-50/50 transition-colors !border-b !border-slate-200"></tr>
         </table>
+
+        <!-- Mobile Stacked Cards: Visible on <md -->
+        <div class="md:hidden flex flex-col gap-4 mt-4">
+            @for (element of dataSource(); track element.id) {
+            <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex justify-between items-center">
+                <div>
+                    <strong class="text-slate-800 block text-lg">{{element.name}}</strong>
+                    <span class="text-slate-500 text-sm">Price: ${{element.sale_price}} | Stock:
+                        {{element.current_stock}}</span>
+                </div>
+                <button mat-mini-fab (click)="openProductionDialog(element)"
+                    class="!bg-gradient-to-r !from-blue-500 !to-purple-600 !text-white">
+                    <mat-icon>add</mat-icon>
+                </button>
+            </div>
+            } @empty {
+            <p class="text-center p-8 text-slate-500 font-medium">{{ 'PRODUCTION.NO_DATA' | translate }}</p>
+            }
+        </div>
     </div>
     }
 

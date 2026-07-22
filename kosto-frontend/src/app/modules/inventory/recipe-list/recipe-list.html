@@ -22,8 +22,8 @@
     </div>
     } @else {
     <div class="table-responsive overflow-x-auto">
-        <!-- Tabla transparente -->
-        <table mat-table [dataSource]="filteredRecipes()" class="w-full !bg-transparent !shadow-none">
+        <!-- Desktop Table -->
+        <table mat-table [dataSource]="filteredRecipes()" class="hidden md:table w-full !bg-transparent !shadow-none">
 
             <ng-container matColumnDef="product_id">
                 <th mat-header-cell *matHeaderCellDef class="!text-slate-800 !font-bold !text-sm"> {{
@@ -73,13 +73,38 @@
             <tr mat-header-row *matHeaderRowDef="displayedColumns" class="!bg-transparent"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"
                 class="!bg-transparent hover:!bg-slate-50/50 transition-colors !border-b !border-slate-200"></tr>
-
-            <tr class="mat-row" *matNoDataRow>
-                <td class="mat-cell text-center p-8 text-slate-500 font-medium" colspan="4">
-                    {{ 'RECIPES.NO_DATA' | translate }}
-                </td>
-            </tr>
         </table>
+
+        <!-- Mobile Stacked Cards -->
+        <div class="md:hidden flex flex-col gap-4 mt-4">
+            @for (element of filteredRecipes(); track element.id) {
+            <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+                <div class="flex justify-between items-start mb-2">
+                    <strong class="text-slate-800">{{ productMap().get(element.product_id) }}</strong>
+                    <span class="text-sm font-medium text-slate-500">Qty: {{element.required_quantity}}</span>
+                </div>
+                <div class="mb-4">
+                    <p class="text-xs text-slate-400 uppercase">{{ 'RECIPES.TABLE.RESOURCE' | translate }}</p>
+                    <p class="text-slate-700 font-medium">{{ resourceMap().get(element.resource_id)?.name }}</p>
+                    <small
+                        [class]="hasSufficientStock(element.resource_id, element.required_quantity) ? 'text-emerald-500' : 'text-red-500'">
+                        {{ (hasSufficientStock(element.resource_id, element.required_quantity) ? 'RECIPES.STOCK.OK' :
+                        'RECIPES.STOCK.INSUFFICIENT') | translate }}
+                    </small>
+                </div>
+                <div class="flex justify-end border-t border-slate-100 pt-2">
+                    <button mat-icon-button (click)="onEdit(element)" class="!text-slate-400">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-icon-button (click)="onDelete(element.id)" class="!text-slate-400">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
+            </div>
+            } @empty {
+            <p class="text-center p-8 text-slate-500">{{ 'RECIPES.NO_DATA' | translate }}</p>
+            }
+        </div>
     </div>
     }
 

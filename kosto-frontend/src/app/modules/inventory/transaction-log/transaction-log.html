@@ -15,8 +15,8 @@
     </div>
     } @else {
     <div class="table-responsive overflow-x-auto">
-        <!-- Eliminamos mat-elevation-z2 y forzamos bg-transparent -->
-        <table mat-table [dataSource]="transactionLogs()" class="w-full !bg-transparent">
+        <!-- Desktop Table: Visible on md+ -->
+        <table mat-table [dataSource]="transactionLogs()" class="hidden md:table w-full !bg-transparent">
 
             <ng-container matColumnDef="type">
                 <th mat-header-cell *matHeaderCellDef class="!text-slate-800 !font-bold !text-sm"> {{
@@ -57,13 +57,31 @@
             <tr mat-header-row *matHeaderRowDef="displayedColumns" class="!bg-transparent"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"
                 class="!bg-transparent hover:!bg-slate-50/50 transition-colors !border-b !border-slate-200"></tr>
-
-            <tr class="mat-row" *matNoDataRow>
-                <td class="mat-cell text-center p-8 text-slate-500 font-medium" colspan="5">
-                    {{ 'TRANSACTIONS.NO_DATA' | translate }}
-                </td>
-            </tr>
         </table>
+
+        <!-- Mobile Stacked Cards: Visible on <md -->
+        <div class="md:hidden flex flex-col gap-4 mt-4">
+            @for (element of transactionLogs(); track element.id) {
+            <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="font-bold text-blue-600">{{element.type}}</span>
+                    <span class="text-xs text-slate-400">{{element.transaction_date}}</span>
+                </div>
+                <div class="mb-3">
+                    <p class="text-slate-800 font-medium text-lg">
+                        {{ productMap().get(element.reference_id)?.name || ('TRANSACTIONS.UNKNOWN_PRODUCT' | translate)
+                        }}
+                    </p>
+                </div>
+                <div class="flex justify-between items-center pt-3 border-t border-slate-100">
+                    <span class="text-slate-500 text-sm">Qty: {{element.quantity}}</span>
+                    <span class="font-bold text-slate-800 text-lg">${{element.total_amount}}</span>
+                </div>
+            </div>
+            } @empty {
+            <p class="text-center p-8 text-slate-500 font-medium">{{ 'TRANSACTIONS.NO_DATA' | translate }}</p>
+            }
+        </div>
     </div>
     }
 </app-main-kosto>
