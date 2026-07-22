@@ -32,7 +32,7 @@ export const registerSale = async (tenantId: string, productId: string, quantity
         // El trigger 'trg_increment_usage' se disparará automáticamente al finalizar este INSERT
         const logQuery = `
             INSERT INTO transaction_log (tenant_id, type, reference_id, quantity, total_amount)
-            VALUES ($1, 'SALE', $2, $3, $4)
+            VALUES ($1, 'sale', $2, $3, $4)
             RETURNING id, transaction_date;
         `;
         const result = await client.query(logQuery, [tenantId, productId, quantity, totalAmount]);
