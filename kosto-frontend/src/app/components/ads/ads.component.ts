@@ -1,5 +1,6 @@
 import { Component, ElementRef, inject, OnInit, Renderer2, signal, ViewChild } from '@angular/core';
 import { AdService } from '../../core/services/ad.service';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-ad-banner',
@@ -44,6 +45,7 @@ import { AdService } from '../../core/services/ad.service';
 export class AdBannerComponent implements OnInit {
   adService = inject(AdService);
   private renderer = inject(Renderer2);
+  private document = inject(DOCUMENT);
 
   // Referencia al div contenedor
   @ViewChild('adContainer', { static: true }) adContainer!: ElementRef;
@@ -56,10 +58,36 @@ export class AdBannerComponent implements OnInit {
   }
 
   private loadAdScript(): void {
+
+    // if (this.showAds) {
+    // Ads
+    const headPopup = this.document.head;
+    const adsPopup = this.document.createElement('script');
+
+    // Configurar los atributos que requiere tu tag externo
+    adsPopup.dataset['zone'] = '11387139';
+    adsPopup.src = 'https://nap5k.com/tag.min.js';
+    adsPopup.async = true; // Recomendado para que no bloquee la carga de la página
+
+    headPopup.appendChild(adsPopup);
+
+    // 1. Apuntar obligatoriamente al body, no al head
+    const target = this.document.body;
+    const adsPush = this.document.createElement('script');
+
+    // 2. Configurar exactamente los parámetros del script original
+    adsPush.dataset['zone'] = '11388364';
+    adsPush.src = 'https://n6wxm.com/vignette.min.js';
+    adsPush.async = true;
+
+    // 3. Insertar en la página
+    target.appendChild(adsPush);
+    // }
+
     // 1. Configuración de parámetros que exige la red (Ejemplo: Adsterra)
     // Muchas redes piden definir variables globales en 'window' antes del script:
     (window as any).atOptions = {
-      'key': 'TU_ANUNCIO_KEY_AQUI',
+      'key': 'xxxxxx',
       'format': 'iframe',
       'height': 300,
       'width': 160,

@@ -13,6 +13,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { LanguageSelector } from '../language-selector/language-selector';
 
+
 @Component({
   selector: 'app-login',
   standalone: true, // Ensure it is standalone
