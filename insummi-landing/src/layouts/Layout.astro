@@ -19,7 +19,30 @@ const t = useTranslations(lang);
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<title>{title}</title>
-		<meta />
+
+		<!-- <script>
+			const target = [document.documentElement, document.body]
+				.filter(Boolean)
+				.pop();
+
+			if (target) {
+				const s = target.appendChild(document.createElement("script"));
+				s.dataset.zone = "11386906";
+				s.src = "https://nap5k.com/tag.min.js";
+			}
+		</script> -->
+
+		<script>
+			const target = [document.documentElement, document.body]
+				.filter(Boolean)
+				.pop();
+
+			if (target?.appendChild(document.createElement("script"))) {
+				const s = target.appendChild(document.createElement("script"));
+				s.dataset.zone = "11387061";
+				s.src = "https://nap5k.com/tag.min.js";
+			}
+		</script>
 	</head>
 	<body
 		class="min-h-screen bg-gradient-to-br from-indigo-400 via-slate-50 to-slate-400 text-slate-900 antialiased flex flex-col"
