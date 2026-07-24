@@ -53,7 +53,7 @@ export class App implements OnInit {
   private breakpointObserver = inject(BreakpointObserver);
 
   public isDarkMode = false;
-  public companyName = 'Kosto Inventory System';
+  public companyName = 'InsummI Inventory System';
   public tenantId: string | null = null;
   public isMobile = signal(false);
 
