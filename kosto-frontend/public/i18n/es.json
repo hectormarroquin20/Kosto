@@ -17,6 +17,8 @@
     "TRANSACTIONS": {
         "TITLE": "Registros de Transacción",
         "SUBTITLE": "Gestión centralizada de Registros de Transacción",
+        "FILTER_LABEL": "Buscar por nombre de producto o fecha",
+        "FILTER_PLACEHOLDER": "Ej. Capuchino Vainilla o 2023-04-15",
         "NEW_BTN": "nueva transacción",
         "LOADING": "Cargando logs de transacciones y existencias...",
         "UNKNOWN_PRODUCT": "Producto Desconocido",
@@ -56,6 +58,8 @@
     "RESOURCES": {
         "TITLE": "Insumos de Kosto",
         "SUBTITLE": "Gestión centralizada de Insumos",
+        "FILTER_LABEL": "Filtrar por nombre de insumo",
+        "FILTER_PLACEHOLDER": "Ej. Leche",
         "NEW_BTN": "Nuevo Insumo",
         "LOADING": "Cargando insumos y existencias...",
         "NO_DATA": "No hay insumos registrados en la base de datos.",
@@ -94,8 +98,8 @@
         "TITLE": "Inventario de Kosto",
         "SUBTITLE": "Gestión centralizada de Recetas",
         "NEW_BTN": "Nueva Receta",
-        "FILTER_LABEL": "Filtrar por nombre de producto",
-        "FILTER_PLACEHOLDER": "Ej. Pastel de Chocolate",
+        "FILTER_LABEL": "Filtrar por nombre de Insumo",
+        "FILTER_PLACEHOLDER": "Ej. Chocolate en polvo",
         "LOADING": "Cargando recetas y existencias...",
         "LOADING_TEXT": "Cargando...",
         "NO_DATA": "No hay recetas registradas o no coinciden con el filtro.",
@@ -123,6 +127,8 @@
     "PRODUCTS": {
         "TITLE": "Inventario de Kosto",
         "SUBTITLE": "Gestión centralizada de productos",
+        "FILTER_LABEL": "Filtrar por nombre de producto",
+        "FILTER_PLACEHOLDER": "Ej. Capuchino Vainilla",
         "NEW_BTN": "Nuevo Producto",
         "LOADING": "Cargando productos y existencias...",
         "NO_DATA": "No hay productos registrados en la base de datos.",
@@ -165,6 +171,8 @@
     "PRODUCTION": {
         "TITLE": "Registrar Producción de Vitrina",
         "SUBTITLE": "Gestión centralizada de registros de producción",
+        "FILTER_LABEL": "Filtrar por nombre de producto",
+        "FILTER_PLACEHOLDER": "Ej. Pastel de Chocolate",
         "LOADING": "Cargando registros de produccion...",
         "NO_DATA": "No hay registras producción.",
         "TABLE": {

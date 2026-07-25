@@ -9,6 +9,13 @@
         </div>
     </button>
 
+    <!-- Form Field transparente -->
+    <mat-form-field appearance="outline" class="w-full mb-4 !bg-transparent">
+        <mat-label>{{ 'RECIPES.FILTER_LABEL' | translate }}</mat-label>
+        <input matInput (keyup)="filter.set($any($event.target).value)"
+            [placeholder]="'RECIPES.FILTER_PLACEHOLDER' | translate">
+    </mat-form-field>
+
     @if (isLoading()) {
     <div class="text-center p-12">
         <p class="text-slate-500 font-medium">{{ 'PRODUCTS.LOADING' | translate }}</p>
@@ -18,7 +25,7 @@
     <div class="table-responsive overflow-x-auto">
 
         <!-- Desktop Table: Visible on medium+ screens -->
-        <table mat-table [dataSource]="products()" class="hidden md:table w-full !bg-transparent !shadow-none">
+        <table mat-table [dataSource]="filteredProducts()" class="hidden md:table w-full !bg-transparent !shadow-none">
 
             <ng-container matColumnDef="name">
                 <th mat-header-cell *matHeaderCellDef class="!text-slate-800 !font-bold !text-sm"> {{
@@ -94,7 +101,7 @@
 
         <!-- Mobile View: Visible only on small screens -->
         <div class="md:hidden flex flex-col gap-4 mt-4">
-            @for (element of products(); track element.id) {
+            @for (element of filteredProducts(); track element.id) {
             <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow">
                 <div class="flex justify-between items-start mb-3">
                     <strong class="text-slate-800 text-lg">{{element.name}}</strong>

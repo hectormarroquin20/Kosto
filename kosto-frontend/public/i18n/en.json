@@ -16,6 +16,8 @@
     "TRANSACTIONS": {
         "TITLE": "Transaction Logs",
         "SUBTITLE": "Centralized management of transaction logs",
+        "FILTER_LABEL": "Search by product or date",
+        "FILTER_PLACEHOLDER": "e.g. Coffee or 2023-10-27",
         "NEW_BTN": "new transaction",
         "LOADING": "Loading transaction logs and stock...",
         "UNKNOWN_PRODUCT": "Unknown Product",
@@ -54,6 +56,8 @@
     },
     "RESOURCES": {
         "TITLE": "Kosto Resources",
+        "FILTER_LABEL": "Filter by resource name",
+        "FILTER_PLACEHOLDER": "e.g. Milk",
         "SUBTITLE": "Centralized resource management",
         "NEW_BTN": "New Resource",
         "LOADING": "Loading resources and stock...",
@@ -91,8 +95,8 @@
         "TITLE": "Kosto Inventory",
         "SUBTITLE": "Centralized Recipe Management",
         "NEW_BTN": "New Recipe",
-        "FILTER_LABEL": "Filter by product name",
-        "FILTER_PLACEHOLDER": "e.g. Chocolate Cake",
+        "FILTER_LABEL": "Filter by product name or transaction date",
+        "FILTER_PLACEHOLDER": "e.g. Coffee or 2023-10-27",
         "LOADING": "Loading recipes and stock...",
         "LOADING_TEXT": "Loading...",
         "NO_DATA": "No recipes registered or no matches found.",
@@ -119,6 +123,8 @@
     },
     "PRODUCTS": {
         "TITLE": "Kosto Inventory",
+        "FILTER_LABEL": "Filter by product name",
+        "FILTER_PLACEHOLDER": "e.g. Vanilla Cappuccino",
         "SUBTITLE": "Centralized product management",
         "NEW_BTN": "New Product",
         "LOADING": "Loading products and stock...",
@@ -161,6 +167,8 @@
     },
     "PRODUCTION": {
         "TITLE": "Display Production Registrar",
+        "FILTER_LABEL": "Filter by product name",
+        "FILTER_PLACEHOLDER": "e.g. Chocolate Cake",
         "SUBTITLE": "Centralized management of production records",
         "LOADING": "Loading production logs...",
         "NO_DATA": "No registered in the database.",

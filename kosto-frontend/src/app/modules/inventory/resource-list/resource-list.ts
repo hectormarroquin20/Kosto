@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { ResourceService } from '../../../core/services/resource.service';
 import { ResourceModel } from '../../../core/models/resource.interface';
 
@@ -9,10 +9,13 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { Router, RouterLink } from '@angular/router';
 
-import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { AddStockResourceDialog } from '../add-resource-stock-dialog/add-stock-dialog';
 import { MatDialog } from '@angular/material/dialog';
 import { MainKostoComponent } from "@/components/main-kosto/main-kosto";
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-resource-list',
@@ -21,6 +24,10 @@ import { MainKostoComponent } from "@/components/main-kosto/main-kosto";
     MatCardModule,
     MatIconModule,
     MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule,
+    ReactiveFormsModule,
     RouterLink,
     TranslatePipe,
     MainKostoComponent
@@ -28,7 +35,7 @@ import { MainKostoComponent } from "@/components/main-kosto/main-kosto";
   templateUrl: './resource-list.html',
   styleUrl: './resource-list.scss',
 })
-export class ResourceList {
+export class ResourceList implements OnInit {
   private readonly resourcesService = inject(ResourceService);
   private readonly router = inject(Router);
   private readonly dialog = inject(MatDialog);
@@ -36,6 +43,15 @@ export class ResourceList {
   // Reactive state using Signals
   public resources = signal<ResourceModel[]>([]);
   public isLoading = signal<boolean>(true);
+  public filter = signal('');
+
+  public filteredResources = computed(() => {
+    const f = this.filter().toLowerCase();
+    if (!f) return this.resources();
+    return this.resources().filter(r =>
+      r.name.toLowerCase().includes(f)
+    );
+  });
 
   // Columns we want to show in the table
   public displayedColumns: string[] = ['name', 'unit_cost', 'stock', 'unit_measure', 'updated_at', 'actions'];
@@ -91,3 +107,4 @@ export class ResourceList {
     });
   }
 }
+

@@ -1,4 +1,4 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, inject, signal, OnInit, computed } from '@angular/core';
 import { ProductModel } from '../../../core/models/product.interface';
 import { ProductService } from '../../../core/services/product.service';
 import { MatTableModule } from '@angular/material/table';
@@ -6,8 +6,11 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { Router, RouterLink } from '@angular/router';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
 
-import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { AddProductStockDialog } from '../add-product-stock-dialog/add-product-stock-dialog';
 import { MatDialog } from '@angular/material/dialog';
 import { MainKostoComponent } from "@/components/main-kosto/main-kosto";
@@ -20,6 +23,9 @@ import { MainKostoComponent } from "@/components/main-kosto/main-kosto";
     MatCardModule,
     MatIconModule,
     MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule,
     RouterLink,
     TranslatePipe,
     MainKostoComponent
@@ -34,6 +40,15 @@ export class ProductList implements OnInit {
 
   public products = signal<ProductModel[]>([]);
   public isLoading = signal<boolean>(true);
+  public filter = signal('');
+
+  public filteredProducts = computed(() => {
+    const f = this.filter().toLowerCase();
+    if (!f) return this.products();
+    return this.products().filter(p =>
+      p.name.toLowerCase().includes(f)
+    );
+  });
 
   // Define the columns to be displayed in the table
   public displayedColumns: string[] = ['name', 'price', 'stock', 'type', 'actions'];

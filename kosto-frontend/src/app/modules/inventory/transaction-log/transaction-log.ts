@@ -14,6 +14,9 @@ import { forkJoin } from 'rxjs';
 
 import { TranslatePipe } from '@ngx-translate/core';
 import { MainKostoComponent } from "@/components/main-kosto/main-kosto";
+import { FormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-transaction-log',
@@ -22,6 +25,9 @@ import { MainKostoComponent } from "@/components/main-kosto/main-kosto";
     MatCardModule,
     MatIconModule,
     MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule,
     RouterLink,
     TranslatePipe,
     MainKostoComponent
@@ -38,12 +44,37 @@ export class TransactionLog {
   public products = signal<ProductModel[]>([]);
 
   public isLoading = signal<boolean>(true);
+  public filter = signal('');
 
   // Create a quick search map O(1) for the HTML
   public productMap = computed(() => {
     const map = new Map<string, ProductModel>(); // Store the whole object
     this.products().forEach(p => map.set(p.id!, p));
     return map;
+  });
+
+  public filteredLogs = computed(() => {
+    const f = this.filter().toLowerCase().trim();
+    if (!f) return this.transactionLogs();
+
+    return this.transactionLogs().filter(log => {
+      // Ensure we look up by the correct key.
+      // If your model uses 'product_id' instead of 'reference_id', change it here.
+      const product = this.productMap().get(log.reference_id);
+      const productName = product?.name?.toLowerCase() || '';
+
+      const dateVal = log.transaction_date;
+      const dateString = dateVal instanceof Date
+        ? dateVal.toLocaleDateString().toLowerCase()
+        : String(dateVal ?? '').toLowerCase();
+
+      const type = (log.type ?? '').toLowerCase();
+
+      // Debugging: If search is failing, check if this console log matches your expectations
+      // console.log(`Searching: ${f} | Name: ${productName} | Date: ${dateString}`);
+
+      return productName.includes(f) || dateString.includes(f) || type.includes(f);
+    });
   });
 
   // Columns we want to display in the table
@@ -89,3 +120,4 @@ export class TransactionLog {
     });
   }
 }
+

@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, computed } from '@angular/core';
 import { ResourceService } from '../../../core/services/resource.service';
 import { ResourceModel } from '../../../core/models/resource.interface';
 
@@ -9,7 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import { Router } from '@angular/router';
 
@@ -32,6 +32,7 @@ import { MainKostoComponent } from "@/components/main-kosto/main-kosto";
     MatFormFieldModule,
     MatInputModule,
     ReactiveFormsModule,
+    FormsModule,
     TranslatePipe,
     MatTooltipModule,
     MainKostoComponent
@@ -50,6 +51,15 @@ export class MissingStockResource {
   public missingResourceStock = signal<ResourceModel[]>([]);
   public isLoading = signal<boolean>(true);
   public isBusinessTier = signal<boolean>(false); // Start false (disabled)
+  public filter = signal('');
+
+  public filteredResources = computed(() => {
+    const f = this.filter().toLowerCase();
+    if (!f) return this.missingResourceStock();
+    return this.missingResourceStock().filter(r =>
+      r.name.toLowerCase().includes(f)
+    );
+  });
 
   // Columns to display in the table
   public displayedColumns: string[] = ['name', 'unit_cost', 'stock', 'unit_measure', 'updated_at', 'actions'];

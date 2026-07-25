@@ -9,6 +9,13 @@
         </div>
     </button>
 
+    <!-- Form Field transparente -->
+    <mat-form-field appearance="outline" class="w-full mb-4 !bg-transparent">
+        <mat-label>{{ 'TRANSACTIONS.FILTER_LABEL' | translate }}</mat-label>
+        <input matInput (keyup)="filter.set($any($event.target).value)"
+            [placeholder]="'TRANSACTIONS.FILTER_PLACEHOLDER' | translate">
+    </mat-form-field>
+
     @if (isLoading()) {
     <div class="text-center p-12">
         <p class="text-slate-500 font-medium">{{ 'TRANSACTIONS.LOADING' | translate }}</p>
@@ -16,7 +23,7 @@
     } @else {
     <div class="table-responsive overflow-x-auto">
         <!-- Desktop Table: Visible on md+ -->
-        <table mat-table [dataSource]="transactionLogs()" class="hidden md:table w-full !bg-transparent">
+        <table mat-table [dataSource]="filteredLogs()" class="hidden md:table w-full !bg-transparent">
 
             <ng-container matColumnDef="type">
                 <th mat-header-cell *matHeaderCellDef class="!text-slate-800 !font-bold !text-sm"> {{
@@ -61,7 +68,7 @@
 
         <!-- Mobile Stacked Cards: Visible on <md -->
         <div class="md:hidden flex flex-col gap-4 mt-4">
-            @for (element of transactionLogs(); track element.id) {
+            @for (element of filteredLogs(); track element.id) {
             <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
                 <div class="flex justify-between items-center mb-2">
                     <span class="font-bold text-blue-600">{{element.type}}</span>
